@@ -1,0 +1,23 @@
+.scholarvault-touchspin .input-group-btn-vertical {
+  position: absolute;
+  right: 0;
+  height: 100%;
+  z-index: 11;
+}
+.scholarvault-touchspin .input-group-btn-vertical > .btn {
+  position: absolute;
+  right: 0;
+  height: 50%;
+  padding: 0;
+  width: 2em;
+  text-align: center;
+  line-height: 1;
+}
+.scholarvault-touchspin .input-group-btn-vertical .scholarvault-touchspin-up {
+  border-radius: 0 4px 0 0;
+  top: 0;
+}
+.scholarvault-touchspin .input-group-btn-vertical .scholarvault-touchspin-down {
+  border-radius: 0 0 4px 0;
+  bottom: 0;
+}
