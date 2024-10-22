@@ -1,5 +1,5 @@
-import SubmitThesisForm from "@/app/components/Forms/SubmitThesisForm";
-import Pagination from "@/app/components/misc/Pagination";
+import SubmitThesisForm from "../../../../custom/Forms/SubmitThesisForm";
+import Pagination from "../../../../custom/misc/Pagination";
 
 function Submit_Thesis() {
   return (

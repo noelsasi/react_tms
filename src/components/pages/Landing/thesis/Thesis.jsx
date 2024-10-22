@@ -1,5 +1,5 @@
-import AdvancedSearch from "@/app/components/Search/AdvancedSearch";
-import Link from "next/link";
+import AdvancedSearch from "../../../custom/Search/AdvancedSearch";
+import { Link } from "react-router-dom";
 
 function Thesis() {
   return (
@@ -14,7 +14,7 @@ function Thesis() {
             <nav aria-label="breadcrumb" className="breadcrumb-row m-t15">
               <ul className="breadcrumb">
                 <li className="breadcrumb-item">
-                  <Link href="/">Home</Link>
+                  <Link to="/">Home</Link>
                 </li>
                 <li className="breadcrumb-item active" aria-current="page">
                   Thesis Details
@@ -188,47 +188,7 @@ function Thesis() {
                       </li>
                     </ol>
 
-                    <div className="comment-respond" id="respond">
-                      <div className="widget-title style-1">
-                        <h4 className="title" id="reply-title">
-                          Leave Your Comment
-                          <small>
-                            <a
-                              style={{ display: "none" }}
-                              id="cancel-comment-reply-link"
-                              rel="nofollow"
-                            >
-                              Cancel reply
-                            </a>
-                          </small>
-                        </h4>
-                      </div>
-                      <form
-                        className="comment-form"
-                        id="commentform"
-                        method="post"
-                      >
-                        <p className="comment-form-comment">
-                          <label htmlFor="comment">Comment</label>
-                          <textarea
-                            rows={8}
-                            name="comment"
-                            placeholder="Comment"
-                            id="comment"
-                            defaultValue={""}
-                          />
-                        </p>
-                        <p className="form-submit">
-                          <button
-                            type="submit"
-                            className="btn btn-primary"
-                            id="submit"
-                          >
-                            SUBMIT
-                          </button>
-                        </p>
-                      </form>
-                    </div>
+                    
                   </div>
                 </div>
               </div>

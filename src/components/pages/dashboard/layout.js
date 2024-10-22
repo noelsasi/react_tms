@@ -1,5 +1,5 @@
 "use client";
-import Script from "next/script";
+
 import DashBoardHeader from "../components/Dashboard/Header";
 import NavBar from "../components/Dashboard/NavBar";
 import Footer from "../components/Dashboard/Footer";

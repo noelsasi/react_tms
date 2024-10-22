@@ -372,7 +372,7 @@ export default function Home() {
                 </h2>
               </div>
               <div className="text-center text-xl-end col-lg-5">
-                <Link href="/auth/signin" className="btn btn-light btn-lg">
+                <Link to="/auth/signin" className="btn btn-light btn-lg">
                   Create Free Account
                 </Link>
               </div>

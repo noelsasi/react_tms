@@ -1,66 +1,109 @@
-"use client";
 import React, { useState } from "react";
-import ManagePeerForm from "@/app/components/Forms/ManagePeerForm";
-import Pagination from "@/app/components/misc/Pagination";
+import ManageUserForm from "../../../../custom/Forms/ManageUserForm";
+import Pagination from "../../../../custom/misc/Pagination";
 
-function Manage_Peer() {
+function Manage_users() {
   const [formMode, setFormMode] = useState("create");
-  const [currentPeer, setCurrentPeer] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(null);
+
+  const users = [
+    {
+      id: "01",
+      firstName: "Bobby",
+      lastName: "Schol",
+      name: "Mr. Bobby",
+      email: "bobby@example.com",
+      gender: "Male",
+      dob: "1990-05-15",
+      address: "123 Main St",
+      phone: "123-456-7890",
+      role: "Scholar",
+      status: "Active",
+    },
+    {
+      id: "02",
+      firstName: "Chris",
+      lastName: "Brown",
+      name: "Chris Brown",
+      email: "chris@example.com",
+      gender: "Male",
+      dob: "1988-07-21",
+      address: "456 Oak St",
+      phone: "987-654-3210",
+      role: "Scholar",
+      status: "Inactive",
+    },
+    {
+      id: "03",
+      firstName: "John",
+      lastName: "Doe",
+      name: "John Doe",
+      email: "john@example.com",
+      gender: "Male",
+      dob: "1990-05-15",
+      address: "123 Main St",
+      phone: "123-456-7890",
+      role: "User",
+      status: "Active",
+    },
+    {
+      id: "04",
+      firstName: "Jane",
+      lastName: "Smith",
+      name: "Jane Smith",
+      email: "jane@example.com",
+      gender: "Female",
+      dob: "1990-05-15",
+      address: "123 Main St",
+      phone: "123-456-7890",
+      role: "User",
+      status: "Active",
+    },
+    {
+      id: "05",
+      firstName: "Alice",
+      lastName: "Johnson",
+      name: "Alice Johnson",
+      email: "alice@example.com",
+      gender: "Female",
+      dob: "1990-05-15",
+      address: "123 Main St",
+      phone: "123-456-7890",
+      role: "User",
+      status: "Active",
+    },
+  ];
 
   const toggleDropdown = (index) => {
     setDropdownOpen(dropdownOpen === index ? null : index);
   };
 
-  const handleEdit = () => {
+  const handleEdit = (user) => {
+    setCurrentUser(user);
     setFormMode("edit");
   };
 
+  const handleDelete = (id) => {};
+
   const handleCreateMode = () => {
-    setCurrentPeer(null);
+    setCurrentUser(null);
     setFormMode("create");
   };
-
-  const peerReviews = [
-    {
-      id: 1,
-      name: "AI in health care",
-      review: "The use of AI in health care",
-      status: "Pending",
-      date: "2024-05-01",
-    },
-    {
-      id: 2,
-      name: "Machine Learning in Education",
-      review: "Leveraging ML to enhance learning outcomes",
-      status: "Pending",
-      date: "2024-05-02",
-    },
-    {
-      id: 3,
-      name: "Blockchain for Data Security",
-      review: "Exploring blockchain for enhancing data security",
-      status: "Approved",
-      date: "2024-05-03",
-    },
-    {
-      id: 4,
-      name: "Climate Change Modeling",
-      review: "AI-based climate prediction models",
-      status: "Rejected",
-      date: "2024-05-04",
-    },
-  ];
 
   return (
     <div className="content-body">
       <div className="container-fluid">
         <div className="row">
-          <ManagePeerForm mode={formMode} onCreate={handleCreateMode} />
+          <ManageUserForm
+            mode={formMode}
+            onCreate={handleCreateMode}
+            user={currentUser}
+          />
           <div className="col-lg-12">
             <div className="card">
               <div className="card-header">
-                <h4 className="card-title">List of Peer Reviews</h4>
+                <h4 className="card-title">List of Users</h4>
               </div>
               <div className="card-body">
                 <div className="table-responsive">
@@ -71,30 +114,50 @@ function Manage_Peer() {
                           <strong>ID</strong>
                         </th>
                         <th>
-                          <strong>Thesis Name</strong>
+                          <strong>FIRST NAME</strong>
                         </th>
                         <th>
-                          <strong>Review</strong>
+                          <strong>LAST NAME</strong>
                         </th>
                         <th>
-                          <strong>Status</strong>
+                          <strong>GENDER</strong>
                         </th>
                         <th>
-                          <strong>Date</strong>
+                          <strong>DOB</strong>
+                        </th>
+                        <th>
+                          <strong>PHONE</strong>
+                        </th>
+                        <th>
+                          <strong>ADDRESS</strong>
+                        </th>
+                        <th>
+                          <strong>EMAIL</strong>
+                        </th>
+                        <th>
+                          <strong>ROLE</strong>
+                        </th>
+                        <th>
+                          <strong>STATUS</strong>
                         </th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {peerReviews.map((peer, index) => (
-                        <tr key={peer.id}>
+                      {users.map((user, index) => (
+                        <tr key={user.id}>
                           <td>
-                            <strong>{String(peer.id).padStart(2, "0")}</strong>
+                            <strong>{user.id}</strong>
                           </td>
-                          <td>{peer.name}</td>
-                          <td>{peer.review}</td>
-                          <td>{peer.status}</td>
-                          <td>{peer.date}</td>
+                          <td>{user.firstName}</td>
+                          <td>{user.lastName}</td>
+                          <td>{user.gender}</td>
+                          <td>{user.dob}</td>
+                          <td>{user.phone}</td>
+                          <td>{user.address}</td>
+                          <td>{user.email}</td>
+                          <td>{user.role}</td>
+                          <td>{user.status}</td>
                           <td>
                             <div className="dropdown">
                               <button
@@ -138,18 +201,20 @@ function Manage_Peer() {
                               </button>
                               {dropdownOpen === index && (
                                 <div className="dropdown-menu show">
-                                  <button className="dropdown-item">
-                                    Download Summary Report
-                                  </button>
-                                  <button
+                                  <a
                                     className="dropdown-item"
-                                    onClick={handleEdit}
+                                    href="#"
+                                    onClick={() => handleEdit(user)}
                                   >
                                     Edit
-                                  </button>
-                                  <button className="dropdown-item">
+                                  </a>
+                                  <a
+                                    className="dropdown-item"
+                                    href="#"
+                                    onClick={() => handleDelete(user.id)}
+                                  >
                                     Delete
-                                  </button>
+                                  </a>
                                 </div>
                               )}
                             </div>
@@ -162,6 +227,7 @@ function Manage_Peer() {
               </div>
             </div>
           </div>
+
           <Pagination />
         </div>
       </div>
@@ -169,4 +235,4 @@ function Manage_Peer() {
   );
 }
 
-export default Manage_Peer;
+export default Manage_users;

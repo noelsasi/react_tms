@@ -1,8 +1,6 @@
-
-"use client";
 import React, { useState } from "react";
-import ManageThesisForm from "@/app/components/Forms/ManageThesisForm";
-import Pagination from "@/app/components/misc/Pagination";
+import ManageThesisForm from "../../../../custom/Forms/ManageThesisForm";
+import Pagination from "../../../../custom/misc/Pagination";
 
 function Manage_Thesis() {
   const [formMode, setFormMode] = useState("create");
@@ -66,9 +64,7 @@ function Manage_Thesis() {
     setFormMode("create");
   };
 
-  const handleDelete = (id) => {
-    // Add your delete logic here
-  };
+  const handleDelete = (id) => {};
 
   const toggleDropdown = (index) => {
     setDropdownOpen(dropdownOpen === index ? null : index);
@@ -78,7 +74,11 @@ function Manage_Thesis() {
     <div className="content-body">
       <div className="container-fluid">
         <div className="row">
-          <ManageThesisForm mode={formMode} onCreate={handleCreateMode} thesis={currentThesis} />
+          <ManageThesisForm
+            mode={formMode}
+            onCreate={handleCreateMode}
+            thesis={currentThesis}
+          />
 
           <div className="col-lg-12">
             <div className="card">
@@ -124,7 +124,9 @@ function Manage_Thesis() {
                       {theses.map((thesis, index) => (
                         <tr key={thesis.id}>
                           <td>
-                            <strong>{String(thesis.id).padStart(2, '0')}</strong>
+                            <strong>
+                              {String(thesis.id).padStart(2, "0")}
+                            </strong>
                           </td>
                           <td>{thesis.title}</td>
                           <td>{thesis.author}</td>
@@ -154,9 +156,24 @@ function Manage_Thesis() {
                                     fillRule="evenodd"
                                   >
                                     <rect x={0} y={0} width={24} height={24} />
-                                    <circle fill="#000000" cx={5} cy={12} r={2} />
-                                    <circle fill="#000000" cx={12} cy={12} r={2} />
-                                    <circle fill="#000000" cx={19} cy={12} r={2} />
+                                    <circle
+                                      fill="#000000"
+                                      cx={5}
+                                      cy={12}
+                                      r={2}
+                                    />
+                                    <circle
+                                      fill="#000000"
+                                      cx={12}
+                                      cy={12}
+                                      r={2}
+                                    />
+                                    <circle
+                                      fill="#000000"
+                                      cx={19}
+                                      cy={12}
+                                      r={2}
+                                    />
                                   </g>
                                 </svg>
                               </button>

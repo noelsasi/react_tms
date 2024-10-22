@@ -1,59 +1,67 @@
 import { Helmet } from "react-helmet";
 import Script from "react-load-script";
 import { Outlet } from "react-router-dom";
-import Header from "../../custom/Layout/Header";
-import Footer from "../../custom/Layout/Footer";
+
+import Footer from "../../../components/custom/Dashboard/Footer";
+import { useState } from "react";
+import DashBoardHeader from "../../custom/Dashboard/Header";
+import NavBar from "../../custom/Dashboard/NavBar";
 function DashBoardLayout() {
+  const [isMenuToggled, setIsMenuToggled] = useState(false);
+
+  const handleToggle = () => {
+    setIsMenuToggled(!isMenuToggled);
+  };
   return (
     <div>
       <Helmet>
         <link
           rel="shortcut icon"
           type="image/png"
-          href="/assets/icons/icon.png"
+          href="/dash/images/favicon.png"
         />
-        <link href="/assets/vendor/animate/animate.css" rel="stylesheet" />
-        <link
-          href="/assets/vendor/magnific-popup/magnific-popup.css"
-          rel="stylesheet"
-        />
-        <link
-          href="/assets/vendor/swiper/swiper-bundle.min.css"
-          rel="stylesheet"
-        />
-        <link rel="stylesheet" href="/assets/css/style.css" />
-        <link
-          className="skin"
-          rel="stylesheet"
-          href="/assets/css/skin/skin-1.css"
-        />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin=""
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-          rel="stylesheet"
-        />
-      </Helmet>
-      <div className="page-wraper">
-        <Header />
-        <div className="page-content">
-          <Outlet />
-          <Footer />
-        </div>
-      </div>
 
-      <Script url="/assets/js/jquery.min.js"></Script>
-      <Script url="/assets/js/anm.js"></Script>
-      <Script url="/assets/vendor/wow/wow.js"></Script>
-      <Script url="/assets/vendor/swiper/swiper-bundle.min.js"></Script>
-      <Script url="/assets/vendor/scholarvault/js/scholarvault.bundle.min.js"></Script>
-      <Script url="/assets/vendor/magnific-popup/magnific-popup.js"></Script>
-      <Script url="/assets/js/dz.carousel.js"></Script>
-      <Script url="/assets/js/dz.ajax.js"></Script>
+        <link
+          href="/dash/vendor/scholarvault-select/dist/css/scholarvault-select.min.css"
+          rel="stylesheet"
+        />
+        <link
+          href="/dash/vendor/owl-carousel/owl.carousel.css"
+          rel="stylesheet"
+        />
+        <link
+          rel="stylesheet"
+          href="/dash/vendor/select2/css/select2.min.css"
+        />
+        <link
+          href="/dash/vendor/scholarvault-select/dist/css/scholarvault-select.min.css"
+          rel="stylesheet"
+        />
+
+        <link href="/dash/css/style.css" rel="stylesheet" />
+      </Helmet>
+      <div className={`main-wrapper ${isMenuToggled ? "menu-toggle" : ""}`}>
+        <DashBoardHeader
+          onToggle={handleToggle}
+          isMenuToggled={isMenuToggled}
+        />
+        <NavBar />
+        <Outlet />
+        <Footer />
+      </div>
+      <Script url="/dash/vendor/global/global.min.js"></Script>
+      <Script url="/dash/vendor/scholarvault-select/dist/js/scholarvault-select.min.js"></Script>
+
+      <Script url="/dash/vendor/chartjs/chart.bundle.min.js"></Script>
+      <Script url="/dash/vendor/select2/js/select2.full.min.js"></Script>
+      <Script url="/dash/js/plugins-init/select2-init.js"></Script>
+      <Script url="/dash/vendor/peity/jquery.peity.min.js"></Script>
+      <Script url="/dash/vendor/owl-carousel/owl.carousel.js"></Script>
+
+      <Script url="/dash/js/custom.min.js"></Script>
+      <Script url="/dash/js/dlabnav-init.js"></Script>
+      <Script url="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></Script>
+      <Script url="https://cdn.jsdelivr.net/npm/scholarvault@5.1.3/dist/js/scholarvault.min.js"></Script>
     </div>
   );
 }

@@ -1,22 +1,19 @@
-"use client";
-
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 function DashBoardHeader({ onToggle, isMenuToggled }) {
   const [isNotificationOpen, setNotificationOpen] = useState(false);
   const [isProfileOpen, setProfileOpen] = useState(false);
   const [role, setRole] = useState(null);
 
-  const pathname = usePathname();
+  const location = useLocation();
 
   useEffect(() => {
-    if (pathname) {
-      const currentRole = pathname.split("/")[2];
+    if (location.pathname) {
+      const currentRole = location.pathname.split("/")[2];
       setRole(currentRole);
     }
-  }, [pathname]);
+  }, [location.pathname]);
 
   const toggleNotificationDropdown = () => {
     setNotificationOpen(!isNotificationOpen);
@@ -29,7 +26,10 @@ function DashBoardHeader({ onToggle, isMenuToggled }) {
   return (
     <div>
       <div className="nav-header">
-        <Link href={`/`} className="brand-logo gap-2 d-flex align-items-center">
+        <Link
+          to={`/dashboard/${role}`}
+          className="brand-logo gap-2 d-flex align-items-center"
+        >
           <img
             src="/dash/icons/icon.png"
             alt="logo"
@@ -175,7 +175,7 @@ function DashBoardHeader({ onToggle, isMenuToggled }) {
                       <ul className="timeline">
                         <li>
                           <Link
-                            href={`/dashboard/${role}/profile`}
+                            to={`/dashboard/${role}/profile`}
                             className="dropdown-item ai-icon"
                             style={{ whiteSpace: "nowrap" }}
                             onClick={toggleProfileDropdown}
@@ -201,7 +201,7 @@ function DashBoardHeader({ onToggle, isMenuToggled }) {
                         </li>
                         <li>
                           <Link
-                            href="/"
+                            to="/"
                             className="dropdown-item ai-icon"
                             style={{ whiteSpace: "nowrap" }}
                             onClick={toggleProfileDropdown}

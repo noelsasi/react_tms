@@ -14,7 +14,7 @@ function About() {
             <nav aria-label="breadcrumb" className="breadcrumb-row m-t15">
               <ul className="breadcrumb">
                 <li className="breadcrumb-item">
-                  <Link href="/">Home</Link>
+                  <Link to="/">Home</Link>
                 </li>
                 <li className="breadcrumb-item active" aria-current="page">
                   About Us

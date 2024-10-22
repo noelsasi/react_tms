@@ -1,4 +1,4 @@
-import Pagination from "@/app/components/misc/Pagination";
+import Pagination from "../../../../custom/misc/Pagination";
 
 function My_thesis() {
   return (

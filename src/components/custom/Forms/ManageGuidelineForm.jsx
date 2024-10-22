@@ -1,7 +1,6 @@
-"use client";
 import { useEffect } from "react";
 
-function ManagePeerForm({ mode, onCreate }) {
+function ManageGuidelineForm({ mode, onCreate }) {
   useEffect(() => {
     (function () {
       "use strict";
@@ -29,7 +28,7 @@ function ManagePeerForm({ mode, onCreate }) {
     <div className="col-lg-12">
       <div className="card">
         <div className="card-header">
-          <h4 className="card-title">Manage Peer Review</h4>
+          <h4 className="card-title">Manage Guidelines and Template</h4>
         </div>
         <div className="card-body">
           <div className="basic-form">
@@ -40,7 +39,7 @@ function ManagePeerForm({ mode, onCreate }) {
             >
               <div className="row">
                 <div className="mb-3 col-md-6">
-                  <label className="form-label">Thesis Name</label>
+                  <label className="form-label">Title</label>
                   <input
                     type="text"
                     className="form-control"
@@ -50,39 +49,32 @@ function ManagePeerForm({ mode, onCreate }) {
                   <div className="invalid-feedback">Please enter a Title.</div>
                 </div>
                 <div className="mb-3 col-md-6">
-                  <label className="form-label">Date</label>
+                  <label htmlFor="formFileSm" className="form-label">
+                    Input File(.pdf,max size:10MB)
+                  </label>
                   <input
-                    type="date"
-                    className="form-control"
-                    placeholder="Enter Date"
+                    className="form-control form-control-sm"
+                    id="formFileSm"
+                    type="file"
                     required
                   />
-                  <div className="invalid-feedback">Please enter a Date.</div>
+                  <div className="invalid-feedback">Please attach a file.</div>
                 </div>
               </div>
 
               <div className="row">
-                <div className="mb-3 col-md-6">
-                  <label className="form-label">Review</label>
-                  <textarea
-                    required
-                    className="form-control"
-                    placeholder="Enter Review"
-                  />
-                  <div className="invalid-feedback">Please enter Message.</div>
-                </div>
-                <div className="mb-3 col-md-6">
-                  <label className="form-label">Status</label>
-                  <select name="status" className="form-control" required>
-                    <option value="" disabled>
-                      Choose Status
-                    </option>
-                    <option>Pending</option>
-                    <option>Approv</option>
-                    <option>Reject</option>
-                  </select>
-                  <div className="invalid-feedback">
-                    Please select a Status.
+                <label className="form-label">Description</label>
+                <div className="basic-form">
+                  <div className="mb-3">
+                    <textarea
+                      required
+                      placeholder="Enter Description"
+                      className="form-control"
+                      rows={2}
+                      id="comment"
+                      defaultValue={""}
+                    />
+                    <div className="invalid-feedback">Please Description.</div>
                   </div>
                 </div>
               </div>
@@ -90,7 +82,7 @@ function ManagePeerForm({ mode, onCreate }) {
               <div className="d-flex justify-content-end">
                 {" "}
                 <button type="submit" className="btn btn-primary">
-                  {mode === "edit" ? "Edit" : "Create"} Review
+                  {mode === "edit" ? "Edit" : "Create"}
                 </button>
               </div>
             </form>
@@ -101,4 +93,4 @@ function ManagePeerForm({ mode, onCreate }) {
   );
 }
 
-export default ManagePeerForm;
+export default ManageGuidelineForm;

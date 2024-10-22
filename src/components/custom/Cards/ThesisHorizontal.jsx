@@ -38,7 +38,7 @@ function ThesisHorizontal({ title, abstract, author, date, img_src }) {
           <p>
             {abstract}
           </p>
-          <Link href="/thesis" className="btn btn-primary">
+          <Link ro="/thesis" className="btn btn-primary">
             Read More
           </Link>
         </div>

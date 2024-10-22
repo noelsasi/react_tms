@@ -1,17 +1,16 @@
-"use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function NavBar() {
   const [role, setRole] = useState(null);
-  const pathname = usePathname();
+  const location = useLocation();
+
   useEffect(() => {
-    if (pathname) {
-      const currentRole = pathname.split("/")[2];
+    if (location.pathname) {
+      const currentRole = location.pathname.split("/")[2];
       setRole(currentRole);
     }
-  }, [pathname]);
+  }, [location.pathname]);
 
   const menuItems = {
     admin: [
@@ -125,7 +124,7 @@ function NavBar() {
         <ul className="metismenu" id="menu">
           {currentMenuItems.map((item, index) => (
             <li key={index}>
-              <Link aria-expanded="false" href={item.link}>
+              <Link aria-expanded="false" to={item.link}>
                 <i className={item.icon} />
                 <span className="nav-text">{item.label}</span>
               </Link>

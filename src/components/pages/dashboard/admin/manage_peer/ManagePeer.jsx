@@ -1,7 +1,6 @@
-"use client";
 import React, { useState } from "react";
-import ManagePeerForm from "@/app/components/Forms/ManagePeerForm";
-import Pagination from "@/app/components/misc/Pagination";
+import ManagePeerForm from "../../../../custom/Forms/ManagePeerForm";
+import Pagination from "../../../../custom/misc/Pagination";
 
 function Manage_Peer() {
   const [formMode, setFormMode] = useState("create");

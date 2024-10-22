@@ -1,5 +1,5 @@
-import ManageUserForm from "@/app/components/Forms/ManageUserForm";
-import UpdateProfile from "@/app/components/Forms/UpdateProfile";
+import ManageUserForm from "../../../../custom/Forms/ManageUserForm";
+import UpdateProfile from "../../../../custom/Forms/UpdateProfile";
 
 function Profile() {
   return (
@@ -17,7 +17,7 @@ function Profile() {
                           <img src="/dash/images/profile/pic1.jpg" alt="img" />
                           <div
                             className="upload-link"
-                            title
+                            
                             data-bs-toggle="tooltip"
                             data-placement="right"
                             data-original-title="update"

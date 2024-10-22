@@ -1,7 +1,5 @@
-"use client";
-
-import ManageGuidelineForm from "@/app/components/Forms/ManageGuidelineForm";
-import Pagination from "@/app/components/misc/Pagination";
+import ManageGuidelineForm from "../../../../custom/Forms/ManageGuidelineForm";
+import Pagination from "../../../../custom/misc/Pagination";
 import { useState } from "react";
 
 function Manage_Guidelines() {
@@ -54,7 +52,11 @@ function Manage_Guidelines() {
     <div className="content-body">
       <div className="container-fluid">
         <div className="row">
-          <ManageGuidelineForm mode={formMode} onCreate={handleCreateMode} guideline={currentGuideline} />
+          <ManageGuidelineForm
+            mode={formMode}
+            onCreate={handleCreateMode}
+            guideline={currentGuideline}
+          />
           <div className="col-lg-12">
             <div className="card">
               <div className="card-header">
@@ -109,9 +111,24 @@ function Manage_Guidelines() {
                                     fillRule="evenodd"
                                   >
                                     <rect x={0} y={0} width={24} height={24} />
-                                    <circle fill="#000000" cx={5} cy={12} r={2} />
-                                    <circle fill="#000000" cx={12} cy={12} r={2} />
-                                    <circle fill="#000000" cx={19} cy={12} r={2} />
+                                    <circle
+                                      fill="#000000"
+                                      cx={5}
+                                      cy={12}
+                                      r={2}
+                                    />
+                                    <circle
+                                      fill="#000000"
+                                      cx={12}
+                                      cy={12}
+                                      r={2}
+                                    />
+                                    <circle
+                                      fill="#000000"
+                                      cx={19}
+                                      cy={12}
+                                      r={2}
+                                    />
                                   </g>
                                 </svg>
                               </button>

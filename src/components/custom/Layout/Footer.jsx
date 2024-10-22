@@ -12,7 +12,7 @@ function Footer() {
                 data-wow-delay="1.4s"
               >
                 <div className="footer-logo">
-                  <Link href="/" className="logo-dark">
+                  <Link to="/" className="logo-dark">
                     <svg
                       width="250"
                       height="60.14378940098918"
@@ -199,13 +199,13 @@ function Footer() {
                 <h4 className="footer-title pt-3">Useful Links</h4>
                 <ul>
                   <li>
-                    <Link href="/about">About Us</Link>
+                    <Link to="/about">About Us</Link>
                   </li>
                   <li>
-                    <Link href="/blogs">Blogs</Link>
+                    <Link to="/blog">Blogs</Link>
                   </li>
                   <li>
-                    <Link href="/contact">Contact Us</Link>
+                    <Link to="/contact">Contact Us</Link>
                   </li>
                 </ul>
               </div>

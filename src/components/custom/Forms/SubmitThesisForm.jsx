@@ -1,4 +1,3 @@
-"use client";
 import { useEffect } from "react";
 function SubmitThesisForm({ mode, onCreate }) {
   useEffect(() => {

@@ -1,12 +1,13 @@
-"use client";
-
-import Comment from "@/app/components/Forms/Comment";
-import Pagination from "@/app/components/misc/Pagination";
-import RenderPdf from "@/app/components/pdfRender/RenderPdf";
-import Link from "next/link";
-import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import Comment from "../../../../custom/Forms/Comment";
+import Pagination from "../../../../custom/misc/Pagination";
+import RenderPdf from "../../../../custom/pdfRender/RenderPdf";
+import { useEffect, useState } from "react";
 
 function SearchThesis() {
+  const [role, setRole] = useState(null);
+  const location = useLocation();
+
   const [formData, setFormData] = useState({
     search: "",
     author: "",
@@ -63,6 +64,12 @@ function SearchThesis() {
     setComments(updatedComments);
   };
 
+  useEffect(() => {
+    if (location.pathname) {
+      const currentRole = location.pathname.split("/")[2];
+      setRole(currentRole);
+    }
+  }, [location.pathname]);
   return (
     <div className="content-body">
       <div className="container-fluid">
@@ -477,26 +484,29 @@ function SearchThesis() {
                                       <p>{comment.content}</p>
                                     </div>
                                   </div>
-                                  <button
-                                    onClick={() =>
-                                      handleDeleteComment(comment.id)
-                                    }
-                                    title="Delete Comment"
-                                    aria-label={`Delete comment by ${comment.author}`}
-                                    style={{
-                                      background: "none",
-                                      border: "none",
-                                      color: "red",
-                                      cursor: "pointer",
-                                      padding: "0",
-                                      marginLeft: "10px",
-                                    }}
-                                  >
-                                    <i
-                                      className="fa fa-trash"
-                                      style={{ fontSize: "16px" }}
-                                    ></i>
-                                  </button>
+
+                                  {role !== "user" && (
+                                    <button
+                                      onClick={() =>
+                                        handleDeleteComment(comment.id)
+                                      }
+                                      title="Delete Comment"
+                                      aria-label={`Delete comment by ${comment.author}`}
+                                      style={{
+                                        background: "none",
+                                        border: "none",
+                                        color: "red",
+                                        cursor: "pointer",
+                                        padding: "0",
+                                        marginLeft: "10px",
+                                      }}
+                                    >
+                                      <i
+                                        className="fa fa-trash"
+                                        style={{ fontSize: "16px" }}
+                                      ></i>
+                                    </button>
+                                  )}
                                 </div>
                               </li>
                             ))}
