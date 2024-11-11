@@ -21,6 +21,9 @@ import Submit_Thesis from "./components/pages/dashboard/admin/submit_thesis/Subm
 import Profile from "./components/pages/dashboard/admin/profile/Profile";
 import Search_Thesis from "./components/pages/dashboard/admin/search_thesis/SearchThesis";
 import My_Thesis from "./components/pages/dashboard/user/my_thesis/MyThesis";
+import Verify from "./components/pages/auth/verify/Verify";
+import Sendmail from "./components/pages/auth/sendmail/Sendmail";
+import TestingSignin from "./components/pages/auth/signin/TestingSignin";
 function App() {
   return (
     <Router>
@@ -38,6 +41,8 @@ function App() {
           <Route path="forgot" element={<Forgot />} />
           <Route path="reset" element={<Reset />} />
           <Route path="signup" element={<SignUp />} />
+          <Route path="verify" element={<Verify />} />
+          <Route path="sendmail" element={<Sendmail />} />
         </Route>
         <Route path="/dashboard/admin" element={<DashBoardLayout />}>
           <Route index element={<DashBoardHome />} />
