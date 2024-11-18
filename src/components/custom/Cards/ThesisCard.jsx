@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-function ThesisCard({ author, date, title, desc, img_src }) {
+function ThesisCard({ author, date, title, desc, img_src, thesis_id, authorProfile }) {
   return (
     <div className="col-lg-4 col-md-6 m-b30">
       <div
@@ -12,8 +12,7 @@ function ThesisCard({ author, date, title, desc, img_src }) {
           className="dz-media"
           style={{ height: "250px", overflow: "hidden" }}
         >
-          {/* Use Link directly without nested <a> */}
-          <Link to="/thesis">
+          <Link to={`/thesis/${thesis_id}`}>
             <img
               src={img_src}
               alt="img"
@@ -41,7 +40,8 @@ function ThesisCard({ author, date, title, desc, img_src }) {
               <ul>
                 <li className="post-author text-primary">
                   <span>
-                    <i className="fa-solid fa-user" />
+                    {authorProfile && !authorProfile.includes("scholarvault.com") ? <img src={authorProfile} alt="author" style={{ width: "30px", height: "30px", borderRadius: "50%" }} />
+                      : <i className="fa-solid fa-user" />}
                   </span>
                   {author}
                 </li>
@@ -51,8 +51,7 @@ function ThesisCard({ author, date, title, desc, img_src }) {
             <p>{desc}</p>
           </div>
           <div>
-            {/* Use Link directly for the button as well */}
-            <Link to="/thesis" className="btn btn-primary">
+            <Link to={`/thesis/${thesis_id}`} className="btn btn-primary">
               Read More
             </Link>
           </div>

@@ -277,10 +277,9 @@ function Forgot() {
 
       console.log(response.data); // Log the response to inspect the structure
 
-      if (response.data.message === "Verification email sent") {
-        // Successful response handling
+      if (response.data.message) {
         setSuccessMessage(
-          "Verification email has been sent. Please check your inbox."
+          response.data.message
         );
         setEmail(""); // Clear the email field after successful submission
       } else {

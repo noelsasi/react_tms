@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import HeaderBar from "../../../custom/Dashboard/Charts/HeaderBar";
 import PrimaryCharts from "../../../custom/Dashboard/Charts/PrimaryCharts";
-import { fetchDashboardData, fetchNotifications } from "../slices";
+import { fetchDashboardData, fetchNotifications, fetchUserProfile } from "../slices";
 import React from "react";
 
 function DashBoardHome() {
@@ -12,6 +12,7 @@ function DashBoardHome() {
   React.useEffect(() => {
     dispatch(fetchDashboardData())
     dispatch(fetchNotifications())
+    dispatch(fetchUserProfile())
   }, [dispatch])
 
 

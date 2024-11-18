@@ -173,7 +173,7 @@ export const deleteUser = (id, cb) => async dispatch => {
 }
 
 export const fetchUserProfile =
-  (role = 'guest') =>
+  (role = 'admin') =>
     async dispatch => {
       try {
         const response = await axios.get(`/api/${role}/profile`, {

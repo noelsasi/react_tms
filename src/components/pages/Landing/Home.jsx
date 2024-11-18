@@ -1,7 +1,26 @@
-
+import { useEffect, useState } from "react";
+import axios from "axios";
 import ThesisCard from "../../custom/Cards/ThesisCard";
-import {Link } from"react-router-dom";
+import { Link } from "react-router-dom";
 export default function Home() {
+  const [theses, setTheses] = useState({
+    latest: [],
+    featured: []
+  });
+
+  useEffect(() => {
+    const fetchTheses = async () => {
+      try {
+        const response = await axios.get("/api/misc/home");
+        setTheses(response.data);
+      } catch (error) {
+        console.error("Error fetching theses:", error);
+      }
+    };
+
+    fetchTheses();
+  }, []);
+
   return (
     <div>
       <div className="main-bnr bg-light">
@@ -306,27 +325,22 @@ export default function Home() {
             </h2>
           </div>
           <div className="row">
-            <ThesisCard
-              author="John Doe"
-              date="18 Jun 2024"
-              title="AI in Healthcare: Transforming Diagnostics"
-              desc="Examines the role of AI in enhancing diagnostic accuracy and patient outcomes."
-              img_src="/assets/images/blog/t2.png"
-            />
-            <ThesisCard
-              author="Mark"
-              date="11 Jun 2024"
-              title="Sustainable Architecture: Green Building Solutions"
-              desc="Explores innovative architectural designs that promote environmental sustainability"
-              img_src="/assets/images/blog/t3.png"
-            />
-            <ThesisCard
-              author="Tony"
-              date="18 May 2024"
-              title=" Blockchain Technology in Financial Security"
-              desc="Investigates how blockchain is revolutionizing security in financial transactions."
-              img_src="/assets/images/blog/t4.png"
-            />
+            {theses.latest.map((thesis) => (
+              <ThesisCard
+                key={thesis.thesis_id}
+                author={thesis.author.name}
+                authorProfile={thesis.author.profilePic}
+                date={new Date(thesis.created_at).toLocaleDateString('en-US', {
+                  day: '2-digit',
+                  month: 'short',
+                  year: 'numeric'
+                })}
+                title={thesis.title}
+                desc={thesis.abstract.substring(0, 100) + '...'}
+                img_src="/assets/images/blog/t2.png"
+                thesis_id={thesis.thesis_id}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -338,27 +352,22 @@ export default function Home() {
             </h2>
           </div>
           <div className="row">
-            <ThesisCard
-              author="ELon "
-              date="18 Jun 2024"
-              title="Impact of Climate Change on Marine Biodiversity"
-              desc="Analyzes the effects of global climate change on marine ecosystems and species diversity."
-              img_src="/assets/images/blog/t5.png"
-            />
-            <ThesisCard
-              author="Chris"
-              date="18 Jun 2024"
-              title="Advancements in Quantum Computing"
-              desc="A study of the potential breakthroughs in quantum computing and its future applications"
-              img_src="/assets/images/blog/t6.png"
-            />
-            <ThesisCard
-              author="David"
-              date="18 Jun 2024"
-              title="Mental Health Awareness in Modern Workplaces"
-              desc="Focuses on promoting mental health initiatives and support systems within corporate environments."
-              img_src="/assets/images/blog/t7.png"
-            />
+            {theses.featured.map((thesis) => (
+              <ThesisCard
+                key={thesis.thesis_id}
+                author={thesis.author.name}
+                authorProfile={thesis.author.profilePic}
+                date={new Date(thesis.created_at).toLocaleDateString('en-US', {
+                  day: '2-digit',
+                  month: 'short',
+                  year: 'numeric'
+                })}
+                title={thesis.title}
+                desc={thesis.abstract.substring(0, 100) + '...'}
+                img_src="/assets/images/blog/t5.png"
+                thesis_id={thesis.thesis_id}
+              />
+            ))}
           </div>
         </div>
       </section>

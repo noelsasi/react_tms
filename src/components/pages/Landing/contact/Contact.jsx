@@ -1,26 +1,59 @@
-import {Link} from "react-router-dom";
-import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
+import showToast from "../../../../lib/showToast";
 
 function Contact() {
-  useEffect(() => {
-    (function () {
-      "use strict";
-      const forms = document.querySelectorAll(".needs-validation");
-      Array.prototype.slice.call(forms).forEach(function (form) {
-        form.addEventListener(
-          "submit",
-          function (event) {
-            if (!form.checkValidity()) {
-              event.preventDefault();
-              event.stopPropagation();
-            }
-            form.classList.add("was-validated");
-          },
-          false
-        );
-      });
-    })();
-  }, []);
+  const [loading, setLoading] = useState(false)
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: ""
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const forms = document.querySelectorAll(".needs-validation");
+    Array.from(forms).forEach(form => {
+      if (!form.checkValidity()) {
+        form.classList.add("was-validated")
+        return
+      }
+    })
+
+    setLoading(true)
+
+    try {
+      const response = await axios.post("/api/enquiry", formData);
+      if (response.data) {
+        showToast({
+          type: "success",
+          message: response.data.message
+        });
+        setFormData({
+          name: "",
+          email: "",
+          subject: "",
+          message: ""
+        })
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+    } finally {
+      setLoading(false)
+    }
+  };
+
+
   return (
     <div>
       <div
@@ -284,7 +317,7 @@ function Contact() {
                   We are here for you. How we can help?
                 </p>
                 <div className="contact-area">
-                  <form className="needs-validation" noValidate>
+                  <form className="needs-validation" noValidate onSubmit={handleSubmit}>
                     <div className="dzFormMsg" />
                     <input
                       type="hidden"
@@ -299,11 +332,13 @@ function Contact() {
                           data-wow-delay="1.8s"
                         >
                           <input
-                            name="dzFirstName"
+                            name="name"
                             required
                             type="text"
                             className="form-control"
                             placeholder="Name"
+                            value={formData.name}
+                            onChange={handleChange}
                           />
                           <div className="invalid-feedback">
                             Please enter Name
@@ -317,11 +352,13 @@ function Contact() {
                           data-wow-delay="2.0s"
                         >
                           <input
-                            name="dzEmail"
+                            name="email"
                             required
                             type="email"
                             className="form-control"
                             placeholder="Email Address"
+                            value={formData.email}
+                            onChange={handleChange}
                           />
                           <div className="invalid-feedback">
                             Please enter Email.
@@ -334,11 +371,13 @@ function Contact() {
                           data-wow-delay="2.1s"
                         >
                           <input
-                            name="dzSubject"
+                            name="subject"
                             required
                             type="text"
                             className="form-control"
                             placeholder="Subject"
+                            value={formData.subject}
+                            onChange={handleChange}
                           />
                           <div className="invalid-feedback">
                             Please enter Subject.
@@ -351,12 +390,13 @@ function Contact() {
                           data-wow-delay="2.2s"
                         >
                           <textarea
-                            name="dzMessage"
+                            name="message"
                             rows={5}
                             required
                             className="form-control"
                             placeholder="Type Message..."
-                            defaultValue={""}
+                            value={formData.message}
+                            onChange={handleChange}
                           />
                           <div className="invalid-feedback">
                             Please enter Message
@@ -371,8 +411,9 @@ function Contact() {
                           value="Submit"
                           className="btn btn-primary wow fadeInUp"
                           data-wow-delay="2.4s"
+                          disabled={loading}
                         >
-                          Submit Now
+                          {loading ? "Sending..." : "Submit Now"}
                         </button>
                       </div>
                     </div>
