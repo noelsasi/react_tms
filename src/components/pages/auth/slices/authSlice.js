@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import axios from 'axios'
+import showToast from '../../../../lib/showToast'
 
 const initialState = {
   loading: false,
@@ -101,7 +102,7 @@ export const sendEmailVerification = (email, callback) => async () => {
     if (response.data) {
       showToast({
         type: 'success',
-        message: 'Verification email sent successfully',
+        message: response.data.message,
       })
       if (callback) callback()
     }
@@ -111,17 +112,17 @@ export const sendEmailVerification = (email, callback) => async () => {
   }
 }
 
-export const verifyEmail = (token, email) => async dispatch => {
+export const verifyEmail = (token) => async dispatch => {
   dispatch(setLoading(true))
   try {
-    const response = await axios.post(`/api/auth/verify`, { token, email })
+    const response = await axios.get(`/api/auth/verify?token=${token}`)
     if (response.data) {
       showToast({
         type: 'success',
-        message: 'Email verified successfully, redirecting...',
+        message: response.data.message,
       })
       setTimeout(() => {
-        window.location.href = '/dashboard/admin'
+        window.location.href = '/auth/signin'
       }, 2000)
     }
   } catch (error) {

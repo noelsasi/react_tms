@@ -7,17 +7,17 @@ import { sendEmailVerification } from '../slices'
 import { useDispatch } from 'react-redux'
 
 const initialFormData = {
-  firstname: 'Noel',
-  lastname: 'Mendoza',
-  gender: 'male',
-  dob: '2024-01-01',
-  phone: '09123456789',
-  address: '123 Main St, Anytown, USA',
-  email: 'noel4ver@gmail.com',
-  role: 'user',
-  password: 'password',
-  confirmPassword: 'password',
-  profilePic: 'https://res.cloudinary.com/dknje3po9/image/upload/v1731880731/wocusfnuuub6cin7yjsj.png'
+  firstname: '',
+  lastname: '',
+  gender: '',
+  dob: '',
+  phone: '',
+  address: '',
+  email: '',
+  role: '',
+  password: '',
+  confirmPassword: '',
+  profilePic: null
 };
 
 function SignUp() {
@@ -25,7 +25,8 @@ function SignUp() {
   const [formData, setFormData] = useState(initialFormData)
   const [profilePicFile, setProfilePicFile] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const navigate = useNavigate()
+
+  const [verificationEmail, setVerificationEmail] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,11 +42,11 @@ function SignUp() {
 
     const formData = new FormData();
     formData.append("file", profilePicFile);
-    formData.append("upload_preset", "profilepic");
+    formData.append("upload_preset", "scholarVault");
 
     try {
       const response = await fetch(
-        "https://api.cloudinary.com/v1_1/dknje3po9/image/upload",
+        "https://api.cloudinary.com/v1_1/dyenwfhtf/image/upload",
         {
           method: "POST",
           body: formData,
@@ -77,14 +78,14 @@ function SignUp() {
 
     try {
       let profilePicUrl = formData.profilePic;
-      // if (profilePicFile) {
-      //   profilePicUrl = await handleFileUpload();
-      //   if (!profilePicUrl) {
-      //     alert("Failed to upload profile picture");
-      //     setIsSubmitting(false);
-      //     return;
-      //   }
-      // }
+      if (profilePicFile) {
+        profilePicUrl = await handleFileUpload();
+        if (!profilePicUrl) {
+          alert("Failed to upload profile picture");
+          setIsSubmitting(false);
+          return;
+        }
+      }
 
       const response = await axios.post(
         "/api/auth/signup",
@@ -101,7 +102,7 @@ function SignUp() {
         })
 
         dispatch(sendEmailVerification(formData.email, () => {
-          navigate("/auth/verify?email=" + formData.email);
+          setVerificationEmail(true)
         }))
 
       } else {
@@ -158,222 +159,228 @@ function SignUp() {
                           <Logo />
                         </Link>
                       </div>
-                      <h4 className="text-center mb-4">Sign Up</h4>
-                      <form className="needs-validation" noValidate onSubmit={handleSubmit}>
-                        <div className="row">
-                          <div className="mb-3 col-md-6">
-                            <label className="form-label">First Name</label>
-                            <input
-                              type="text"
-                              name="firstname"
-                              className="form-control"
-                              value={formData.firstname}
-                              onChange={handleChange}
-                              placeholder="Enter First Name"
-                              required
-                            />
-                            <div className="invalid-feedback">
-                              Please enter First Name
-                            </div>
-                          </div>
-                          <div className="mb-3 col-md-6">
-                            <label className="form-label">Last Name</label>
-                            <input
-                              type="text"
-                              name="lastname"
-                              className="form-control"
-                              value={formData.lastname}
-                              onChange={handleChange}
-                              placeholder="Enter Last Name"
-                              required
-                            />
-                            <div className="invalid-feedback">
-                              Please enter Last Name
-                            </div>
-                          </div>
-                        </div>
 
-                        <div className="row">
-                          <div className="mb-3 col-md-6">
-                            <label className="form-label">Gender</label>
-                            <select
-                              name="gender"
-                              className="form-control"
-                              value={formData.gender}
-                              onChange={handleChange}
-                              required
+                      {!verificationEmail ? <>
+                        <h4 className="text-center mb-4">Sign Up</h4>
+                        <form className="needs-validation" noValidate onSubmit={handleSubmit}>
+                          <div className="row">
+                            <div className="mb-3 col-md-6">
+                              <label className="form-label">First Name</label>
+                              <input
+                                type="text"
+                                name="firstname"
+                                className="form-control"
+                                value={formData.firstname}
+                                onChange={handleChange}
+                                placeholder="Enter First Name"
+                                required
+                              />
+                              <div className="invalid-feedback">
+                                Please enter First Name
+                              </div>
+                            </div>
+                            <div className="mb-3 col-md-6">
+                              <label className="form-label">Last Name</label>
+                              <input
+                                type="text"
+                                name="lastname"
+                                className="form-control"
+                                value={formData.lastname}
+                                onChange={handleChange}
+                                placeholder="Enter Last Name"
+                                required
+                              />
+                              <div className="invalid-feedback">
+                                Please enter Last Name
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="row">
+                            <div className="mb-3 col-md-6">
+                              <label className="form-label">Gender</label>
+                              <select
+                                name="gender"
+                                className="form-control"
+                                value={formData.gender}
+                                onChange={handleChange}
+                                required
+                              >
+                                <option value="" disabled>Choose Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                              </select>
+                              <div className="invalid-feedback">
+                                Please select Gender
+                              </div>
+                            </div>
+                            <div className="mb-3 col-md-6">
+                              <label className="form-label">Date of Birth</label>
+                              <input
+                                type="date"
+                                name="dob"
+                                className="form-control"
+                                value={formData.dob}
+                                onChange={handleChange}
+                                required
+                                max={new Date().toISOString().split('T')[0]}
+                              />
+                              <div className="invalid-feedback">
+                                Please enter Date of Birth
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="row">
+                            <div className="mb-3 col-md-6">
+                              <label className="form-label">Phone</label>
+                              <input
+                                type="tel"
+                                name="phone"
+                                className="form-control"
+                                value={formData.phone}
+                                onChange={handleChange}
+                                placeholder="Enter Phone Number"
+                                pattern="[0-9]{10}"
+                                maxLength={10}
+                                required
+                              />
+                              <div className="invalid-feedback">
+                                Please enter a valid 10-digit phone number
+                              </div>
+                            </div>
+                            <div className="mb-3 col-md-6">
+                              <label className="form-label">Profile Picture</label>
+                              <input
+                                type="file"
+                                name="profilePic"
+                                className="form-control"
+                                onChange={handleFileChange}
+                                accept="image/*"
+                                required
+                              />
+                              <div className="invalid-feedback">
+                                Please select a profile picture
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="row">
+                            <div className="mb-3 col-md-12">
+                              <label className="form-label">Address</label>
+                              <textarea
+                                name="address"
+                                className="form-control"
+                                value={formData.address}
+                                onChange={handleChange}
+                                rows={3}
+                                placeholder="Enter Address"
+                                required
+                              />
+                              <div className="invalid-feedback">
+                                Please enter Address
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="row">
+                            <div className="mb-3 col-md-6">
+                              <label className="form-label">Email</label>
+                              <input
+                                type="email"
+                                name="email"
+                                className="form-control"
+                                value={formData.email}
+                                onChange={handleChange}
+                                placeholder="Enter Email Address"
+                                required
+                              />
+                              <div className="invalid-feedback">
+                                Please enter a valid email address
+                              </div>
+                            </div>
+                            <div className="mb-3 col-md-6">
+                              <label className="form-label">Role</label>
+                              <select
+                                name="role"
+                                className="form-control"
+                                value={formData.role}
+                                onChange={handleChange}
+                                required
+                              >
+                                <option value="" disabled>Choose Role</option>
+                                <option value="user">User</option>
+                                <option value="scholar">Scholar</option>
+                              </select>
+                              <div className="invalid-feedback">
+                                Please select a Role
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="row">
+                            <div className="mb-3 col-md-6">
+                              <label className="form-label">Password</label>
+                              <input
+                                type="password"
+                                name="password"
+                                className="form-control"
+                                value={formData.password}
+                                onChange={handleChange}
+                                placeholder="Enter Password"
+                                required
+                              />
+                              <div className="invalid-feedback">
+                                Please enter Password
+                              </div>
+                            </div>
+                            <div className="mb-3 col-md-6">
+                              <label className="form-label">Confirm Password</label>
+                              <input
+                                type="password"
+                                name="confirmPassword"
+                                className="form-control"
+                                value={formData.confirmPassword}
+                                onChange={handleChange}
+                                placeholder="Confirm Password"
+                                required
+                              />
+                              <div className="invalid-feedback">
+                                Please confirm your password
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="text-center mt-4">
+                            <button
+                              type="submit"
+                              className="btn btn-primary"
+                              disabled={isSubmitting}
                             >
-                              <option value="" disabled>Choose Gender</option>
-                              <option value="male">Male</option>
-                              <option value="female">Female</option>
-                            </select>
-                            <div className="invalid-feedback">
-                              Please select Gender
-                            </div>
+                              {isSubmitting ? (
+                                <>
+                                  <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                  Signing Up...
+                                </>
+                              ) : (
+                                'Sign Up'
+                              )}
+                            </button>
                           </div>
-                          <div className="mb-3 col-md-6">
-                            <label className="form-label">Date of Birth</label>
-                            <input
-                              type="date"
-                              name="dob"
-                              className="form-control"
-                              value={formData.dob}
-                              onChange={handleChange}
-                              required
-                              max={new Date().toISOString().split('T')[0]}
-                            />
-                            <div className="invalid-feedback">
-                              Please enter Date of Birth
-                            </div>
-                          </div>
-                        </div>
+                        </form>
 
-                        <div className="row">
-                          <div className="mb-3 col-md-6">
-                            <label className="form-label">Phone</label>
-                            <input
-                              type="tel"
-                              name="phone"
-                              className="form-control"
-                              value={formData.phone}
-                              onChange={handleChange}
-                              placeholder="Enter Phone Number"
-                              pattern="[0-9]{10}"
-                              maxLength={10}
-                              required
-                            />
-                            <div className="invalid-feedback">
-                              Please enter a valid 10-digit phone number
-                            </div>
-                          </div>
-                          <div className="mb-3 col-md-6">
-                            <label className="form-label">Profile Picture</label>
-                            <input
-                              type="file"
-                              name="profilePic"
-                              className="form-control"
-                              onChange={handleFileChange}
-                              accept="image/*"
-                              required
-                            />
-                            <div className="invalid-feedback">
-                              Please select a profile picture
-                            </div>
-                          </div>
+                        <div className="new-account mt-3">
+                          <p>
+                            Already have an account?{" "}
+                            <Link className="text-decoration-none" to="/auth/signin">
+                              Sign In
+                            </Link>
+                          </p>
                         </div>
-
-                        <div className="row">
-                          <div className="mb-3 col-md-12">
-                            <label className="form-label">Address</label>
-                            <textarea
-                              name="address"
-                              className="form-control"
-                              value={formData.address}
-                              onChange={handleChange}
-                              rows={3}
-                              placeholder="Enter Address"
-                              required
-                            />
-                            <div className="invalid-feedback">
-                              Please enter Address
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="row">
-                          <div className="mb-3 col-md-6">
-                            <label className="form-label">Email</label>
-                            <input
-                              type="email"
-                              name="email"
-                              className="form-control"
-                              value={formData.email}
-                              onChange={handleChange}
-                              placeholder="Enter Email Address"
-                              required
-                            />
-                            <div className="invalid-feedback">
-                              Please enter a valid email address
-                            </div>
-                          </div>
-                          <div className="mb-3 col-md-6">
-                            <label className="form-label">Role</label>
-                            <select
-                              name="role"
-                              className="form-control"
-                              value={formData.role}
-                              onChange={handleChange}
-                              required
-                            >
-                              <option value="" disabled>Choose Role</option>
-                              <option value="user">User</option>
-                              <option value="scholar">Scholar</option>
-                            </select>
-                            <div className="invalid-feedback">
-                              Please select a Role
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="row">
-                          <div className="mb-3 col-md-6">
-                            <label className="form-label">Password</label>
-                            <input
-                              type="password"
-                              name="password"
-                              className="form-control"
-                              value={formData.password}
-                              onChange={handleChange}
-                              placeholder="Enter Password"
-                              required
-                            />
-                            <div className="invalid-feedback">
-                              Please enter Password
-                            </div>
-                          </div>
-                          <div className="mb-3 col-md-6">
-                            <label className="form-label">Confirm Password</label>
-                            <input
-                              type="password"
-                              name="confirmPassword"
-                              className="form-control"
-                              value={formData.confirmPassword}
-                              onChange={handleChange}
-                              placeholder="Confirm Password"
-                              required
-                            />
-                            <div className="invalid-feedback">
-                              Please confirm your password
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="text-center mt-4">
-                          <button
-                            type="submit"
-                            className="btn btn-primary"
-                            disabled={isSubmitting}
-                          >
-                            {isSubmitting ? (
-                              <>
-                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                                Signing Up...
-                              </>
-                            ) : (
-                              'Sign Up'
-                            )}
-                          </button>
-                        </div>
-                      </form>
-
-                      <div className="new-account mt-3">
-                        <p>
-                          Already have an account?{" "}
-                          <Link className="text-decoration-none" to="/auth/signin">
-                            Sign In
-                          </Link>
-                        </p>
-                      </div>
+                      </> : <>
+                        <h4 className="text-center mb-4">Verify Email</h4>
+                        <p>A verification email has been sent to your email address. Please check your email and click the link to verify your account.</p>
+                      </>}
                     </div>
                   </div>
                 </div>

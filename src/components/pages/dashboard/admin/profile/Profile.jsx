@@ -16,11 +16,11 @@ function Profile() {
 
     const formData = new FormData()
     formData.append('file', profilePicFile)
-    formData.append('upload_preset', 'profilepic')
+    formData.append('upload_preset', 'scholarVault')
 
     try {
       const response = await fetch(
-        'https://api.cloudinary.com/v1_1/dknje3po9/image/upload',
+        'https://api.cloudinary.com/v1_1/dyenwfhtf/image/upload',
         {
           method: 'POST',
           body: formData,

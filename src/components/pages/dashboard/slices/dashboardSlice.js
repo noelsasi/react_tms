@@ -12,7 +12,8 @@ const initialState = {
   formSubmitting: false,
   guidelinesList: [],
   dashboardData: [],
-  notifications: []
+  notifications: [],
+  comments: []
 }
 
 const dashboardSlice = createSlice({
@@ -55,6 +56,10 @@ const dashboardSlice = createSlice({
 
     setNotifications: (state, action) => {
       state.notifications = action.payload
+    },
+
+    setComments: (state, action) => {
+      state.comments = action.payload
     }
   },
 })
@@ -69,7 +74,8 @@ export const {
   setFormSubmitting,
   setGuidelinesList,
   setDashboardData,
-  setNotifications
+  setNotifications,
+  setComments
 } = dashboardSlice.actions
 
 export const dashboardReducer = dashboardSlice.reducer
@@ -111,6 +117,10 @@ export const fetchUsers = () => async dispatch => {
     dispatch(setUsersList(data))
   } catch (error) {
     console.log('Error fetching users:', error)
+    showToast({
+      type: 'error',
+      message: error.response?.data?.message || 'Error fetching users'
+    })
   }
 }
 
@@ -128,11 +138,15 @@ export const createUser = (data, cb) => async dispatch => {
       dispatch(fetchUsers())
       showToast({
         type: 'success',
-        message: response.message,
+        message: response.data.message,
       })
     }
   } catch (error) {
     console.log('Error creating user:', error)
+    showToast({
+      type: 'error',
+      message: error.response?.data?.message || 'An error occurred'
+    })
   } finally {
     dispatch(setFormSubmitting(false))
   }
@@ -145,12 +159,16 @@ export const deleteUser = (id, cb) => async dispatch => {
       dispatch(fetchUsers())
       showToast({
         type: 'success',
-        message: 'User deleted successfully',
+        message: response.data.message,
       })
       if (cb) cb()
     }
   } catch (error) {
     console.log('Error deleting user:', error)
+    showToast({
+      type: 'error',
+      message: error.response?.data?.message || 'An error occurred'
+    })
   }
 }
 
@@ -179,7 +197,7 @@ export const updateUserProfile =
           dispatch(fetchUserProfile(role))
           showToast({
             type: 'success',
-            message: 'Profile updated successfully',
+            message: response.data.message,
           })
         }
       } catch (error) {
@@ -193,6 +211,10 @@ export const fetchAllThesis = () => async dispatch => {
     dispatch(setThesisData(data))
   } catch (error) {
     console.log('Error fetching theses:', error)
+    showToast({
+      type: 'error',
+      message: error.response?.data?.message || 'An error occurred'
+    })
   }
 }
 
@@ -222,6 +244,10 @@ export const createThesis = (data, cb) => async (dispatch, getState) => {
     }
   } catch (error) {
     console.log('Error creating thesis:', error)
+    showToast({
+      type: 'error',
+      message: error.response?.data?.message || 'An error occurred'
+    })
   } finally {
     dispatch(setFormSubmitting(false))
   }
@@ -240,6 +266,10 @@ export const deleteThesis = (thesis_id, cb) => async dispatch => {
     }
   } catch (error) {
     console.log('Error deleting thesis:', error)
+    showToast({
+      type: 'error',
+      message: error.response?.data?.message || 'An error occurred'
+    })
   }
 }
 
@@ -249,6 +279,10 @@ export const fetchPeers = () => async dispatch => {
     dispatch(setPeersList(data))
   } catch (error) {
     console.log('Error fetching peers:', error)
+    showToast({
+      type: 'error',
+      message: error.response?.data?.message || 'An error occurred'
+    })
   }
 }
 
@@ -288,6 +322,10 @@ export const createPeerReview = (data, cb) => async (dispatch, getState) => {
     }
   } catch (error) {
     console.log('Error creating peer review:', error)
+    showToast({
+      type: 'error',
+      message: error.response?.data?.message || 'An error occurred'
+    })
   } finally {
     dispatch(setFormSubmitting(false))
   }
@@ -306,6 +344,10 @@ export const deletePeerReview = (id, cb) => async dispatch => {
     }
   } catch (error) {
     console.log('Error deleting peer review:', error)
+    showToast({
+      type: 'error',
+      message: error.response?.data?.message || 'An error occurred'
+    })
   }
 }
 
@@ -315,6 +357,10 @@ export const fetchGuidelines = () => async dispatch => {
     dispatch(setGuidelinesList(data))
   } catch (error) {
     console.log('Error fetching guidelines:', error)
+    showToast({
+      type: 'error',
+      message: error.response?.data?.message || 'An error occurred'
+    })
   }
 }
 
@@ -348,7 +394,7 @@ export const createGuideline = (data, cb) => async (dispatch, getState) => {
     console.log('Error creating guideline:', error)
     showToast({
       type: 'error',
-      message: 'Error creating guideline',
+      message: error.response?.data?.message || 'An error occurred'
     })
   } finally {
     dispatch(setFormSubmitting(false))
@@ -370,7 +416,7 @@ export const deleteGuideline = (id, cb) => async dispatch => {
     console.log('Error deleting guideline:', error)
     showToast({
       type: 'error',
-      message: 'Error deleting guideline',
+      message: error.response?.data?.message || 'An error occurred'
     })
   }
 }
@@ -385,7 +431,7 @@ export const fetchMyThesis = () => async (dispatch, getState) => {
     console.log('Error fetching my theses:', error)
     showToast({
       type: 'error',
-      message: 'Error fetching thesis data'
+      message: error.response?.data?.message || 'An error occurred'
     })
   } finally {
     dispatch(setLoading(false))
@@ -409,7 +455,7 @@ export const submitThesis = (data, cb) => async dispatch => {
     console.log('Error submitting thesis:', error)
     showToast({
       type: 'error',
-      message: 'Error submitting thesis'
+      message: error.response?.data?.message || 'An error occurred'
     })
   } finally {
     dispatch(setFormSubmitting(false))
@@ -427,7 +473,7 @@ export const searchThesis = (data) => async dispatch => {
 
 export const fetchDashboardData = () => async (dispatch, getState) => {
   const { userInfo } = getState().auth
-  const role = userInfo.role.role_name
+  const role = ['admin', 'scholar'].includes(userInfo.role.role_name) ? 'admin' : 'user'
   try {
     const { data } = await axios.get('/api/dashboard/' + role, {
       withCredentials: true,
@@ -435,6 +481,10 @@ export const fetchDashboardData = () => async (dispatch, getState) => {
     dispatch(setDashboardData(data))
   } catch (error) {
     console.log('Error fetching dashboard data:', error)
+    showToast({
+      type: 'error',
+      message: error.response?.data?.message || 'An error occurred'
+    })
   }
 }
 
@@ -446,6 +496,10 @@ export const fetchNotifications = () => async (dispatch) => {
     }
   } catch (err) {
     console.log('err', err)
+    showToast({
+      type: 'error',
+      message: err.response?.data?.message || 'An error occurred'
+    })
   }
 }
 
@@ -458,5 +512,90 @@ export const triggerNotification = (data) => async dispatch => {
     }
   } catch (error) {
     console.log('Error triggering notification:', error)
+    showToast({
+      type: 'error',
+      message: error.response?.data?.message || 'An error occurred'
+    })
+  }
+}
+
+export const fetchComments = (thesis_id) => async dispatch => {
+  try {
+    const { data } = await axios.get(`/api/comments?thesis_id=${thesis_id}`)
+    dispatch(setComments(data))
+  } catch (error) {
+    console.log('Error fetching comments:', error)
+    showToast({
+      type: 'error',
+      message: error.response?.data?.message || 'An error occurred'
+    })
+  }
+}
+
+export const addComment = (data, cb) => async (dispatch, getState) => {
+  try {
+    dispatch(setFormSubmitting(true))
+    const response = await axios.post('/api/comments', data)
+
+    if (response.data) {
+      dispatch(fetchComments(data.thesis_id))
+      showToast({
+        type: 'success',
+        message: 'Comment added successfully'
+      })
+      if (cb) cb()
+    }
+  } catch (error) {
+    console.log('Error adding comment:', error)
+    showToast({
+      type: 'error',
+      message: error.response?.data?.message || 'An error occurred'
+    })
+  } finally {
+    dispatch(setFormSubmitting(false))
+  }
+}
+
+export const updateComment = (id, data, cb) => async dispatch => {
+  try {
+    dispatch(setFormSubmitting(true))
+    const response = await axios.put(`/api/comments/${id}`, data)
+
+    if (response.data) {
+      dispatch(fetchComments(data.thesis_id))
+      showToast({
+        type: 'success',
+        message: 'Comment updated successfully'
+      })
+      if (cb) cb()
+    }
+  } catch (error) {
+    console.log('Error updating comment:', error)
+    showToast({
+      type: 'error',
+      message: error.response?.data?.message || 'An error occurred'
+    })
+  } finally {
+    dispatch(setFormSubmitting(false))
+  }
+}
+
+export const deleteComment = (id, thesis_id, cb) => async dispatch => {
+  try {
+    const response = await axios.delete(`/api/comments/${id}`)
+    if (response.data) {
+      dispatch(fetchComments(thesis_id))
+      showToast({
+        type: 'success',
+        message: 'Comment deleted successfully'
+      })
+      if (cb) cb()
+    }
+  } catch (error) {
+    console.log('Error deleting comment:', error)
+    showToast({
+      type: 'error',
+      message: error.response?.data?.message || 'An error occurred'
+    })
   }
 }

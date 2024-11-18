@@ -2,28 +2,32 @@ import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import Logo from '../../../custom/Logo'
 import { verifyEmail } from '../slices'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 function Verify() {
   const dispatch = useDispatch()
+  const { loading } = useSelector(state => state.auth)
   const [searchParams] = useSearchParams()
   const [verificationCode, setVerificationCode] = useState('')
   const [email, setEmail] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const emailFromUrl = searchParams.get('email')
+    const code = searchParams.get('token')
     if (emailFromUrl) {
       setEmail(emailFromUrl)
+    }
+    if (code) {
+      setVerificationCode(code)
     }
   }, [searchParams])
 
 
 
   const handleSubmit = async event => {
-    event.preventDefault()
+    event?.preventDefault()
 
     if (!verificationCode || !email) {
       setErrorMessage('Please enter both verification code and email.')
@@ -38,9 +42,15 @@ function Verify() {
     setErrorMessage('')
     setSuccessMessage('')
 
-    dispatch(verifyEmail(verificationCode, email))
+    dispatch(verifyEmail(verificationCode))
 
   }
+
+  useEffect(() => {
+    if (verificationCode && email) {
+      handleSubmit()
+    }
+  }, [verificationCode, email])
 
   return (
     <div
@@ -107,6 +117,7 @@ function Verify() {
                             onChange={e => setVerificationCode(e.target.value)}
                             required
                             placeholder="Enter verification Code"
+                            disabled
                           />
                           <div className="invalid-feedback">
                             Please enter verification Code
@@ -128,7 +139,7 @@ function Verify() {
                         )}
 
                         {/* Show loading state */}
-                        {isLoading && (
+                        {loading && (
                           <div className="text-center mb-3">
                             <span className="visually-hidden">Loading...</span>
                           </div>
@@ -138,9 +149,9 @@ function Verify() {
                           <button
                             type="submit"
                             className="btn btn-primary btn-block"
-                            disabled={isLoading}
+                            disabled={loading}
                           >
-                            {isLoading ? 'Verifying...' : 'Verify Email'}
+                            {loading ? 'Verifying...' : 'Verify Email'}
                           </button>
                         </div>
                       </form>

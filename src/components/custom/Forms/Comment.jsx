@@ -1,25 +1,15 @@
-import { useEffect } from "react";
+import { useState } from "react";
 
-function Comment() {
-  useEffect(() => {
-    (function () {
-      "use strict";
-      const forms = document.querySelectorAll(".needs-validation");
-      Array.prototype.slice.call(forms).forEach(function (form) {
-        form.addEventListener(
-          "submit",
-          function (event) {
-            if (!form.checkValidity()) {
-              event.preventDefault();
-              event.stopPropagation();
-            }
-            form.classList.add("was-validated");
-          },
-          false
-        );
-      });
-    })();
-  }, []);
+function Comment({ onSubmit }) {
+  const [comment, setComment] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (comment.trim()) {
+      onSubmit(comment);
+      setComment("");
+    }
+  };
 
   return (
     <form
@@ -27,9 +17,9 @@ function Comment() {
       noValidate
       id="commentform"
       method="post"
+      onSubmit={handleSubmit}
     >
       <div className="mb-3 col-md-12">
-        <label htmlFor="comment">Comment</label>
         <textarea
           type="text"
           className="form-control w-100"
@@ -37,6 +27,8 @@ function Comment() {
           name="comment"
           placeholder="Enter Comment"
           rows={5}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
           required
         />
         <div className="invalid-feedback">Please enter a comment.</div>

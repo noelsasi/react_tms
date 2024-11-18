@@ -6,8 +6,8 @@ function Cloud() {
     console.log(file)
     const formData = new FormData()
     formData.append('file', file)
-    formData.append('upload_preset', 'profilepic')
-    fetch('https://api.cloudinary.com/v1_1/dknje3po9/image/upload', {
+    formData.append('upload_preset', 'scholarVault')
+    fetch('https://api.cloudinary.com/v1_1/dyenwfhtf/image/upload', {
       method: 'POST',
       body: formData,
     })
@@ -53,7 +53,7 @@ export default Cloud
 //       formData.append("upload_preset", "profilepic"); // Update this to your Cloudinary preset
 //       formData.append("resource_type", "raw"); // This is important for uploading non-image files like PDFs
 
-//       fetch("https://api.cloudinary.com/v1_1/dknje3po9/upload", {
+//       fetch("https://api.cloudinary.com/v1_1/dyenwfhtf/upload", {
 //         method: "POST",
 //         body: formData,
 //       })

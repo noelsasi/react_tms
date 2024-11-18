@@ -4,11 +4,12 @@ import Pagination from "../../../../custom/misc/Pagination";
 import RenderPdf from "../../../../custom/pdfRender/RenderPdf";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllThesis, fetchUsers, searchThesis } from "../../slices/dashboardSlice";
+import { addComment, deleteComment, fetchAllThesis, fetchComments, fetchUsers, searchThesis } from "../../slices/dashboardSlice";
 
 function SearchThesis() {
   const dispatch = useDispatch();
-  const { thesisData, usersList } = useSelector(state => state.dashboard)
+  const { thesisData, usersList, comments } = useSelector(state => state.dashboard)
+  const { userInfo } = useSelector(state => state.auth)
   const [role, setRole] = useState(null);
   const location = useLocation();
   const [selectedThesis, setSelectedThesis] = useState(null);
@@ -22,29 +23,6 @@ function SearchThesis() {
     enddate: null,
   });
 
-
-  const [comments, setComments] = useState([
-    {
-      id: 1,
-      author: "David",
-      avatar: "/assets/images/avatar/user.png",
-      content:
-        "Good to know that you are working on this project which clarifies my doubts about the AI in healthcare.",
-    },
-    {
-      id: 2,
-      author: "Mark",
-      avatar: "/assets/images/avatar/user.png",
-      content: "Deep insights on AI influence on healthcare.",
-    },
-    {
-      id: 3,
-      author: "Chris",
-      avatar: "/assets/images/avatar/user.png",
-      content:
-        "I am working on this project and I would like to know more about the AI in healthcare.",
-    },
-  ]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,13 +47,22 @@ function SearchThesis() {
   };
 
   const handleDeleteComment = (id) => {
-    const updatedComments = comments.filter((comment) => comment.id !== id);
-    setComments(updatedComments);
+    dispatch(deleteComment(id, selectedThesis?.thesis_id))
   };
 
   const handleThesisClick = (thesis) => {
     setSelectedThesis(thesis);
   }
+
+  const handleAddComment = (commentData) => {
+    const newComment = {
+      user_id: userInfo.id,
+      message_content: commentData,
+      thesis_id: selectedThesis?.thesis_id
+    };
+
+    dispatch(addComment(newComment))
+  };
 
   useEffect(() => {
     if (location.pathname) {
@@ -90,6 +77,10 @@ function SearchThesis() {
   useEffect(() => {
     setSelectedThesis(thesisData[0])
   }, [thesisData])
+
+  useEffect(() => {
+    if (selectedThesis?.thesis_id) dispatch(fetchComments(selectedThesis?.thesis_id))
+  }, [selectedThesis])
 
   return (
     <div className="content-body">
@@ -268,21 +259,21 @@ function SearchThesis() {
                             className="comment-list py-3"
                             style={{ paddingLeft: "0" }}
                           >
-                            {comments.map((comment) => (
+                            {comments.length > 0 ? comments.map((comment) => (
                               <li className="comment" key={comment.id}>
-                                <div className="comment-body d-flex align-items-start justify-content-between w-100">
+                                <div className="comment-body d-flex mb-4 align-items-start justify-content-between w-100">
                                   <div className="d-flex align-items-start">
                                     <img
                                       className="avatar photo me-3"
-                                      src={comment.avatar}
-                                      alt={`${comment.author}'s avatar`}
+                                      src={!comment.user?.profilePic || comment.user?.profilePic.includes('example.com') ? '/dash/images/profile/pic1.jpg' : comment.user?.profilePic}
+                                      alt={`${comment.user?.firstname} ${comment.user?.lastname}'s avatar`}
                                       width="40"
                                     />
                                     <div>
                                       <cite className="fn">
-                                        {comment.author}
+                                        {comment.user?.firstname} {comment.user?.lastname}
                                       </cite>
-                                      <p>{comment.content}</p>
+                                      <p className="mb-0 fs-16">{comment.message_content}</p>
                                     </div>
                                   </div>
 
@@ -292,7 +283,7 @@ function SearchThesis() {
                                         handleDeleteComment(comment.id)
                                       }
                                       title="Delete Comment"
-                                      aria-label={`Delete comment by ${comment.author}`}
+                                      aria-label={`Delete comment by ${comment.user?.firstname} ${comment.user?.lastname}`}
                                       style={{
                                         background: "none",
                                         border: "none",
@@ -310,14 +301,14 @@ function SearchThesis() {
                                   )}
                                 </div>
                               </li>
-                            ))}
+                            )) : <li className="comment">No comments yet</li>}
                           </ol>
                           <div className="widget-title style-1">
                             <h4 className="title" id="reply-title">
                               Leave Your Comment
                             </h4>
                           </div>
-                          <Comment />
+                          <Comment onSubmit={handleAddComment} />
                         </div>
                       </div>
                     </div>
