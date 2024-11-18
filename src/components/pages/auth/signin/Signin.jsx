@@ -8,8 +8,8 @@ import { authenticateUser, fetchCsrfToken } from '../slices/authSlice'
 function Signin() {
   const dispatch = useDispatch()
   const { csrfToken, loading: isLoading } = useSelector(state => state.auth)
-  const [email, setEmail] = useState('admin@example.com')
-  const [password, setPassword] = useState('adminPassword123')
+  const [email, setEmail] = useState('admin@scholarvault.com')
+  const [password, setPassword] = useState('scholarvault')
   const [error, setError] = useState(null)
   const navigate = useNavigate()
 
@@ -27,7 +27,7 @@ function Signin() {
     }
 
     dispatch(
-      authenticateUser({ email, password }, (res) => {
+      authenticateUser({ email, password }, res => {
         if (res?.user?.role?.role_name) {
           navigate('/dashboard/' + res.user.role.role_name)
         } else {
@@ -121,7 +121,6 @@ function Signin() {
                           <Link to="/auth/signup">Sign Up</Link>
                         </p>
                       </div>
-
                     </div>
                   </div>
                 </div>

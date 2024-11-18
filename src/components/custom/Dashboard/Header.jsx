@@ -6,7 +6,7 @@ import { fetchNotifications } from '../../../components/pages/dashboard/slices/d
 function DashBoardHeader({ onToggle, isMenuToggled }) {
   const dispatch = useDispatch()
   const { userProfile } = useSelector(state => state.dashboard)
-  const notifications = useSelector((state) => state.dashboard.notifications)
+  const notifications = useSelector(state => state.dashboard.notifications)
 
   const [isNotificationOpen, setNotificationOpen] = useState(false)
   const [isProfileOpen, setProfileOpen] = useState(false)
@@ -90,8 +90,9 @@ function DashBoardHeader({ onToggle, isMenuToggled }) {
                     </svg>
                   </a>
                   <div
-                    className={`dropdown-menu dropdown-menu-end ${isNotificationOpen ? 'show' : ''
-                      }`}
+                    className={`dropdown-menu dropdown-menu-end ${
+                      isNotificationOpen ? 'show' : ''
+                    }`}
                   >
                     <div
                       id="DZ_W_Notification1"
@@ -99,20 +100,29 @@ function DashBoardHeader({ onToggle, isMenuToggled }) {
                       style={{ maxHeight: 380, overflowY: 'auto' }}
                     >
                       <ul className="timeline">
-                        {notifications.map((notification) => (
+                        {notifications.map(notification => (
                           <li key={notification.id}>
                             <div className="timeline-panel">
                               <div className="media me-2">
                                 <img
                                   alt="image"
                                   width={50}
-                                  src={!notification?.user_info?.profilePic || !notification?.user_info?.profilePic.includes('example.com') ? notification?.user_info?.profilePic : "/dash/images/avatar/1.jpg"}
+                                  src={
+                                    !notification?.user_info?.profilePic ||
+                                    !notification?.user_info?.profilePic.includes(
+                                      'scholarvault.com'
+                                    )
+                                      ? notification?.user_info?.profilePic
+                                      : '/dash/images/avatar/1.jpg'
+                                  }
                                 />
                               </div>
                               <div className="media-body">
                                 <h6 className="mb-1">{notification.message}</h6>
                                 <small className="d-block">
-                                  {new Date(notification.created_at).toLocaleString()}
+                                  {new Date(
+                                    notification.created_at
+                                  ).toLocaleString()}
                                 </small>
                               </div>
                             </div>
@@ -135,7 +145,12 @@ function DashBoardHeader({ onToggle, isMenuToggled }) {
                   >
                     <div className="header-info2 d-flex align-items-center gap-2">
                       <img
-                        src={!userProfile.profilePic || userProfile.profilePic.includes('example.com') ? '/dash/images/profile/pic1.jpg' : userProfile.profilePic}
+                        src={
+                          !userProfile.profilePic ||
+                          userProfile.profilePic.includes('scholarvault.com')
+                            ? '/dash/images/profile/pic1.jpg'
+                            : userProfile.profilePic
+                        }
                         alt="img"
                         className="profile-image"
                         style={{
@@ -156,8 +171,9 @@ function DashBoardHeader({ onToggle, isMenuToggled }) {
                     </div>
                   </a>
                   <div
-                    className={`mt-10 dropdown-menu dropdown-menu-end ${isProfileOpen ? 'show' : ''
-                      }`}
+                    className={`mt-10 dropdown-menu dropdown-menu-end ${
+                      isProfileOpen ? 'show' : ''
+                    }`}
                   >
                     <div id="DZ_W_Notification1" className="widget-media">
                       <ul className="timeline">

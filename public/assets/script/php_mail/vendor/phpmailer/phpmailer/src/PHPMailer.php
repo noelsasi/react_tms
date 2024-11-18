@@ -273,9 +273,9 @@ class PHPMailer
      * Either a single hostname or multiple semicolon-delimited hostnames.
      * You can also specify a different port
      * for each host by using this format: [hostname:port]
-     * (e.g. "smtp1.example.com:25;smtp2.example.com").
+     * (e.g. "smtp1.scholarvault.com:25;smtp2.scholarvault.com").
      * You can also specify encryption type, for example:
-     * (e.g. "tls://smtp1.example.com:587;ssl://smtp2.example.com:465").
+     * (e.g. "tls://smtp1.scholarvault.com:587;ssl://smtp2.scholarvault.com:465").
      * Hosts will be tried in order.
      *
      * @var string
@@ -500,7 +500,7 @@ class PHPMailer
     /**
      * DKIM signing domain name.
      *
-     * @example 'example.com'
+     * @example 'scholarvault.com'
      *
      * @var string
      */
@@ -925,17 +925,17 @@ class PHPMailer
                 //Normalize line breaks
                 $str = preg_replace('/\r\n|\r/m', "\n", $str);
                 echo gmdate('Y-m-d H:i:s'),
-                "\t",
+                    "\t",
                     //Trim trailing space
-                trim(
-                    //Indent for readability, except for trailing break
-                    str_replace(
-                        "\n",
-                        "\n                   \t                  ",
-                        trim($str)
-                    )
-                ),
-                "\n";
+                    trim(
+                        //Indent for readability, except for trailing break
+                        str_replace(
+                            "\n",
+                            "\n                   \t                  ",
+                            trim($str)
+                        )
+                    ),
+                    "\n";
         }
     }
 
@@ -1286,7 +1286,7 @@ class PHPMailer
         if (
             (false === $pos)
             || ((!$this->has8bitChars(substr($address, ++$pos)) || !static::idnSupported())
-            && !static::validateAddress($address))
+                && !static::validateAddress($address))
         ) {
             $error_message = sprintf(
                 '%s (From): %s',
@@ -1335,7 +1335,7 @@ class PHPMailer
      * Alternatively you may pass in a callable to inject your own validator, for example:
      *
      * ```php
-     * PHPMailer::validateAddress('user@example.com', function($address) {
+     * PHPMailer::validateAddress('user@scholarvault.com', function($address) {
      *     return (strpos($address, '@') !== false);
      * });
      * ```
@@ -1454,7 +1454,7 @@ class PHPMailer
                     $punycode = idn_to_ascii(
                         $domain,
                         \IDNA_DEFAULT | \IDNA_USE_STD3_RULES | \IDNA_CHECK_BIDI |
-                            \IDNA_CHECK_CONTEXTJ | \IDNA_NONTRANSITIONAL_TO_ASCII,
+                        \IDNA_CHECK_CONTEXTJ | \IDNA_NONTRANSITIONAL_TO_ASCII,
                         \INTL_IDNA_VARIANT_UTS46
                     );
                 } elseif (defined('INTL_IDNA_VARIANT_2003')) {
@@ -1853,7 +1853,7 @@ class PHPMailer
         if (strpos($path, '\\\\') !== 0) {
             $readable = $readable && is_readable($path);
         }
-        return  $readable;
+        return $readable;
     }
 
     /**
@@ -2268,7 +2268,7 @@ class PHPMailer
 
         //Validate $langcode
         $foundlang = true;
-        $langcode  = strtolower($langcode);
+        $langcode = strtolower($langcode);
         if (
             !preg_match('/^(?P<lang>[a-z]{2})(?P<script>_[a-z]{4})?(?P<country>_[a-z]{2})?$/', $langcode, $matches)
             && $langcode !== 'en'
@@ -2321,7 +2321,7 @@ class PHPMailer
                         array_key_exists($matches[1], $PHPMAILER_LANG)
                     ) {
                         //Overwrite language-specific strings so we'll never have missing translation keys.
-                        $PHPMAILER_LANG[$matches[1]] = (string)$matches[3];
+                        $PHPMAILER_LANG[$matches[1]] = (string) $matches[3];
                     }
                 }
             }
@@ -2352,7 +2352,7 @@ class PHPMailer
      * @param array  $addr An array of recipients,
      *                     where each recipient is a 2-element indexed array with element 0 containing an address
      *                     and element 1 containing a name, like:
-     *                     [['joe@example.com', 'Joe User'], ['zoe@example.com', 'Zoe User']]
+     *                     [['joe@scholarvault.com', 'Joe User'], ['zoe@scholarvault.com', 'Zoe User']]
      *
      * @return string
      */
@@ -2370,7 +2370,7 @@ class PHPMailer
      * Format an address for use in a message header.
      *
      * @param array $addr A 2-element indexed array, element 0 containing an address, element 1 containing a name like
-     *                    ['joe@example.com', 'Joe User']
+     *                    ['joe@scholarvault.com', 'Joe User']
      *
      * @return string
      */

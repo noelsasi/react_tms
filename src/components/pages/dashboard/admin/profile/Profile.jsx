@@ -71,7 +71,7 @@ function Profile() {
                         <div className="author-media">
                           <img
                             src={
-                              user.profilePic?.includes('example.com')
+                              user.profilePic?.includes('scholarvault.com')
                                 ? '/dash/images/profile/pic1.jpg'
                                 : user.profilePic
                             }
