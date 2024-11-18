@@ -1,27 +1,37 @@
-import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useLocation } from 'react-router-dom'
+import { fetchNotifications } from '../../../components/pages/dashboard/slices/dashboardSlice'
 
 function DashBoardHeader({ onToggle, isMenuToggled }) {
-  const [isNotificationOpen, setNotificationOpen] = useState(false);
-  const [isProfileOpen, setProfileOpen] = useState(false);
-  const [role, setRole] = useState(null);
+  const dispatch = useDispatch()
+  const { userProfile } = useSelector(state => state.dashboard)
+  const notifications = useSelector((state) => state.dashboard.notifications)
 
-  const location = useLocation();
+  const [isNotificationOpen, setNotificationOpen] = useState(false)
+  const [isProfileOpen, setProfileOpen] = useState(false)
+  const [role, setRole] = useState(null)
+
+  const location = useLocation()
 
   useEffect(() => {
     if (location.pathname) {
-      const currentRole = location.pathname.split("/")[2];
-      setRole(currentRole);
+      const currentRole = location.pathname.split('/')[2]
+      setRole(currentRole)
     }
-  }, [location.pathname]);
+  }, [location.pathname])
+
+  useEffect(() => {
+    dispatch(fetchNotifications())
+  }, [dispatch])
 
   const toggleNotificationDropdown = () => {
-    setNotificationOpen(!isNotificationOpen);
-  };
+    setNotificationOpen(!isNotificationOpen)
+  }
 
   const toggleProfileDropdown = () => {
-    setProfileOpen(!isProfileOpen);
-  };
+    setProfileOpen(!isProfileOpen)
+  }
 
   return (
     <div>
@@ -33,7 +43,7 @@ function DashBoardHeader({ onToggle, isMenuToggled }) {
           <img
             src="/dash/icons/icon.png"
             alt="logo"
-            style={{ width: "40px" }}
+            style={{ width: '40px' }}
           />
           {!isMenuToggled && (
             <h3 className="d-none d-lg-flex">
@@ -80,60 +90,39 @@ function DashBoardHeader({ onToggle, isMenuToggled }) {
                     </svg>
                   </a>
                   <div
-                    className={`dropdown-menu dropdown-menu-end ${
-                      isNotificationOpen ? "show" : ""
-                    }`}
+                    className={`dropdown-menu dropdown-menu-end ${isNotificationOpen ? 'show' : ''
+                      }`}
                   >
                     <div
                       id="DZ_W_Notification1"
                       className="widget-media dlab-scroll p-3"
-                      style={{ maxHeight: 380, overflowY: "auto" }}
+                      style={{ maxHeight: 380, overflowY: 'auto' }}
                     >
                       <ul className="timeline">
-                        <li>
-                          <div className="timeline-panel">
-                            <div className="media me-2">
-                              <img
-                                alt="image"
-                                width={50}
-                                src="/dash/images/avatar/1.jpg"
-                              />
+                        {notifications.map((notification) => (
+                          <li key={notification.id}>
+                            <div className="timeline-panel">
+                              <div className="media me-2">
+                                <img
+                                  alt="image"
+                                  width={50}
+                                  src={!notification?.user_info?.profilePic || !notification?.user_info?.profilePic.includes('example.com') ? notification?.user_info?.profilePic : "/dash/images/avatar/1.jpg"}
+                                />
+                              </div>
+                              <div className="media-body">
+                                <h6 className="mb-1">{notification.message}</h6>
+                                <small className="d-block">
+                                  {new Date(notification.created_at).toLocaleString()}
+                                </small>
+                              </div>
                             </div>
-                            <div className="media-body">
-                              <h6 className="mb-1">
-                                Dr John Doe Commented on your Thesis
-                              </h6>
-                              <small className="d-block">
-                                29 July 2024 - 02:26 PM
-                              </small>
-                            </div>
-                          </div>
-                        </li>
-                        <li>
-                          <div className="timeline-panel">
-                            <div className="media me-2 media-info">KG</div>
-                            <div className="media-body">
-                              <h6 className="mb-1">New Thesis added</h6>
-                              <small className="d-block">
-                                29 July 2024 - 02:26 PM
-                              </small>
-                            </div>
-                          </div>
-                        </li>
-
-                        <li>
-                          <div className="timeline-panel">
-                            <div className="media me-2 media-info">CH</div>
-                            <div className="media-body">
-                              <h6 className="mb-1">New Thesis added</h6>
-                              <small className="d-block">
-                                29 July 2024 - 02:26 PM
-                              </small>
-                            </div>
-                          </div>
-                        </li>
+                          </li>
+                        ))}
                       </ul>
                     </div>
+                    <a className="all-notification" href="#">
+                      View all notifications <i className="ti-arrow-end"></i>
+                    </a>
                   </div>
                 </li>
                 <li className="nav-item dropdown">
@@ -146,30 +135,29 @@ function DashBoardHeader({ onToggle, isMenuToggled }) {
                   >
                     <div className="header-info2 d-flex align-items-center gap-2">
                       <img
-                        src="/dash/images/profile/pic1.jpg"
+                        src={!userProfile.profilePic || userProfile.profilePic.includes('example.com') ? '/dash/images/profile/pic1.jpg' : userProfile.profilePic}
                         alt="img"
                         className="profile-image"
                         style={{
-                          width: "50px",
-                          height: "50px",
-                          borderRadius: "50%",
-                          objectFit: "cover",
+                          width: '50px',
+                          height: '50px',
+                          borderRadius: '50%',
+                          objectFit: 'cover',
                         }}
                       />
                       <div className="d-flex align-items-center sidebar-info">
                         <div>
                           <span></span>
                           <span className="font-w400 d-block">
-                            <strong>User</strong>
+                            <strong>{userProfile.firstName}</strong>
                           </span>
                         </div>
                       </div>
                     </div>
                   </a>
                   <div
-                    className={`mt-10 dropdown-menu dropdown-menu-end ${
-                      isProfileOpen ? "show" : ""
-                    }`}
+                    className={`mt-10 dropdown-menu dropdown-menu-end ${isProfileOpen ? 'show' : ''
+                      }`}
                   >
                     <div id="DZ_W_Notification1" className="widget-media">
                       <ul className="timeline">
@@ -177,7 +165,7 @@ function DashBoardHeader({ onToggle, isMenuToggled }) {
                           <Link
                             to={`/dashboard/${role}/profile`}
                             className="dropdown-item ai-icon"
-                            style={{ whiteSpace: "nowrap" }}
+                            style={{ whiteSpace: 'nowrap' }}
                             onClick={toggleProfileDropdown}
                           >
                             <svg
@@ -203,7 +191,7 @@ function DashBoardHeader({ onToggle, isMenuToggled }) {
                           <Link
                             to="/"
                             className="dropdown-item ai-icon"
-                            style={{ whiteSpace: "nowrap" }}
+                            style={{ whiteSpace: 'nowrap' }}
                             onClick={toggleProfileDropdown}
                           >
                             <svg
@@ -235,7 +223,7 @@ function DashBoardHeader({ onToggle, isMenuToggled }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default DashBoardHeader;
+export default DashBoardHeader

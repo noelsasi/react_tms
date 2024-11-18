@@ -49,6 +49,11 @@ function NavBar() {
         link: "/dashboard/admin/profile",
         icon: "flaticon-086-star",
       },
+      {
+        label: "Chat",
+        link: "/dashboard/admin/chat",
+        icon: "flaticon-025-chat",
+      },
     ],
     scholar: [
       {
@@ -86,6 +91,11 @@ function NavBar() {
         link: "/dashboard/scholar/profile",
         icon: "flaticon-086-star",
       },
+      {
+        label: "Chat",
+        link: "/dashboard/scholar/chat",
+        icon: "flaticon-025-chat",
+      },
     ],
     user: [
       {
@@ -112,6 +122,11 @@ function NavBar() {
         label: "Profile",
         link: "/dashboard/user/profile",
         icon: "flaticon-086-star",
+      },
+      {
+        label: "Chat",
+        link: "/dashboard/user/chat",
+        icon: "flaticon-025-chat",
       },
     ],
   };

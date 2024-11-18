@@ -1,16 +1,16 @@
-"use client";
+'use client'
 
-import DashBoardHeader from "../components/Dashboard/Header";
-import NavBar from "../components/Dashboard/NavBar";
-import Footer from "../components/Dashboard/Footer";
-import { useState } from "react";
+import DashBoardHeader from '../components/Dashboard/Header'
+import NavBar from '../components/Dashboard/NavBar'
+import Footer from '../components/Dashboard/Footer'
+import { useState } from 'react'
 
-function layout({ children }) {
-  const [isMenuToggled, setIsMenuToggled] = useState(false);
+function Layout({ children }) {
+  const [isMenuToggled, setIsMenuToggled] = useState(false)
 
   const handleToggle = () => {
-    setIsMenuToggled(!isMenuToggled);
-  };
+    setIsMenuToggled(!isMenuToggled)
+  }
   return (
     <div>
       <>
@@ -41,7 +41,7 @@ function layout({ children }) {
           <link href="/dash/css/style.css" rel="stylesheet" />
         </div>
       </>
-      <div className={`main-wrapper ${isMenuToggled ? "menu-toggle" : ""}`}>
+      <div className={`main-wrapper ${isMenuToggled ? 'menu-toggle' : ''}`}>
         <DashBoardHeader
           onToggle={handleToggle}
           isMenuToggled={isMenuToggled}
@@ -52,21 +52,21 @@ function layout({ children }) {
       </div>
 
       <>
-        <Script src="/dash/vendor/global/global.min.js"></Script>
-        <Script src="/dash/vendor/scholarvault-select/dist/js/scholarvault-select.min.js"></Script>
+        <script src="/dash/vendor/global/global.min.js"></script>
+        <script src="/dash/vendor/scholarvault-select/dist/js/scholarvault-select.min.js"></script>
 
-        <Script src="/dash/vendor/chartjs/chart.bundle.min.js"></Script>
-        <Script src="/dash/vendor/select2/js/select2.full.min.js"></Script>
-        <Script src="/dash/js/plugins-init/select2-init.js"></Script>
-        <Script src="/dash/vendor/peity/jquery.peity.min.js"></Script>
-        <Script src="/dash/vendor/owl-carousel/owl.carousel.js"></Script>
+        <script src="/dash/vendor/chartjs/chart.bundle.min.js"></script>
+        <script src="/dash/vendor/select2/js/select2.full.min.js"></script>
+        <script src="/dash/js/plugins-init/select2-init.js"></script>
+        <script src="/dash/vendor/peity/jquery.peity.min.js"></script>
+        <script src="/dash/vendor/owl-carousel/owl.carousel.js"></script>
 
-        <Script src="/dash/js/custom.min.js"></Script>
-        <Script src="/dash/js/dlabnav-init.js"></Script>
-        <Script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></Script>
-        <Script src="https://cdn.jsdelivr.net/npm/scholarvault@5.1.3/dist/js/scholarvault.min.js"></Script>
+        <script src="/dash/js/custom.min.js"></script>
+        <script src="/dash/js/dlabnav-init.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/scholarvault@5.1.3/dist/js/scholarvault.min.js"></script>
       </>
     </div>
-  );
+  )
 }
-export default layout;
+export default Layout

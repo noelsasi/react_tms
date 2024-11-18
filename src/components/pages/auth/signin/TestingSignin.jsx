@@ -12,7 +12,7 @@ const TestingSignin = () => {
     try {
       // Send credentials to NextAuth API for authentication
       const response = await axios.post(
-        "https://3a63-150-107-26-9.ngrok-free.app/api/auth/callback/credentials",
+        "http://localhost:3000/api/auth/callback/credentials",
         {
           email,
           password,

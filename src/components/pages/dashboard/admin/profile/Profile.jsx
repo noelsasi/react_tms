@@ -1,7 +1,62 @@
-import ManageUserForm from "../../../../custom/Forms/ManageUserForm";
-import UpdateProfile from "../../../../custom/Forms/UpdateProfile";
+import { useDispatch, useSelector } from 'react-redux'
+import UpdateProfile from '../../../../custom/Forms/UpdateProfile'
+import React from 'react'
+import {
+  fetchUserProfile,
+  updateUserProfile,
+} from '../../slices/dashboardSlice'
 
 function Profile() {
+  const dispatch = useDispatch()
+  const { userProfile: user } = useSelector(state => state.dashboard)
+
+  const handleFileUpload = async event => {
+    const profilePicFile = event.target.files[0]
+    if (!profilePicFile) return null // If no file is selected, return null
+
+    const formData = new FormData()
+    formData.append('file', profilePicFile)
+    formData.append('upload_preset', 'profilepic')
+
+    try {
+      const response = await fetch(
+        'https://api.cloudinary.com/v1_1/dknje3po9/image/upload',
+        {
+          method: 'POST',
+          body: formData,
+        }
+      )
+
+      const data = await response.json()
+
+      if (data.secure_url) {
+        // return data.secure_url // Return the image URL to be added to formFields
+        dispatch(
+          updateUserProfile(
+            {
+              ...user,
+              firstname: user.firstName,
+              lastname: user.lastName,
+              profilePic: data.secure_url,
+            },
+            'admin'
+          )
+        )
+      } else {
+        alert('File upload failed, please try again.')
+        return null
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error)
+      alert('An error occurred during the file upload.')
+      return null
+    }
+  }
+
+  React.useEffect(() => {
+    dispatch(fetchUserProfile('admin'))
+  }, [])
+
   return (
     <>
       <div className="content-body">
@@ -14,57 +69,71 @@ function Profile() {
                     <div className="p-5">
                       <div className="author-profile mt-4">
                         <div className="author-media">
-                          <img src="/dash/images/profile/pic1.jpg" alt="img" />
+                          <img
+                            src={
+                              user.profilePic?.includes('example.com')
+                                ? '/dash/images/profile/pic1.jpg'
+                                : user.profilePic
+                            }
+                            alt="img"
+                          />
                           <div
                             className="upload-link"
-                            
                             data-bs-toggle="tooltip"
                             data-placement="right"
                             data-original-title="update"
                           >
-                            <input type="file" className="update-flie" />
+                            <input
+                              type="file"
+                              className="update-flie"
+                              onChange={handleFileUpload}
+                            />
                             <i className="fa fa-camera" />
                           </div>
                         </div>
                         <br />
                         <br />
                         <div className="author-info">
-                          <h6 className="title">John</h6>
-                          <span>Admin</span>
+                          <h6 className="title">{user.firstName}</h6>
+                          <span>{user.role}</span>
                         </div>
                       </div>
                     </div>
                     <div className="info-list">
                       <ul>
                         <li>
-                          Fisrt Name<span>John</span>
+                          Fisrt Name<span>{user.firstName}</span>
                         </li>
                         <li>
-                          Last Name<span>Doe</span>
+                          Last Name<span>{user.lastName}</span>
                         </li>
                         <li>
-                          DOB<span>06-01-1997</span>
+                          DOB
+                          <span>{new Date(user.dob).toLocaleDateString()}</span>
                         </li>
                         <li>
-                          Gender<span>Male</span>
+                          Gender<span>{user.gender}</span>
                         </li>
                         <li>
-                          Phone No<span>123456789</span>
+                          Phone No<span>{user.phone}</span>
                         </li>
                         <li>
-                          Email<span>demo@gmail.com</span>
+                          Email<span>{user.email}</span>
                         </li>
                         <li>
-                          Joined<span>2022-05-01</span>
+                          Joined
+                          <span>
+                            {new Date(user.joined).toLocaleDateString()}
+                          </span>
                         </li>
                         <li>
-                          Thesis<span>12</span>
+                          Thesis<span>{user.thesesCount}</span>
                         </li>
                         <li>
-                          Downloads<span>18</span>
+                          Downloads<span>{user.downloadsCount}</span>
                         </li>
                         <li>
-                          Address<span>123 Main St, New York, NY 10001</span>
+                          Address<span>{user.address}</span>
                         </li>
                       </ul>
                     </div>
@@ -79,7 +148,7 @@ function Profile() {
                 </div>
                 <div className="card-body">
                   <div className="basic-form">
-                    <UpdateProfile />
+                    <UpdateProfile user={user} />
                   </div>
                 </div>
               </div>
@@ -88,7 +157,7 @@ function Profile() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
-export default Profile;
+export default Profile

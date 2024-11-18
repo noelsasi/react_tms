@@ -104,7 +104,8 @@ const data1 = [
   },
 ];
 
-function PrimaryCharts() {
+
+function PrimaryCharts({ dashboardData }) {
   return (
     <div className="col-12">
       <div className="row">
@@ -146,7 +147,7 @@ function PrimaryCharts() {
             </div>
             <div className="card-body">
               <div className="flot-chart">
-              <ResponsiveContainer width="100%" height="90%">
+                <ResponsiveContainer width="100%" height="90%">
                   <BarChart width={500} height={300} data={data1} barSize={20}>
                     <CartesianGrid
                       strokeDasharray="3 3"

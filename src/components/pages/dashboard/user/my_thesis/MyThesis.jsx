@@ -1,6 +1,20 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Pagination from "../../../../custom/misc/Pagination";
+import { fetchMyThesis } from "../../slices/dashboardSlice";
 
 function My_thesis() {
+  const dispatch = useDispatch();
+  const { thesisData, loading } = useSelector((state) => state.dashboard);
+
+  useEffect(() => {
+    dispatch(fetchMyThesis());
+  }, [dispatch]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="content-body">
       <div className="container-fluid">
@@ -45,148 +59,31 @@ function My_thesis() {
                       </tr>
                     </thead>
                     <tbody>
-                      {[
-                        {
-                          id: "01",
-                          title: "AI in Health Care",
-                          author: "David",
-                          category: "Medicine",
-                          keywords: "AI, Healthcare",
-                          abstract: "The use of AI in health care",
-                          status: "Accepted",
-                        },
-                        {
-                          id: "02",
-                          title: "Machine Learning in Education",
-                          author: "Susan",
-                          category: "Education",
-                          keywords: "ML, Education",
-                          abstract:
-                            "Leveraging ML to enhance learning outcomes",
-                          status: "Accepted",
-                        },
-                        {
-                          id: "03",
-                          title: "Blockchain for Data Security",
-                          author: "Michael",
-                          category: "Computer Science",
-                          keywords: "Blockchain, Security",
-                          abstract:
-                            "Exploring blockchain for enhancing data security",
-                          status: "Pending",
-                        },
-                        {
-                          id: "04",
-                          title: "Climate Change Modeling",
-                          author: "Emma",
-                          category: "Environmental Science",
-                          keywords: "Climate, Modeling",
-                          abstract: "AI-based climate prediction models",
-                          status: "Rejected",
-                        },
-                        {
-                          id: "05",
-                          title: "Smart Farming with IoT",
-                          author: "James",
-                          category: "Agriculture",
-                          keywords: "IoT, Agriculture",
-                          abstract: "Using IoT to enhance farming practices",
-                          status: "Accepted",
-                        },
-                        {
-                          id: "06",
-                          title: "Augmented Reality in Tourism",
-                          author: "Sophia",
-                          category: "Tourism",
-                          keywords: "AR, Tourism",
-                          abstract: "Enhancing tourist experiences with AR",
-                          status: "Accepted",
-                        },
-                        {
-                          id: "07",
-                          title: "Cybersecurity Strategies",
-                          author: "Liam",
-                          category: "Cybersecurity",
-                          keywords: "Cybersecurity, Strategies",
-                          abstract:
-                            "Best practices for securing digital assets",
-                          status: "Rejected",
-                        },
-                        {
-                          id: "08",
-                          title: "Deep Learning for Image Recognition",
-                          author: "Olivia",
-                          category: "Artificial Intelligence",
-                          keywords: "Deep Learning, AI",
-                          abstract:
-                            "Advancements in image recognition using deep learning",
-                          status: "Accepted",
-                        },
-                        {
-                          id: "09",
-                          title: "Natural Language Processing",
-                          author: "Noah",
-                          category: "Computer Science",
-                          keywords: "NLP, AI",
-                          abstract: "Exploring NLP techniques and applications",
-                          status: "Accepted",
-                        },
-                        {
-                          id: "10",
-                          title: "Renewable Energy Solutions",
-                          author: "Isabella",
-                          category: "Environmental Science",
-                          keywords: "Renewable, Energy",
-                          abstract:
-                            "Innovations in renewable energy technologies",
-                          status: "Accepted",
-                        },
-                        {
-                          id: "11",
-                          title: "Data Analytics in Sports",
-                          author: "Oliver",
-                          category: "Sports",
-                          keywords: "Data, Sports",
-                          abstract:
-                            "Using data analytics to enhance sports performance",
-                          status: "Accepted",
-                        },
-                      ].map(
-                        ({
-                          id,
-                          title,
-                          author,
-                          category,
-                          keywords,
-                          abstract,
-                          status,
-                        }) => {
-                          const views =
-                            status === "Accepted"
-                              ? Math.floor(Math.random() * 1000)
-                              : "-";
-                          const downloads =
-                            status === "Accepted"
-                              ? Math.floor(Math.random() * 500)
-                              : "-";
-
-                          return (
-                            <tr key={id}>
-                              <td>
-                                <strong>{id}</strong>
-                              </td>
-                              <td>{title}</td>
-                              <td>{author}</td>
-                              <td>{category}</td>
-                              <td>{keywords}</td>
-                              <td>{abstract}</td>
-                              <td>{views}</td>
-                              <td>{downloads}</td>
-                              <td>{status}</td>
-                            </tr>
-                          );
-                        }
-                      )}
+                      {thesisData.map(({
+                        thesis_id,
+                        title,
+                        author_name,
+                        category,
+                        keywords,
+                        abstract,
+                        views_count,
+                        downloads_count,
+                        status
+                      }) => (
+                        <tr key={thesis_id}>
+                          <td>
+                            <strong>{String(thesis_id).padStart(2, '0')}</strong>
+                          </td>
+                          <td>{title}</td>
+                          <td>{author_name}</td>
+                          <td>{category}</td>
+                          <td>{keywords?.join(', ')}</td>
+                          <td>{abstract}</td>
+                          <td>{status === "Accepted" ? views_count : "-"}</td>
+                          <td>{status === "Accepted" ? downloads_count : "-"}</td>
+                          <td>{status}</td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>

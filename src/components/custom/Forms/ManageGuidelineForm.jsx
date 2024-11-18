@@ -1,96 +1,162 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from 'react-redux'
+import { createGuideline, fileUploadHandler } from '../../pages/dashboard/slices/dashboardSlice'
+import { ChevronDownIcon, Cross1Icon, TrashIcon } from "@radix-ui/react-icons"
 
-function ManageGuidelineForm({ mode, onCreate }) {
+const initialFormData = {
+  title: '',
+  description: '',
+  file: null
+}
+
+function ManageGuidelineForm({ guideline, show, setShow }) {
+  const dispatch = useDispatch()
+  const { formSubmitting } = useSelector(state => state.dashboard)
+  const [formData, setFormData] = useState(initialFormData)
+  const [file, setFile] = useState(null)
+
   useEffect(() => {
-    (function () {
-      "use strict";
-      const forms = document.querySelectorAll(".needs-validation");
-      Array.prototype.slice.call(forms).forEach(function (form) {
-        form.addEventListener(
-          "submit",
-          function (event) {
-            if (!form.checkValidity()) {
-              event.preventDefault();
-              event.stopPropagation();
-            }
-            form.classList.add("was-validated");
-          },
-          false
-        );
-      });
-    })();
-  }, []);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(mode === "edit" ? "Editing" : "Creating");
-  };
+    if (guideline) {
+      setFormData({
+        title: guideline.title || '',
+        description: guideline.description || '',
+      })
+      if (guideline.fileUrl) {
+        setFile({
+          name: guideline.fileUrl
+        })
+      }
+    }
+  }, [guideline])
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0])
+  }
+
+  const handleReset = (e) => {
+    e?.preventDefault()
+    setFormData(initialFormData)
+    setFile(null)
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (e.target.checkValidity()) {
+      const fileUrl = guideline?.fileUrl
+        ? guideline?.file_url
+        : await fileUploadHandler(file)
+
+      const dataToSubmit = {
+        ...formData,
+        file_url: fileUrl
+      }
+
+      if (guideline?.id) {
+        dataToSubmit.id = guideline.id
+      }
+
+      dispatch(createGuideline(dataToSubmit, () => handleReset()))
+    } else {
+      e.target.classList.add('was-validated')
+    }
+  }
+
   return (
     <div className="col-lg-12">
       <div className="card">
-        <div className="card-header">
-          <h4 className="card-title">Manage Guidelines and Template</h4>
+        <div className="card-header d-flex justify-content-between align-items-center" style={{ cursor: 'pointer' }} onClick={() => setShow(!show)}>
+          <h4 className="card-title">Manage Guidelines</h4>
+          <button className="btn btn-sm" onClick={() => setShow(!show)}>
+            <ChevronDownIcon style={{ rotate: show ? '180deg' : '0deg' }} />
+          </button>
         </div>
-        <div className="card-body">
+        {show && <div className="card-body">
           <div className="basic-form">
-            <form
-              className="needs-validation"
-              noValidate
-              onSubmit={handleSubmit}
-            >
+            <form className="needs-validation" noValidate onSubmit={handleSubmit}>
               <div className="row">
                 <div className="mb-3 col-md-6">
                   <label className="form-label">Title</label>
                   <input
                     type="text"
                     className="form-control"
+                    name="title"
                     placeholder="Enter Title"
+                    value={formData.title}
+                    onChange={handleInputChange}
                     required
                   />
                   <div className="invalid-feedback">Please enter a Title.</div>
                 </div>
-                <div className="mb-3 col-md-6">
-                  <label htmlFor="formFileSm" className="form-label">
-                    Input File(.pdf,max size:10MB)
-                  </label>
+                {!file?.name && <div className="mb-3 col-md-6">
+                  <label className="form-label">File (.pdf, max size:10MB)</label>
                   <input
-                    className="form-control form-control-sm"
-                    id="formFileSm"
                     type="file"
+                    className="form-control"
+                    name="file"
+                    onChange={handleFileChange}
+                    accept=".pdf"
                     required
                   />
                   <div className="invalid-feedback">Please attach a file.</div>
-                </div>
+                </div>}
+
+                {file?.name && <div className="mb-3 col-md-6">
+                  <label className="form-label">File</label>
+                  <p className="form-control d-flex justify-content-between align-items-center">
+                    {file?.name}
+                    <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => setFile(null)}>
+                      <Cross1Icon />
+                    </button>
+                  </p>
+                </div>}
               </div>
 
               <div className="row">
-                <label className="form-label">Description</label>
-                <div className="basic-form">
-                  <div className="mb-3">
-                    <textarea
-                      required
-                      placeholder="Enter Description"
-                      className="form-control"
-                      rows={2}
-                      id="comment"
-                      defaultValue={""}
-                    />
-                    <div className="invalid-feedback">Please Description.</div>
-                  </div>
+                <div className="mb-3 col-md-12">
+                  <label className="form-label">Description</label>
+                  <textarea
+                    className="form-control"
+                    name="description"
+                    placeholder="Enter Description"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    rows={3}
+                    required
+                  />
+                  <div className="invalid-feedback">Please enter Description.</div>
                 </div>
               </div>
 
-              <div className="d-flex justify-content-end">
-                {" "}
-                <button type="submit" className="btn btn-primary">
-                  {mode === "edit" ? "Edit" : "Create"}
+              <div className="d-flex justify-content-end gap-3">
+                <button type="reset" className="btn btn-outline-primary" onClick={handleReset}>
+                  Reset
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={formSubmitting}
+                >
+                  {formSubmitting ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                      {guideline?.id ? 'Editing...' : 'Creating...'}
+                    </>
+                  ) : (
+                    `${guideline?.id ? 'Edit' : 'Create'} Guideline`
+                  )}
                 </button>
               </div>
             </form>
           </div>
-        </div>
+        </div>}
       </div>
     </div>
-  );
+  )
 }
 
-export default ManageGuidelineForm;
+export default ManageGuidelineForm

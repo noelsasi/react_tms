@@ -1,83 +1,93 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import Logo from "../../../custom/Logo";
+import React, { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import Logo from '../../../custom/Logo'
 
 function Sendmail() {
-  const [email, setEmail] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [email, setEmail] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
+
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location.search)
+  const emailParam = searchParams.get('email')
+
+  React.useEffect(() => {
+    if (emailParam) {
+      setEmail(emailParam)
+    }
+  }, [emailParam])
 
   useEffect(() => {
     // Client-side form validation
-    (function () {
-      "use strict";
-      const forms = document.querySelectorAll(".needs-validation");
+    ; (function () {
+      'use strict'
+      const forms = document.querySelectorAll('.needs-validation')
       Array.prototype.slice.call(forms).forEach(function (form) {
         form.addEventListener(
-          "submit",
+          'submit',
           function (event) {
             if (!form.checkValidity()) {
-              event.preventDefault();
-              event.stopPropagation();
+              event.preventDefault()
+              event.stopPropagation()
             }
-            form.classList.add("was-validated");
+            form.classList.add('was-validated')
           },
           false
-        );
-      });
-    })();
-  }, []);
+        )
+      })
+    })()
+  }, [])
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async event => {
+    event.preventDefault()
 
     // Check if the email is entered and valid
     if (!email) {
-      setErrorMessage("Please enter your email address.");
-      setSuccessMessage("");
-      return;
+      setErrorMessage('Please enter your email address.')
+      setSuccessMessage('')
+      return
     }
 
     // Clear previous success/error messages
-    setErrorMessage("");
-    setSuccessMessage("");
+    setErrorMessage('')
+    setSuccessMessage('')
 
     try {
       // Make the POST request to the backend
       const response = await fetch(
-        `https://3a63-150-107-26-9.ngrok-free.app/api/auth/sendemail?email=${email}`,
+        `http://localhost:3000/api/auth/sendemail?email=${email}`,
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({ email }), // Send email as the body
         }
-      );
+      )
 
       if (!response.ok) {
         // Handle error response
-        const data = await response.json();
-        setErrorMessage(data.message || "An error occurred. Please try again.");
+        const data = await response.json()
+        setErrorMessage(data.message || 'An error occurred. Please try again.')
       } else {
         // Handle successful response
         setSuccessMessage(
-          "Verification email has been sent. Please check your inbox."
-        );
-        setEmail(""); // Clear the email field after successful submission
+          'Verification email has been sent. Please check your inbox.'
+        )
+        setEmail('') // Clear the email field after successful submission
       }
-    } catch (error) {
-      setErrorMessage("Network error. Please try again.");
+    } catch (err) {
+      setErrorMessage('Network error. Please try again.' + err)
     }
-  };
+  }
 
   return (
     <div
       className="vh-100"
       style={{
         backgroundImage: "url('/dash/images/bg.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
       }}
     >
       <div className="authentication h-100">
@@ -110,7 +120,7 @@ function Sendmail() {
                             type="email"
                             className="form-control"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={e => setEmail(e.target.value)}
                             required
                             placeholder="Enter your email address"
                           />
@@ -151,7 +161,7 @@ function Sendmail() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Sendmail;
+export default Sendmail

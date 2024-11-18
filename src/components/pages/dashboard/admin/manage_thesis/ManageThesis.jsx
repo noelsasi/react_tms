@@ -1,215 +1,88 @@
-import React, { useState } from "react";
-import ManageThesisForm from "../../../../custom/Forms/ManageThesisForm";
-import Pagination from "../../../../custom/misc/Pagination";
+import { useEffect, useState } from 'react'
+import ManageThesisForm from '../../../../custom/Forms/ManageThesisForm'
+import Table from '../../../../custom/Table/table'
+import { useDispatch, useSelector } from 'react-redux'
+import { deleteThesis, fetchAllThesis } from '../../slices/dashboardSlice'
+import { Pencil1Icon, TrashIcon } from '@radix-ui/react-icons'
 
 function Manage_Thesis() {
-  const [formMode, setFormMode] = useState("create");
-  const [currentThesis, setCurrentThesis] = useState(null);
-  const [dropdownOpen, setDropdownOpen] = useState(null);
+  const dispatch = useDispatch()
+  const { thesisData } = useSelector(state => state.dashboard)
+  const [currentThesis, setCurrentThesis] = useState(null)
+  const [show, setShow] = useState(false)
 
-  const theses = [
+  const handleEdit = thesis => {
+    setCurrentThesis(thesis)
+    setShow(true)
+  }
+
+  const columns = [
     {
-      id: 1,
-      title: "AI in health care",
-      author: "David",
-      category: "Medicine",
-      keywords: "Bioinformatics",
-      abstract: "The use of AI in health care",
-      views: 740,
-      downloads: 210,
-      status: "Pending",
+      id: 'id', label: 'ID', width: 80, render: thesis => (
+        <strong>{String(thesis.thesis_id).padStart(2, '0')}</strong>
+      )
+    },
+    { id: 'title', label: 'Title', key: 'title' },
+    { id: 'author', label: 'Author', key: 'author_name' },
+    {
+      id: 'reviewer', label: 'Reviewer', key: 'reviewer_name',
+      render: thesis =>
+        <span className={thesis.reviewer_id ? '' : 'text-danger'}>
+          {thesis.reviewer_name || 'Not Assigned'
+          }</span>
+    },
+    { id: 'category', label: 'Category', key: 'category' },
+    { id: 'keywords', label: 'Keywords', render: thesis => thesis.keywords?.join(', ') },
+    { id: 'abstract', label: 'Abstract', key: 'abstract' },
+    { id: 'views', label: 'Views', key: 'views_count' },
+    { id: 'downloads', label: 'Downloads', key: 'downloads_count' },
+    {
+      id: 'status', label: 'Status', render: thesis => (
+        <span className="text-capitalize">{thesis.status}</span>
+      )
     },
     {
-      id: 2,
-      title: "Machine Learning in Education",
-      author: "Susan",
-      category: "Education",
-      keywords: "Data Science",
-      abstract: "Leveraging ML to enhance learning outcomes",
-      views: 900,
-      downloads: 200,
-      status: "Accepted",
-    },
-    {
-      id: 3,
-      title: "Blockchain for Data Security",
-      author: "Michael",
-      category: "Computer Science",
-      keywords: "Security",
-      abstract: "Exploring blockchain for enhancing data security",
-      views: 600,
-      downloads: 120,
-      status: "Pending",
-    },
-    {
-      id: 4,
-      title: "Climate Change Modeling",
-      author: "Emma",
-      category: "Environmental Science",
-      keywords: "Climate Studies",
-      abstract: "AI-based climate prediction models",
-      views: 720,
-      downloads: 98,
-      status: "Pending",
-    },
-  ];
+      id: 'actions', label: 'Action', render: thesis => (
+        <div className="d-flex flex-column gap-2">
+          <button
+            type="button"
+            className="btn btn-sm text-primary"
+            onClick={() => handleEdit(thesis)}
+          >
+            <Pencil1Icon />
+          </button>
+          <button
+            type="button"
+            className="btn btn-sm text-danger"
+            onClick={() => dispatch(deleteThesis(thesis.thesis_id, () => setShow(false)))}
+          >
+            <TrashIcon />
+          </button>
+        </div>
+      )
+    }
+  ]
 
-  const handleEdit = (thesis) => {
-    setCurrentThesis(thesis);
-    setFormMode("edit");
-  };
-
-  const handleCreateMode = () => {
-    setCurrentThesis(null);
-    setFormMode("create");
-  };
-
-  const handleDelete = (id) => {};
-
-  const toggleDropdown = (index) => {
-    setDropdownOpen(dropdownOpen === index ? null : index);
-  };
+  useEffect(() => {
+    dispatch(fetchAllThesis())
+  }, [])
 
   return (
     <div className="content-body">
       <div className="container-fluid">
         <div className="row">
-          <ManageThesisForm
-            mode={formMode}
-            onCreate={handleCreateMode}
-            thesis={currentThesis}
-          />
-
+          <ManageThesisForm thesis={currentThesis} show={show} setShow={setShow} />
           <div className="col-lg-12">
-            <div className="card">
-              <div className="card-header">
-                <h4 className="card-title">List of Thesis</h4>
-              </div>
-              <div className="card-body">
-                <div className="table-responsive">
-                  <table className="table table-responsive-md">
-                    <thead>
-                      <tr>
-                        <th style={{ width: 80 }}>
-                          <strong>ID</strong>
-                        </th>
-                        <th>
-                          <strong>Title</strong>
-                        </th>
-                        <th>
-                          <strong>Author</strong>
-                        </th>
-                        <th>
-                          <strong>Category</strong>
-                        </th>
-                        <th>
-                          <strong>Keywords</strong>
-                        </th>
-                        <th>
-                          <strong>Abstract</strong>
-                        </th>
-                        <th>
-                          <strong>Views</strong>
-                        </th>
-                        <th>
-                          <strong>Downloads</strong>
-                        </th>
-                        <th>
-                          <strong>Status</strong>
-                        </th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {theses.map((thesis, index) => (
-                        <tr key={thesis.id}>
-                          <td>
-                            <strong>
-                              {String(thesis.id).padStart(2, "0")}
-                            </strong>
-                          </td>
-                          <td>{thesis.title}</td>
-                          <td>{thesis.author}</td>
-                          <td>{thesis.category}</td>
-                          <td>{thesis.keywords}</td>
-                          <td>{thesis.abstract}</td>
-                          <td>{thesis.views}</td>
-                          <td>{thesis.downloads}</td>
-                          <td>{thesis.status}</td>
-                          <td>
-                            <div className="dropdown">
-                              <button
-                                type="button"
-                                className="btn btn-success light sharp"
-                                onClick={() => toggleDropdown(index)}
-                              >
-                                <svg
-                                  width="20px"
-                                  height="20px"
-                                  viewBox="0 0 24 24"
-                                  version="1.1"
-                                >
-                                  <g
-                                    stroke="none"
-                                    strokeWidth={1}
-                                    fill="none"
-                                    fillRule="evenodd"
-                                  >
-                                    <rect x={0} y={0} width={24} height={24} />
-                                    <circle
-                                      fill="#000000"
-                                      cx={5}
-                                      cy={12}
-                                      r={2}
-                                    />
-                                    <circle
-                                      fill="#000000"
-                                      cx={12}
-                                      cy={12}
-                                      r={2}
-                                    />
-                                    <circle
-                                      fill="#000000"
-                                      cx={19}
-                                      cy={12}
-                                      r={2}
-                                    />
-                                  </g>
-                                </svg>
-                              </button>
-                              {dropdownOpen === index && (
-                                <div className="dropdown-menu show">
-                                  <a
-                                    className="dropdown-item"
-                                    href="#"
-                                    onClick={() => handleEdit(thesis)}
-                                  >
-                                    Edit
-                                  </a>
-                                  <a
-                                    className="dropdown-item"
-                                    href="#"
-                                    onClick={() => handleDelete(thesis.id)}
-                                  >
-                                    Delete
-                                  </a>
-                                </div>
-                              )}
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
+            <Table
+              title="List of Thesis"
+              rows={thesisData}
+              columns={columns}
+            />
           </div>
-          <Pagination />
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Manage_Thesis;
+export default Manage_Thesis

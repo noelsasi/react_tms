@@ -141,7 +141,7 @@ function Reset() {
     try {
       // Send POST request with token and new password
       const response = await axios.post(
-        "https://3a63-150-107-26-9.ngrok-free.app/api/auth/resetpass",
+        "http://localhost:3000/api/auth/resetpass",
         {
           token,
           newPassword,

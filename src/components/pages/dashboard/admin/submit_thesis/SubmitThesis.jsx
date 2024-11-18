@@ -1,7 +1,17 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import SubmitThesisForm from "../../../../custom/Forms/SubmitThesisForm";
 import Pagination from "../../../../custom/misc/Pagination";
+import {  fetchMyThesis,  } from "../../slices/dashboardSlice";
 
 function Submit_Thesis() {
+  const dispatch = useDispatch();
+  const { thesisData, loading,  } = useSelector((state) => state.dashboard);
+
+  useEffect(() => {
+    dispatch(fetchMyThesis());
+  }, [dispatch]);
+
   return (
     <div className="content-body">
       <div className="container-fluid">
@@ -19,6 +29,8 @@ function Submit_Thesis() {
                 <a
                   className="m-0 subtitle"
                   href="https://grad.ucsd.edu/academics/preparing-to-graduate/dissertation-thesis-template.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   Click here to see template
                 </a>
@@ -219,12 +231,14 @@ function Submit_Thesis() {
                         <th style={{ width: 80 }}>
                           <strong>ID</strong>
                         </th>
-
                         <th>
                           <strong>Title</strong>
                         </th>
                         <th>
                           <strong>Author</strong>
+                        </th>
+                        <th>
+                          <strong>Reviewer</strong>
                         </th>
                         <th>
                           <strong>Category</strong>
@@ -241,52 +255,48 @@ function Submit_Thesis() {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>
-                          <strong>01</strong>
-                        </td>
-                        <td>AI in health care</td>
-                        <td>David</td>
-                        <td>Medicine</td>
-                        <td>Bioinformatics</td>
-                        <td>The use of AI in health care</td>
-                        <td>Pending</td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <strong>02</strong>
-                        </td>
-                        <td>Machine Learning in Education</td>
-                        <td>Susan</td>
-                        <td>Education</td>
-                        <td>Data Science</td>
-                        <td>Leveraging ML to enhance learning outcomes</td>
-                        <td>Accepted</td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <strong>03</strong>
-                        </td>
-                        <td>Blockchain for Data Security</td>
-                        <td>Michael</td>
-                        <td>Computer Science</td>
-                        <td>Security</td>
-                        <td>
-                          Exploring blockchain for enhancing data security
-                        </td>
-                        <td>Pending</td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <strong>04</strong>
-                        </td>
-                        <td>Climate Change Modeling</td>
-                        <td>Emma</td>
-                        <td>Environmental Science</td>
-                        <td>Climate Studies</td>
-                        <td>AI-based climate prediction models</td>
-                        <td>Pending</td>
-                      </tr>
+                      {loading ? (
+                        <tr>
+                          <td colSpan="7" className="text-center">
+                            Loading...
+                          </td>
+                        </tr>
+                      ) : thesisData.length === 0 ? (
+                        <tr>
+                          <td colSpan="7" className="text-center">
+                            No thesis found
+                          </td>
+                        </tr>
+                      ) : (
+                        thesisData.map(({
+                          thesis_id,
+                          title,
+                          author_name,
+                          reviewer_name,
+                          category,
+                          keywords,
+                          abstract,
+                          status
+                        }) => (
+                          <tr key={thesis_id}>
+                            <td>
+                              <strong>{String(thesis_id).padStart(2, '0')}</strong>
+                            </td>
+                            <td>{title}</td>
+                            <td>{author_name}</td>
+                            <td>{reviewer_name || 'Not Assigned'}</td>
+                            <td>{category}</td>
+                            <td>{keywords?.join(', ')}</td>
+                            <td>{abstract}</td>
+                            <td>
+                              <span className={`badge badge-${status.toLowerCase() === 'pending' ? 'warning' : 
+                                status.toLowerCase() === 'approved' ? 'success' : 'danger'}`}>
+                                {status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))
+                      )}
                     </tbody>
                   </table>
                 </div>

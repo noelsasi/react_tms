@@ -1,238 +1,80 @@
-import React, { useState } from "react";
-import ManageUserForm from "../../../../custom/Forms/ManageUserForm";
-import Pagination from "../../../../custom/misc/Pagination";
+import { useEffect, useState } from 'react'
+import ManageUserForm from '../../../../custom/Forms/ManageUserForm'
+import Pagination from '../../../../custom/misc/Pagination'
+import { deleteUser, fetchUsers } from '../../slices/dashboardSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import Table from '../../../../custom/Table/table'
+import { Pencil1Icon, TrashIcon } from '@radix-ui/react-icons'
 
 function Manage_users() {
-  const [formMode, setFormMode] = useState("create");
-  const [currentUser, setCurrentUser] = useState(null);
-  const [dropdownOpen, setDropdownOpen] = useState(null);
+  const dispatch = useDispatch()
+  const { usersList: users } = useSelector(state => state.dashboard)
+  const [currentUser, setCurrentUser] = useState(null)
+  const [dropdownOpen, setDropdownOpen] = useState(null)
+  const [show, setShow] = useState(false)
 
-  const users = [
-    {
-      id: "01",
-      firstName: "Bobby",
-      lastName: "Schol",
-      name: "Mr. Bobby",
-      email: "bobby@example.com",
-      gender: "Male",
-      dob: "1990-05-15",
-      address: "123 Main St",
-      phone: "123-456-7890",
-      role: "Scholar",
-      status: "Active",
-    },
-    {
-      id: "02",
-      firstName: "Chris",
-      lastName: "Brown",
-      name: "Chris Brown",
-      email: "chris@example.com",
-      gender: "Male",
-      dob: "1988-07-21",
-      address: "456 Oak St",
-      phone: "987-654-3210",
-      role: "Scholar",
-      status: "Inactive",
-    },
-    {
-      id: "03",
-      firstName: "John",
-      lastName: "Doe",
-      name: "John Doe",
-      email: "john@example.com",
-      gender: "Male",
-      dob: "1990-05-15",
-      address: "123 Main St",
-      phone: "123-456-7890",
-      role: "User",
-      status: "Active",
-    },
-    {
-      id: "04",
-      firstName: "Jane",
-      lastName: "Smith",
-      name: "Jane Smith",
-      email: "jane@example.com",
-      gender: "Female",
-      dob: "1990-05-15",
-      address: "123 Main St",
-      phone: "123-456-7890",
-      role: "User",
-      status: "Active",
-    },
-    {
-      id: "05",
-      firstName: "Alice",
-      lastName: "Johnson",
-      name: "Alice Johnson",
-      email: "alice@example.com",
-      gender: "Female",
-      dob: "1990-05-15",
-      address: "123 Main St",
-      phone: "123-456-7890",
-      role: "User",
-      status: "Active",
-    },
-  ];
+  const toggleDropdown = index => {
+    setDropdownOpen(dropdownOpen === index ? null : index)
+  }
 
-  const toggleDropdown = (index) => {
-    setDropdownOpen(dropdownOpen === index ? null : index);
-  };
+  const handleEdit = user => {
+    setCurrentUser(user)
+    setShow(true)
+  }
 
-  const handleEdit = (user) => {
-    setCurrentUser(user);
-    setFormMode("edit");
-  };
 
-  const handleDelete = (id) => {};
+  const columns = [
+    { label: 'First Name', key: 'firstname' },
+    { label: 'Last Name', key: 'lastname' },
+    { label: 'Gender', key: 'gender' },
+    { label: 'Date of Birth', key: 'dob', render: user => new Date(user.dob).toLocaleDateString() },
+    { label: 'Address', key: 'address' },
+    { label: 'Phone', key: 'phone' },
+    { label: 'Email', key: 'email' },
+    { label: 'Role', key: 'role' },
+    { label: 'Status', key: 'status' },
+    {
+      label: 'Action', key: 'action', render: user => <div className='d-flex flex-column'>
+        <button className='btn btn-sm text-primary' onClick={() => handleEdit(user)}>
+          <Pencil1Icon />
+        </button>
+        {/* <button className='btn btn-sm text-danger' onClick={() => dispatch(deleteUser(user.id))}>
+          <TrashIcon />
+        </button> */}
+      </div>
+    },
+  ]
 
-  const handleCreateMode = () => {
-    setCurrentUser(null);
-    setFormMode("create");
-  };
+  useEffect(() => {
+    dispatch(fetchUsers())
+
+    return () => {
+      setCurrentUser(null)
+    }
+  }, [])
+
+
 
   return (
     <div className="content-body">
       <div className="container-fluid">
         <div className="row">
           <ManageUserForm
-            mode={formMode}
-            onCreate={handleCreateMode}
+            show={show}
+            setShow={setShow}
             user={currentUser}
           />
           <div className="col-lg-12">
-            <div className="card">
-              <div className="card-header">
-                <h4 className="card-title">List of Users</h4>
-              </div>
-              <div className="card-body">
-                <div className="table-responsive">
-                  <table className="table table-responsive-md">
-                    <thead>
-                      <tr>
-                        <th style={{ width: 80 }}>
-                          <strong>ID</strong>
-                        </th>
-                        <th>
-                          <strong>FIRST NAME</strong>
-                        </th>
-                        <th>
-                          <strong>LAST NAME</strong>
-                        </th>
-                        <th>
-                          <strong>GENDER</strong>
-                        </th>
-                        <th>
-                          <strong>DOB</strong>
-                        </th>
-                        <th>
-                          <strong>PHONE</strong>
-                        </th>
-                        <th>
-                          <strong>ADDRESS</strong>
-                        </th>
-                        <th>
-                          <strong>EMAIL</strong>
-                        </th>
-                        <th>
-                          <strong>ROLE</strong>
-                        </th>
-                        <th>
-                          <strong>STATUS</strong>
-                        </th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {users.map((user, index) => (
-                        <tr key={user.id}>
-                          <td>
-                            <strong>{user.id}</strong>
-                          </td>
-                          <td>{user.firstName}</td>
-                          <td>{user.lastName}</td>
-                          <td>{user.gender}</td>
-                          <td>{user.dob}</td>
-                          <td>{user.phone}</td>
-                          <td>{user.address}</td>
-                          <td>{user.email}</td>
-                          <td>{user.role}</td>
-                          <td>{user.status}</td>
-                          <td>
-                            <div className="dropdown">
-                              <button
-                                type="button"
-                                className="btn btn-success light sharp"
-                                onClick={() => toggleDropdown(index)}
-                              >
-                                <svg
-                                  width="20px"
-                                  height="20px"
-                                  viewBox="0 0 24 24"
-                                  version="1.1"
-                                >
-                                  <g
-                                    stroke="none"
-                                    strokeWidth={1}
-                                    fill="none"
-                                    fillRule="evenodd"
-                                  >
-                                    <rect x={0} y={0} width={24} height={24} />
-                                    <circle
-                                      fill="#000000"
-                                      cx={5}
-                                      cy={12}
-                                      r={2}
-                                    />
-                                    <circle
-                                      fill="#000000"
-                                      cx={12}
-                                      cy={12}
-                                      r={2}
-                                    />
-                                    <circle
-                                      fill="#000000"
-                                      cx={19}
-                                      cy={12}
-                                      r={2}
-                                    />
-                                  </g>
-                                </svg>
-                              </button>
-                              {dropdownOpen === index && (
-                                <div className="dropdown-menu show">
-                                  <a
-                                    className="dropdown-item"
-                                    href="#"
-                                    onClick={() => handleEdit(user)}
-                                  >
-                                    Edit
-                                  </a>
-                                  <a
-                                    className="dropdown-item"
-                                    href="#"
-                                    onClick={() => handleDelete(user.id)}
-                                  >
-                                    Delete
-                                  </a>
-                                </div>
-                              )}
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
+            <Table
+              title="Users"
+              rows={users}
+              columns={columns}
+            />
           </div>
-
-          <Pagination />
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Manage_users;
+export default Manage_users

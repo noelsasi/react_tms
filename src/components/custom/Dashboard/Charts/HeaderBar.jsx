@@ -1,4 +1,4 @@
-function HeaderBar() {
+function HeaderBar({ dashboardData }) {
   return (
     <div className="col-lg-12">
       <div className="card">
@@ -9,7 +9,7 @@ function HeaderBar() {
                 <span>
                   <i className="fas fa-eye" />
                 </span>
-                <h3 className="count mb-0">540</h3>
+                <h3 className="count mb-0">{dashboardData.totalViews || 0}</h3>
                 <span className="fs-14">Total Viewes</span>
               </div>
             </div>
@@ -18,7 +18,7 @@ function HeaderBar() {
                 <span>
                   <i className="far fa-solid fa-user" />
                 </span>
-                <h3 className="count mb-0">261</h3>
+                <h3 className="count mb-0">{dashboardData.totalUsers || 0}</h3>
                 <span className="fs-14">Users</span>
               </div>
             </div>
@@ -27,7 +27,7 @@ function HeaderBar() {
                 <span>
                   <i className="fas fa-download" />
                 </span>
-                <h3 className="count mb-0">874</h3>
+                <h3 className="count mb-0">{dashboardData.totalDownloads || 0}</h3>
                 <span className="fs-14">Total Downloads</span>
               </div>
             </div>
@@ -36,7 +36,7 @@ function HeaderBar() {
                 <span>
                   <i className="fas fa-solid fa-file" />
                 </span>
-                <h3 className="count mb-0">1200</h3>
+                <h3 className="count mb-0">{dashboardData.totalTheses || 0}</h3>
                 <span className="fs-14">Total Thesis</span>
               </div>
             </div>
@@ -45,7 +45,7 @@ function HeaderBar() {
                 <span>
                   <i className=" fa-regular fa-file" />
                 </span>
-                <h3 className="count mb-0">50</h3>
+                <h3 className="count mb-0">{dashboardData.underReviewTheses || 0}</h3>
                 <span className="fs-14">Under Review Thesis</span>
               </div>
             </div>

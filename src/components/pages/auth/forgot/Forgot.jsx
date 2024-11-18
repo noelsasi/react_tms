@@ -137,7 +137,7 @@
 //       // Make the POST request to the backend with the email in the request body
 //       const response = await axios({
 //         method: "POST",
-//         url: "https://3a63-150-107-26-9.ngrok-free.app/api/auth/sendemail",
+//         url: "http://localhost:3000/api/auth/sendemail",
 //         data: {
 //           email,
 //         },
@@ -271,7 +271,7 @@ function Forgot() {
     try {
       // Make the POST request to the backend with the email in the request body
       const response = await axios.post(
-        "https://3a63-150-107-26-9.ngrok-free.app/api/auth/resetmail",
+        "http://localhost:3000/api/auth/resetmail",
         { email } // Send email as the request body
       );
 

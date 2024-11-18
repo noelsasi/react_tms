@@ -1,21 +1,21 @@
-import { useState } from "react";
+import { useState } from 'react'
 
 function Cloud() {
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState(null)
   const submitImage = () => {
-    console.log(file);
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "profilepic");
-    fetch("https://api.cloudinary.com/v1_1/dknje3po9/image/upload", {
-      method: "POST",
+    console.log(file)
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('upload_preset', 'profilepic')
+    fetch('https://api.cloudinary.com/v1_1/dknje3po9/image/upload', {
+      method: 'POST',
       body: formData,
     })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-      });
-};
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+      })
+  }
   return (
     <div>
       <input
@@ -25,14 +25,14 @@ function Cloud() {
         className="form-control"
         placeholder="Select your Profile Picture"
         required
-        onChange={(e) => setFile(e.target.files[0])}
+        onChange={e => setFile(e.target.files[0])}
       />
       <button onClick={() => submitImage()}>Submit</button>
     </div>
-  );
+  )
 }
 
-export default Cloud;
+export default Cloud
 
 // // import { useState } from "react";
 
@@ -40,19 +40,19 @@ export default Cloud;
 
 // function Cloud() {
 //     const [file, setFile] = useState(null);
-  
+
 //     const submitFile = () => {
 //       if (!file) {
 //         console.log("No file selected");
 //         return;
 //       }
-  
+
 //       console.log(file);
 //       const formData = new FormData();
 //       formData.append("file", file);
 //       formData.append("upload_preset", "profilepic"); // Update this to your Cloudinary preset
 //       formData.append("resource_type", "raw"); // This is important for uploading non-image files like PDFs
-  
+
 //       fetch("https://api.cloudinary.com/v1_1/dknje3po9/upload", {
 //         method: "POST",
 //         body: formData,
@@ -65,7 +65,7 @@ export default Cloud;
 //           console.error("Error uploading file:", error);
 //         });
 //     };
-  
+
 //     return (
 //       <div>
 //         <input
@@ -82,6 +82,5 @@ export default Cloud;
 //       </div>
 //     );
 //   }
-  
+
 //   export default Cloud;
-  

@@ -26,7 +26,7 @@ function Pagination() {
         </li>
       </ul>
     </div>
-  );
+  )
 }
 
-export default Pagination;
+export default Pagination
