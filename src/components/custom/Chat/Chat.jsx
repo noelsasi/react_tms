@@ -17,19 +17,21 @@ const Chat = () => {
 
   // Filter users for autocomplete
   const autocompleteResults = searchQuery.trim()
-    ? usersList.filter(u =>
-      u.id !== user.id &&
-      (u.firstname?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        u.lastname?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        u.username?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        u.email?.toLowerCase().includes(searchQuery.toLowerCase()))
-    ).slice(0, 5) // Limit to 5 results
+    ? usersList
+        .filter(
+          u =>
+            u.id !== user.id &&
+            (u.firstname?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              u.lastname?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              u.username?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              u.email?.toLowerCase().includes(searchQuery.toLowerCase()))
+        )
+        .slice(0, 5) // Limit to 5 results
     : []
-
 
   // Handle clicking outside of autocomplete
   useEffect(() => {
-    const handleClickOutside = (e) => {
+    const handleClickOutside = e => {
       if (!e.target.closest('.search-container')) {
         setShowAutocomplete(false)
       }
@@ -55,7 +57,9 @@ const Chat = () => {
   const fetchMessages = async () => {
     if (selectedUser) {
       try {
-        const response = await axios.get(`/api/chat/conversation?user_id=${selectedUser.id}`)
+        const response = await axios.get(
+          `/api/chat/conversation?user_id=${selectedUser.id}`
+        )
         setMessages(response.data)
       } catch (error) {
         console.error('Error fetching messages:', error)
@@ -68,27 +72,30 @@ const Chat = () => {
   }, [selectedUser])
 
   // Handle sending messages
-  const handleSendMessage = async (e) => {
+  const handleSendMessage = async e => {
     e.preventDefault()
     if (!newMessage.trim() || !selectedUser) return
 
     try {
       await axios.post('/api/chat/send', {
         receiver_id: selectedUser.id,
-        content: newMessage
+        content: newMessage,
       })
 
       // Add message to local state
-      setMessages(prev => [...prev, {
-        content: newMessage,
-        sender_id: user.id,
-        receiver_id: selectedUser.id,
-        created_at: new Date().toISOString(),
-        sender: {
-          username: user.username,
-          profilePic: user.profilePic
-        }
-      }])
+      setMessages(prev => [
+        ...prev,
+        {
+          content: newMessage,
+          sender_id: user.id,
+          receiver_id: selectedUser.id,
+          created_at: new Date().toISOString(),
+          sender: {
+            username: user.username,
+            profilePic: user.profilePic,
+          },
+        },
+      ])
 
       setNewMessage('')
       fetchMessages()
@@ -106,7 +113,17 @@ const Chat = () => {
             <div className="card">
               <div className="card-body">
                 <div className="d-flex align-items-center ">
-                  <img src={user.profilePic && !user.profilePic.includes("https://www.scholarvault.com") ? user.profilePic : "/dash/images/profile/pic1.jpg"} alt="user" className="rounded-circle" width="40" />
+                  <img
+                    src={
+                      user.profilePic &&
+                      !user.profilePic.includes('https://www.scholarvault.com')
+                        ? user.profilePic
+                        : '/dash/images/profile/pic1.jpg'
+                    }
+                    alt="user"
+                    className="rounded-circle"
+                    width="40"
+                  />
                   <h5 className="mb-0 ms-3">{user.username}</h5>
                 </div>
                 <hr />
@@ -117,7 +134,7 @@ const Chat = () => {
                     className="form-control"
                     placeholder="Search users..."
                     value={searchQuery}
-                    onChange={(e) => {
+                    onChange={e => {
                       setSearchQuery(e.target.value)
                       setShowAutocomplete(true)
                     }}
@@ -125,39 +142,51 @@ const Chat = () => {
                   />
 
                   {/* Autocomplete dropdown */}
-                  {showAutocomplete && searchQuery.trim() && autocompleteResults.length > 0 &&
-                    <div className="autocomplete-dropdown">
-                      {autocompleteResults.map(user => (
-                        <div
-                          key={user.id}
-                          className="autocomplete-item d-flex align-items-center py-2 cursor-pointer border-bottom"
-                          onClick={() => {
-                            setShowAutocomplete(false)
-                            setSearchQuery('')
-                            setSelectedUser({
-                              id: user.id,
-                              username: user.firstname,
-                              profilePic: user.profilePic
-                            })
-                          }}
-                        >
-                          <img
-                            src={user.profilePic && !user.profilePic.includes("https://www.scholarvault.com") ? user.profilePic : "/dash/images/profile/pic1.jpg"}
-                            alt={user.username}
-                            className="rounded-circle"
-                            width="40"
-                          />
-                          <div className="ms-3">
-                            <h6 className="mb-0">{user.username}</h6>
-                            <p className="mb-0 text-muted">{user.email}</p>
+                  {showAutocomplete &&
+                    searchQuery.trim() &&
+                    autocompleteResults.length > 0 && (
+                      <div className="autocomplete-dropdown">
+                        {autocompleteResults.map(user => (
+                          <div
+                            key={user.id}
+                            className="autocomplete-item d-flex align-items-center py-2 cursor-pointer border-bottom"
+                            onClick={() => {
+                              setShowAutocomplete(false)
+                              setSearchQuery('')
+                              setSelectedUser({
+                                id: user.id,
+                                username: user.firstname,
+                                profilePic: user.profilePic,
+                              })
+                            }}
+                          >
+                            <img
+                              src={
+                                user.profilePic &&
+                                !user.profilePic.includes(
+                                  'https://www.scholarvault.com'
+                                )
+                                  ? user.profilePic
+                                  : '/dash/images/profile/pic1.jpg'
+                              }
+                              alt={user.username}
+                              className="rounded-circle shadow-sm border border-dark me-2"
+                              width="40"
+                            />
+                            <div className="ms-3">
+                              <h6 className="mb-0">{user.username}</h6>
+                              <p className="mb-0 text-muted">{user.email}</p>
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  }
+                        ))}
+                      </div>
+                    )}
                 </div>
 
-                <div className="chat-list" style={{ height: '60vh', overflowY: 'auto' }}>
+                <div
+                  className="chat-list"
+                  style={{ height: '60vh', overflowY: 'auto' }}
+                >
                   {chats.map(chat => (
                     <div
                       key={chat.id}
@@ -166,14 +195,21 @@ const Chat = () => {
                         setSelectedUser({
                           id: chat.other_user_id,
                           username: chat.username,
-                          profilePic: chat.profilePic
+                          profilePic: chat.profilePic,
                         })
                       }}
                     >
                       <img
-                        src={chat.profilePic && !chat.profilePic.includes("https://www.scholarvault.com") ? chat.profilePic : "/dash/images/profile/pic1.jpg"}
+                        src={
+                          chat.profilePic &&
+                          !chat.profilePic.includes(
+                            'https://www.scholarvault.com'
+                          )
+                            ? chat.profilePic
+                            : '/dash/images/profile/pic1.jpg'
+                        }
                         alt={chat.username}
-                        className="rounded-circle"
+                        className="rounded-circle shadow-sm border border-dark"
                         width="40"
                       />
                       <div className="ms-3">
@@ -193,22 +229,68 @@ const Chat = () => {
                 <div className="card-header">
                   <div className="d-flex align-items-center">
                     <img
-                      src={selectedUser.profilePic && !selectedUser.profilePic.includes("https://www.scholarvault.com") ? selectedUser.profilePic : "/dash/images/profile/pic1.jpg"}
+                      src={
+                        selectedUser.profilePic &&
+                        !selectedUser.profilePic.includes(
+                          'https://www.scholarvault.com'
+                        )
+                          ? selectedUser.profilePic
+                          : '/dash/images/profile/pic1.jpg'
+                      }
                       alt={selectedUser.username}
-                      className="rounded-circle"
+                      className="rounded-circle shadow-sm border border-dark"
                       width="40"
                     />
                     <h6 className="mb-0 ms-3">{selectedUser.username}</h6>
                   </div>
                 </div>
 
-                <div className="card-body" style={{ height: '400px', overflowY: 'auto' }}>
+                <div
+                  className="card-body"
+                  style={{ height: '400px', overflowY: 'auto' }}
+                >
                   {messages.map(message => (
                     <div
                       key={message.id}
-                      className={`chat-message ${message.sender_id === user.id ? 'chat-sender' : 'chat-receiver'}`}
+                      className={`chat-message ${
+                        message.sender_id === user.id
+                          ? 'text-end'
+                          : 'text-start'
+                      } py-3`}
                     >
-                      <p className="mb-0">{message.content}</p>
+                      <p className="mb-2">
+                        {message.sender_id !== user.id ? (
+                          <img
+                            src={
+                              message.sender.profilePic &&
+                              !message.sender.profilePic.includes(
+                                'https://www.scholarvault.com'
+                              )
+                                ? message.sender.profilePic
+                                : '/dash/images/profile/pic1.jpg'
+                            }
+                            alt="user"
+                            className="rounded-circle me-2 shadow-sm"
+                            width="30"
+                          />
+                        ) : null}
+                        {message.content}
+                        {message.sender_id === user.id ? (
+                          <img
+                            src={
+                              user.profilePic &&
+                              !user.profilePic.includes(
+                                'https://www.scholarvault.com'
+                              )
+                                ? user.profilePic
+                                : '/dash/images/profile/pic1.jpg'
+                            }
+                            alt="user"
+                            className="rounded-circle ms-2 shadow-sm border border-dark"
+                            width="30"
+                          />
+                        ) : null}
+                      </p>
                       <small className="text-muted">
                         {new Date(message.created_at).toLocaleTimeString()}
                       </small>
@@ -224,7 +306,7 @@ const Chat = () => {
                         className="form-control"
                         placeholder="Type your message..."
                         value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
+                        onChange={e => setNewMessage(e.target.value)}
                       />
                       <button type="submit" className="btn btn-primary">
                         <i className="fas fa-paper-plane"></i>
