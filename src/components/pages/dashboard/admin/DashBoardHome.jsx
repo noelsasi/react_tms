@@ -7,6 +7,8 @@ import React from "react";
 function DashBoardHome() {
 
   const { dashboardData } = useSelector(state => state.dashboard)
+  const {userInfo} = useSelector(state => state.auth)
+  const isUser = userInfo?.role?.role_name === 'user'
   const dispatch = useDispatch()
 
   React.useEffect(() => {
@@ -19,7 +21,7 @@ function DashBoardHome() {
   return (
     <div className="content-body">
       <div className="container-fluid">
-        <HeaderBar dashboardData={dashboardData} />
+        <HeaderBar isUser={isUser} dashboardData={dashboardData} />
         <PrimaryCharts dashboardData={dashboardData} />
       </div>
     </div>

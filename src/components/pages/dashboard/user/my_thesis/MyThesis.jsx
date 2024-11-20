@@ -1,18 +1,18 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Pagination from "../../../../custom/misc/Pagination";
-import { fetchMyThesis } from "../../slices/dashboardSlice";
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import Pagination from '../../../../custom/misc/Pagination'
+import { fetchMyThesis } from '../../slices/dashboardSlice'
 
 function My_thesis() {
-  const dispatch = useDispatch();
-  const { thesisData, loading } = useSelector((state) => state.dashboard);
+  const dispatch = useDispatch()
+  const { thesisData, loading } = useSelector(state => state.dashboard)
 
   useEffect(() => {
-    dispatch(fetchMyThesis());
-  }, [dispatch]);
+    dispatch(fetchMyThesis())
+  }, [dispatch])
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
 
   return (
@@ -54,47 +54,72 @@ function My_thesis() {
                           <strong>Downloads</strong>
                         </th>
                         <th>
+                          <strong>Reviewer</strong>
+                        </th>
+                        <th>
                           <strong>Status</strong>
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {thesisData.map(({
-                        thesis_id,
-                        title,
-                        author_name,
-                        category,
-                        keywords,
-                        abstract,
-                        views_count,
-                        downloads_count,
-                        status
-                      }) => (
-                        <tr key={thesis_id}>
-                          <td>
-                            <strong>{String(thesis_id).padStart(2, '0')}</strong>
-                          </td>
-                          <td>{title}</td>
-                          <td>{author_name}</td>
-                          <td>{category}</td>
-                          <td>{keywords?.join(', ')}</td>
-                          <td>{abstract}</td>
-                          <td>{status === "Accepted" ? views_count : "-"}</td>
-                          <td>{status === "Accepted" ? downloads_count : "-"}</td>
-                          <td>{status}</td>
-                        </tr>
-                      ))}
+                      {thesisData.map(
+                        ({
+                          thesis_id,
+                          title,
+                          author_name,
+                          category,
+                          keywords,
+                          abstract,
+                          views_count,
+                          downloads_count,
+                          reviewer_name,
+                          status,
+                        }) => (
+                          <tr key={thesis_id}>
+                            <td>
+                              <strong>
+                                {String(thesis_id).padStart(2, '0')}
+                              </strong>
+                            </td>
+                            <td>{title}</td>
+                            <td>{author_name}</td>
+                            <td>{category}</td>
+                            <td>{keywords}</td>
+                            <td>{abstract}</td>
+                            <td>{status === 'Accepted' ? views_count : '-'}</td>
+                            <td>
+                              {status === 'Accepted' ? downloads_count : '-'}
+                            </td>
+                            <td>
+                              {reviewer_name || 'Not assigned'}
+                            </td>
+                            <td>
+                              <span
+                                className={`text-capitalize badge badge-${
+                                  status.toLowerCase() === 'pending'
+                                    ? 'warning'
+                                    : status.toLowerCase() === 'approved'
+                                    ? 'success'
+                                    : 'danger'
+                                }`}
+                              >
+                                {status}
+                              </span>
+                            </td>
+                          </tr>
+                        )
+                      )}
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
           </div>
-          <Pagination />
+          {/* <Pagination /> */}
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default My_thesis;
+export default My_thesis

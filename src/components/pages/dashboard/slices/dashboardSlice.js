@@ -87,6 +87,8 @@ export const fileUploadHandler = async (file, upload_preset = 'scholarVault') =>
   formData.append('file', file)
   formData.append('upload_preset', upload_preset)
 
+  dispatch(setFormSubmitting(true))
+
   try {
     const response = await fetch(
       'https://api.cloudinary.com/v1_1/dyenwfhtf/auto/upload',
@@ -108,6 +110,8 @@ export const fileUploadHandler = async (file, upload_preset = 'scholarVault') =>
     console.error('Error uploading file:', error)
     alert('An error occurred during the file upload.')
     return null
+  } finally{
+    dispatch(setFormSubmitting(false))
   }
 }
 
@@ -188,6 +192,7 @@ export const fetchUserProfile =
 export const updateUserProfile =
   (data, role = 'guest') =>
     async dispatch => {
+
       try {
         const response = await axios.post(`/api/${role}/profile`, data, {
           withCredentials: true,
@@ -441,7 +446,7 @@ export const fetchMyThesis = () => async (dispatch, getState) => {
 export const submitThesis = (data, cb) => async dispatch => {
   try {
     dispatch(setFormSubmitting(true))
-    const response = await axios.post('/api/admin/thesis', data)
+    const response = await axios.post('/api/scholar/submit_thesis', data)
 
     if (response.data) {
       dispatch(fetchMyThesis())

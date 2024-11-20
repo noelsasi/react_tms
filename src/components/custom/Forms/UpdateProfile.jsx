@@ -97,8 +97,8 @@ function UpdateProfile({ user }) {
             <option value="" disabled>
               Choose Gender
             </option>
-            <option>Male</option>
-            <option>Female</option>
+            <option value={'Male'}>Male</option>
+            <option value={'Female'}>Female</option>
           </select>
           <div className="invalid-feedback">Please select Gender.</div>
         </div>

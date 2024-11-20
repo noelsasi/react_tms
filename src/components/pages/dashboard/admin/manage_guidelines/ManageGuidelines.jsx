@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import ManageGuidelineForm from "../../../../custom/Forms/ManageGuidelineForm"
 import { useDispatch, useSelector } from 'react-redux'
-import Table from '../../../../custom/Table/table'
 import { Pencil1Icon, TrashIcon } from '@radix-ui/react-icons'
 import { deleteGuideline, fetchGuidelines } from '../../slices/dashboardSlice'
+import { Table } from '../../../../custom/Table'
 
 function Manage_Guidelines() {
   const dispatch = useDispatch()

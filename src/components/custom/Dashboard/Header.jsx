@@ -74,6 +74,9 @@ function DashBoardHeader({ onToggle, isMenuToggled }) {
                     onClick={toggleNotificationDropdown}
                     role="button"
                   >
+                    <span className={`text-capitalize badge badge-warning`}>
+                      {notifications.length}
+                    </span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width={24}
@@ -130,9 +133,6 @@ function DashBoardHeader({ onToggle, isMenuToggled }) {
                         ))}
                       </ul>
                     </div>
-                    <a className="all-notification" href="#">
-                      View all notifications <i className="ti-arrow-end"></i>
-                    </a>
                   </div>
                 </li>
                 <li className="nav-item dropdown">

@@ -20,7 +20,7 @@ function NavBar() {
         icon: 'flaticon-025-dashboard',
       },
       {
-        label: 'Search Thesis',
+        label: 'All Thesis',
         link: '/dashboard/admin/search_thesis',
         icon: 'flaticon-022-copy',
       },
@@ -62,7 +62,7 @@ function NavBar() {
         icon: 'flaticon-025-dashboard',
       },
       {
-        label: 'Search Thesis',
+        label: 'All Thesis',
         link: '/dashboard/scholar/search_thesis',
         icon: 'flaticon-022-copy',
       },
@@ -104,7 +104,7 @@ function NavBar() {
         icon: 'flaticon-025-dashboard',
       },
       {
-        label: 'Search Thesis',
+        label: 'All Thesis',
         link: '/dashboard/user/search_thesis',
         icon: 'flaticon-022-copy',
       },

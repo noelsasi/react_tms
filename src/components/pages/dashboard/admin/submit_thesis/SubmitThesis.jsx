@@ -286,10 +286,10 @@ function Submit_Thesis() {
                             <td>{author_name}</td>
                             <td>{reviewer_name || 'Not Assigned'}</td>
                             <td>{category}</td>
-                            <td>{keywords?.join(', ')}</td>
+                            <td>{keywords}</td>
                             <td>{abstract}</td>
                             <td>
-                              <span className={`badge badge-${status.toLowerCase() === 'pending' ? 'warning' : 
+                              <span className={`text-capitalize badge badge-${status.toLowerCase() === 'pending' ? 'warning' : 
                                 status.toLowerCase() === 'approved' ? 'success' : 'danger'}`}>
                                 {status}
                               </span>
@@ -303,7 +303,7 @@ function Submit_Thesis() {
               </div>
             </div>
           </div>
-          <Pagination />
+          {/* <Pagination /> */}
         </div>
       </div>
     </div>
