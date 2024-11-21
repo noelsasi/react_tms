@@ -1,7 +1,5 @@
 .event-chat-ryt {
-
   .chat-area {
-
     .chat-reciver,
     .chat-sender {
       margin-bottom: 1.875rem;
@@ -16,7 +14,6 @@
       position: relative;
 
       &-body {
-
         p {
           margin: 0;
           max-width: 100%;
@@ -40,7 +37,7 @@
   }
 
   .chat-reciver {
-    padding: .5rem 1rem;
+    padding: 0.5rem 1rem;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -57,7 +54,7 @@
         margin-right: 2rem;
         text-align: right;
 
-        @at-root [direction="rtl"] & {
+        @at-root [direction='rtl'] & {
           text-align: left;
           margin-left: 2rem;
           margin-right: auto;
@@ -73,7 +70,7 @@
             border: 0.0625rem solid #e0e0e0;
 
             &::after {
-              content: "";
+              content: '';
               width: 1.25rem;
               height: 1.25rem;
               border-bottom: 0.0625rem solid #e0e0e0;
@@ -85,14 +82,13 @@
               -webkit-transform: rotate(-45deg) translateX(15px);
               transform: rotate(-45deg) translateX(15px);
 
-              @at-root [direction="rtl"] & {
+              @at-root [direction='rtl'] & {
                 left: 0;
                 right: auto;
                 -webkit-transform: rotate(135deg) translateY(15px);
                 transform: rotate(135deg) translateY(15px);
               }
             }
-
           }
 
           .time {
@@ -103,7 +99,7 @@
             bottom: 0;
             left: -5rem;
 
-            @at-root [direction="rtl"] & {
+            @at-root [direction='rtl'] & {
               right: -5rem;
               left: auto;
             }
@@ -115,14 +111,13 @@
 
   .chat-sender {
     text-align: left;
-    padding: .5rem 1rem;
+    padding: 0.5rem 1rem;
 
     .media {
-
       .media-body {
         margin-left: 2rem;
 
-        @at-root [direction="rtl"] & {
+        @at-root [direction='rtl'] & {
           text-align: right;
           margin-right: 2rem;
           margin-left: auto;
@@ -133,9 +128,8 @@
           margin-bottom: 0;
 
           span {
-
             &::after {
-              content: "";
+              content: '';
               width: 1.25rem;
               height: 1.25rem;
               border-bottom: 0.0625rem solid #e0e0e0;
@@ -147,7 +141,7 @@
               -webkit-transform: rotate(45deg) translateX(-15px);
               transform: rotate(45deg) translateX(-15px);
 
-              @at-root [direction="rtl"] & {
+              @at-root [direction='rtl'] & {
                 left: auto;
                 right: 0;
                 -webkit-transform: rotate(-135deg) translateY(15px);
@@ -164,16 +158,14 @@
             bottom: 0;
             right: -5rem;
 
-            @at-root [direction="rtl"] & {
+            @at-root [direction='rtl'] & {
               left: -5rem;
               right: auto;
             }
           }
-
         }
       }
     }
-
   }
 }
 
@@ -182,7 +174,6 @@
   padding-bottom: 1.875rem;
 
   form {
-
     .form-control {
       height: 2.8125rem;
       border-radius: 1.875rem;
@@ -192,7 +183,6 @@
     }
 
     .input-group {
-
       &-append {
         i {
           color: #6c757d;
@@ -200,8 +190,8 @@
         }
 
         .input-group-text {
-          padding-left: .7rem;
-          padding-right: .7rem;
+          padding-left: 0.7rem;
+          padding-right: 0.7rem;
           background: #f8f9fa;
           border-color: #e0e0e0;
           border-left: 0;
@@ -215,4 +205,9 @@
       }
     }
   }
+}
+
+.active-thesis {
+  background-color: #f8f9fa;
+  border-left: 3px solid #2f4cdd;
 }

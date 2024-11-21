@@ -6,20 +6,51 @@ import {
   fileUploadHandler,
 } from '../../pages/dashboard/slices/dashboardSlice'
 import { Cross1Icon, ChevronDownIcon } from '@radix-ui/react-icons'
+import CreatableSelect from 'react-select/creatable'
 
-const CATEGORIES = [
-  { value: 'science', label: 'Science' },
-  { value: 'bio', label: 'Bio' },
-  { value: 'environmental', label: 'Environmental' },
-]
-
-const KEYWORDS = [
-  { value: 'ML', label: 'ML' },
+export const CATEGORIES = [
   { value: 'AI', label: 'AI' },
-  { value: 'IT', label: 'IT' },
+  { value: 'Quantum Computing', label: 'Quantum Computing' },
+  { value: 'Blockchain', label: 'Blockchain' },
+  { value: 'Renewable Energy', label: 'Renewable Energy' },
+  { value: 'Cybersecurity', label: 'Cybersecurity' },
+  { value: 'IoT', label: 'IoT' },
+  { value: 'Big Data', label: 'Big Data' },
+  { value: 'AR', label: 'AR' },
+  { value: '5G', label: '5G' },
 ]
 
-const STATUSES = [
+export const KEYWORDS = [
+  'AI',
+  'Machine Learning',
+  'Data Science',
+  'Quantum Computing',
+  'Qubits',
+  'Entanglement',
+  'Blockchain',
+  'Cryptocurrency',
+  'Decentralization',
+  'Renewable Energy',
+  'Solar',
+  'Wind',
+  'Cybersecurity',
+  'Threats',
+  'Protection',
+  'Neural Networks',
+  'Deep Learning',
+  'IoT',
+  'Smart Devices',
+  'Connectivity',
+  'Big Data',
+  'Analytics',
+  'Augmented Reality',
+  'AR',
+  'Technology',
+  '5G',
+  'Networks',
+].map(keyword => ({ value: keyword, label: keyword }))
+
+export const STATUSES = [
   { value: 'pending', label: 'Pending' },
   { value: 'approved', label: 'Approved' },
   { value: 'rejected', label: 'Rejected' },
@@ -36,22 +67,26 @@ const initialFormData = {
 }
 
 function ManageThesisForm({ thesis: currentThesis, show, setShow }) {
-
   const dispatch = useDispatch()
   const { usersList, formSubmitting } = useSelector(state => state.dashboard)
   const { userInfo } = useSelector(state => state.auth)
   const [formData, setFormData] = useState(initialFormData)
   const [file, setFile] = useState(null)
 
-  console.log('file  ', file)
-
-
   useEffect(() => {
     if (currentThesis) {
+      const kw = KEYWORDS.filter(keyword =>
+        currentThesis.keywords.includes(keyword.value)
+      )
+      kw.push(
+        ...currentThesis.keywords
+          .filter(keyword => !KEYWORDS.some(k => k.value === keyword))
+          .map(keyword => ({ value: keyword, label: keyword }))
+      )
       setFormData({
         title: currentThesis.title || '',
         category: currentThesis.category || '',
-        keywords: currentThesis.keywords || [],
+        keywords: kw,
         status: currentThesis.status || '',
         author_id: currentThesis.author_id || '',
         abstract: currentThesis.abstract || '',
@@ -73,11 +108,7 @@ function ManageThesisForm({ thesis: currentThesis, show, setShow }) {
   }
 
   const handleKeywordsChange = e => {
-    const selectedKeywords = Array.from(
-      e.target.selectedOptions,
-      option => option.value
-    )
-    setFormData(prev => ({ ...prev, keywords: selectedKeywords }))
+    setFormData(prev => ({ ...prev, keywords: e }))
   }
 
   const handleFileChange = e => {
@@ -91,7 +122,7 @@ function ManageThesisForm({ thesis: currentThesis, show, setShow }) {
   }
 
   const handleSubmit = async e => {
-    e.preventDefault()
+    e?.preventDefault()
     if (e.target.checkValidity()) {
       let fileUrl = file?.name
 
@@ -99,12 +130,17 @@ function ManageThesisForm({ thesis: currentThesis, show, setShow }) {
         fileUrl = await fileUploadHandler(file)
       }
 
-      const dataToSubmit = { ...formData, document_url: fileUrl, status: formData.status?.toLowerCase() }
+      const dataToSubmit = {
+        ...formData,
+        document_url: fileUrl,
+        status: formData.status?.toLowerCase(),
+        keywords: formData.keywords.map(keyword => keyword.value),
+      }
 
       if (currentThesis?.thesis_id) {
         dataToSubmit.thesis_id = currentThesis.thesis_id
       }
-      dispatch(createThesis(dataToSubmit, () => handleReset()))
+      dispatch(createThesis(dataToSubmit, () => setFormData(initialFormData)))
     } else {
       console.log('Form is not valid', e.target)
       e.target.classList.add('was-validated')
@@ -177,16 +213,17 @@ function ManageThesisForm({ thesis: currentThesis, show, setShow }) {
                     </div>
                     <div className="mb-3 col-md-6">
                       <label className="form-label">Keywords</label>
-                      <select
-                        name="keywords"
-                        className="form-control"
-                        multiple
+                      <CreatableSelect
+                        options={KEYWORDS}
+                        isMulti
                         value={formData.keywords}
                         onChange={handleKeywordsChange}
                         required
-                      >
-                        {renderOptions(KEYWORDS)}
-                      </select>
+                        placeholder="Select or create keywords..."
+                        formatCreateLabel={inputValue =>
+                          `Create "${inputValue}"`
+                        }
+                      />
                       <div className="invalid-feedback">
                         Please select at least one Keyword.
                       </div>
@@ -297,8 +334,15 @@ function ManageThesisForm({ thesis: currentThesis, show, setShow }) {
                   {['admin', 'scholar'].includes(userInfo?.role?.role_name) && (
                     <div className="mb-3">
                       <label className="form-label">Reviewer</label>
-                      <select name="reviewer_id" className="form-control" value={formData.reviewer_id} onChange={handleInputChange} >
-                        <option value="" disabled>Select Reviewer</option>
+                      <select
+                        name="reviewer_id"
+                        className="form-control"
+                        value={formData.reviewer_id}
+                        onChange={handleInputChange}
+                      >
+                        <option value="" disabled>
+                          Select Reviewer
+                        </option>
                         {usersList.map(user => (
                           <option key={user.id} value={user.id}>
                             {user.firstname} {user.lastname}
@@ -324,11 +368,19 @@ function ManageThesisForm({ thesis: currentThesis, show, setShow }) {
                     >
                       {formSubmitting ? (
                         <>
-                          <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                          {currentThesis?.thesis_id ? 'Editing...' : 'Creating...'}
+                          <span
+                            className="spinner-border spinner-border-sm me-2"
+                            role="status"
+                            aria-hidden="true"
+                          ></span>
+                          {currentThesis?.thesis_id
+                            ? 'Updating...'
+                            : 'Creating...'}
                         </>
                       ) : (
-                        `${currentThesis?.thesis_id ? 'Edit' : 'Create'} Thesis`
+                        `${
+                          currentThesis?.thesis_id ? 'Update' : 'Create'
+                        } Thesis`
                       )}
                     </button>
                   </div>

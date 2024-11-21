@@ -1,40 +1,49 @@
-import { Link, useLocation } from "react-router-dom";
-import Comment from "../../../../custom/Forms/Comment";
-import Pagination from "../../../../custom/misc/Pagination";
-import RenderPdf from "../../../../custom/pdfRender/RenderPdf";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addComment, deleteComment, fetchAllThesis, fetchComments, fetchUsers, searchThesis } from "../../slices/dashboardSlice";
+import { Link, useLocation } from 'react-router-dom'
+import Comment from '../../../../custom/Forms/Comment'
+import Pagination from '../../../../custom/misc/Pagination'
+import RenderPdf from '../../../../custom/pdfRender/RenderPdf'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  addComment,
+  deleteComment,
+  fetchAllThesis,
+  fetchComments,
+  fetchUsers,
+  searchThesis,
+  viewThesis,
+} from '../../slices/dashboardSlice'
 
 function SearchThesis() {
-  const dispatch = useDispatch();
-  const { thesisData, usersList, comments } = useSelector(state => state.dashboard)
+  const dispatch = useDispatch()
+  const { thesisData, usersList, comments } = useSelector(
+    state => state.dashboard
+  )
   const { userInfo } = useSelector(state => state.auth)
-  const [role, setRole] = useState(null);
-  const location = useLocation();
-  const [selectedThesis, setSelectedThesis] = useState(null);
+  const [role, setRole] = useState(null)
+  const location = useLocation()
+  const [selectedThesis, setSelectedThesis] = useState(null)
 
   const [formData, setFormData] = useState({
-    search: "",
-    author: "",
-    keyword: "",
-    status: "",
+    search: '',
+    author: '',
+    keyword: '',
+    status: '',
     startdate: null,
     enddate: null,
-  });
+  })
 
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = e => {
+    const { name, value } = e.target
     setFormData(prevState => ({
       ...prevState,
-      [name]: value
-    }));
-  };
+      [name]: value,
+    }))
+  }
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
+  const handleSubmit = event => {
+    event.preventDefault()
+    event.stopPropagation()
     const payload = {}
     if (formData.search) payload.search = formData.search
     if (formData.author) payload.author_name = formData.author
@@ -44,42 +53,45 @@ function SearchThesis() {
     if (formData.enddate) payload.enddate = formData.enddate
 
     dispatch(searchThesis(payload))
-  };
-
-  const handleDeleteComment = (id) => {
-    dispatch(deleteComment(id, selectedThesis?.thesis_id))
-  };
-
-  const handleThesisClick = (thesis) => {
-    setSelectedThesis(thesis);
   }
 
-  const handleAddComment = (commentData) => {
+  const handleDeleteComment = id => {
+    dispatch(deleteComment(id, selectedThesis?.thesis_id))
+  }
+
+  const handleThesisClick = thesis => {
+    setSelectedThesis(thesis)
+  }
+
+  const handleAddComment = commentData => {
     const newComment = {
       user_id: userInfo.id,
       message_content: commentData,
-      thesis_id: selectedThesis?.thesis_id
-    };
+      thesis_id: selectedThesis?.thesis_id,
+    }
 
     dispatch(addComment(newComment))
-  };
+  }
 
   useEffect(() => {
     if (location.pathname) {
-      const currentRole = location.pathname.split("/")[2];
-      setRole(currentRole);
+      const currentRole = location.pathname.split('/')[2]
+      setRole(currentRole)
     }
 
     dispatch(fetchAllThesis())
     dispatch(fetchUsers())
-  }, [location.pathname]);
+  }, [location.pathname])
 
   useEffect(() => {
     setSelectedThesis(thesisData[0])
   }, [thesisData])
 
   useEffect(() => {
-    if (selectedThesis?.thesis_id) dispatch(fetchComments(selectedThesis?.thesis_id))
+    if (selectedThesis?.thesis_id) {
+      dispatch(fetchComments(selectedThesis?.thesis_id))
+      dispatch(viewThesis(selectedThesis?.thesis_id))
+    }
   }, [selectedThesis])
 
   return (
@@ -89,11 +101,7 @@ function SearchThesis() {
           <div className="col-lg-12">
             <div className="card">
               <div className="card-body">
-                <form
-                  id="searchform"
-                  method="post"
-                  onSubmit={handleSubmit}
-                >
+                <form id="searchform" method="post" onSubmit={handleSubmit}>
                   <div className="row">
                     <div className="mb-3 col-lg-2 col-md-6">
                       <div className="form-group">
@@ -104,9 +112,7 @@ function SearchThesis() {
                           name="search"
                           value={formData.search}
                           onChange={handleChange}
-
                         />
-
                       </div>
                     </div>
 
@@ -117,16 +123,16 @@ function SearchThesis() {
                           name="author"
                           value={formData.author}
                           onChange={handleChange}
-
                         >
                           <option value="" disabled>
                             Author
                           </option>
                           {usersList?.map(user => (
-                            <option value={user.user_id}>{user.firstname} {user.lastname}</option>
+                            <option value={user.user_id}>
+                              {user.firstname} {user.lastname}
+                            </option>
                           ))}
                         </select>
-
                       </div>
                     </div>
 
@@ -137,7 +143,6 @@ function SearchThesis() {
                           name="keyword"
                           value={formData.keyword}
                           onChange={handleChange}
-
                         >
                           <option value="" disabled>
                             Keywords
@@ -147,7 +152,6 @@ function SearchThesis() {
                           <option value="NLP">NLP</option>
                           <option value="Others">Others</option>
                         </select>
-
                       </div>
                     </div>
 
@@ -158,7 +162,6 @@ function SearchThesis() {
                           name="status"
                           value={formData.status}
                           onChange={handleChange}
-
                         >
                           <option value="" disabled>
                             Status
@@ -167,7 +170,6 @@ function SearchThesis() {
                           <option value="approved">Approved</option>
                           <option value="rejected">Rejected</option>
                         </select>
-
                       </div>
                     </div>
 
@@ -180,9 +182,7 @@ function SearchThesis() {
                           name="date"
                           value={formData.date}
                           onChange={handleChange}
-
                         />
-
                       </div>
                     </div>
 
@@ -191,7 +191,7 @@ function SearchThesis() {
                         <button
                           type="submit"
                           className="btn btn-primary btn-sm w-100"
-                          style={{ padding: "0.4rem" }}
+                          style={{ padding: '0.4rem' }}
                         >
                           Search Thesis
                         </button>
@@ -229,7 +229,16 @@ function SearchThesis() {
                       </thead>
                       <tbody>
                         {thesisData?.map(thesis => (
-                          <tr onClick={() => handleThesisClick(thesis)} key={thesis.thesis_id}>
+                          <tr
+                            onClick={() => handleThesisClick(thesis)}
+                            key={thesis.thesis_id}
+                            className={`cursor-pointer ${
+                              selectedThesis?.thesis_id === thesis.thesis_id
+                                ? 'active-thesis'
+                                : ''
+                            }`}
+                            style={{ cursor: 'pointer' }}
+                          >
                             <td>{thesis.thesis_id}</td>
                             <td>{thesis.title}</td>
                             <td>{thesis.author_name}</td>
@@ -247,7 +256,11 @@ function SearchThesis() {
             <div className="row">
               <div className="col-lg-12">
                 <div className="card">
-                  <RenderPdf fileUrl={selectedThesis?.document_url} />
+                  <RenderPdf
+                    title={selectedThesis?.title}
+                    thesisId={selectedThesis?.thesis_id}
+                    fileUrl={selectedThesis?.document_url}
+                  />
                   <div className="card-footer border-0">
                     <div className="clear" id="comment-list">
                       <div className="comments-area" id="comments">
@@ -257,51 +270,65 @@ function SearchThesis() {
                         <div className="clearfix">
                           <ol
                             className="comment-list py-3"
-                            style={{ paddingLeft: "0" }}
+                            style={{ paddingLeft: '0' }}
                           >
-                            {comments.length > 0 ? comments.map((comment) => (
-                              <li className="comment" key={comment.id}>
-                                <div className="comment-body d-flex mb-4 align-items-start justify-content-between w-100">
-                                  <div className="d-flex align-items-start">
-                                    <img
-                                      className="avatar photo me-3"
-                                      src={!comment.user?.profilePic || comment.user?.profilePic.includes('example.com') ? '/dash/images/profile/pic1.jpg' : comment.user?.profilePic}
-                                      alt={`${comment.user?.firstname} ${comment.user?.lastname}'s avatar`}
-                                      width="40"
-                                    />
-                                    <div>
-                                      <cite className="fn">
-                                        {comment.user?.firstname} {comment.user?.lastname}
-                                      </cite>
-                                      <p className="mb-0 fs-16">{comment.message_content}</p>
+                            {comments.length > 0 ? (
+                              comments.map(comment => (
+                                <li className="comment" key={comment.id}>
+                                  <div className="comment-body d-flex mb-4 align-items-start justify-content-between w-100">
+                                    <div className="d-flex align-items-start">
+                                      <img
+                                        className="avatar photo me-3"
+                                        src={
+                                          !comment.user?.profilePic ||
+                                          comment.user?.profilePic.includes(
+                                            'example.com'
+                                          )
+                                            ? '/dash/images/profile/pic1.jpg'
+                                            : comment.user?.profilePic
+                                        }
+                                        alt={`${comment.user?.firstname} ${comment.user?.lastname}'s avatar`}
+                                        width="40"
+                                      />
+                                      <div>
+                                        <cite className="fn">
+                                          {comment.user?.firstname}{' '}
+                                          {comment.user?.lastname}
+                                        </cite>
+                                        <p className="mb-0 fs-16">
+                                          {comment.message_content}
+                                        </p>
+                                      </div>
                                     </div>
-                                  </div>
 
-                                  {role !== "user" && (
-                                    <button
-                                      onClick={() =>
-                                        handleDeleteComment(comment.id)
-                                      }
-                                      title="Delete Comment"
-                                      aria-label={`Delete comment by ${comment.user?.firstname} ${comment.user?.lastname}`}
-                                      style={{
-                                        background: "none",
-                                        border: "none",
-                                        color: "red",
-                                        cursor: "pointer",
-                                        padding: "0",
-                                        marginLeft: "10px",
-                                      }}
-                                    >
-                                      <i
-                                        className="fa fa-trash"
-                                        style={{ fontSize: "16px" }}
-                                      ></i>
-                                    </button>
-                                  )}
-                                </div>
-                              </li>
-                            )) : <li className="comment">No comments yet</li>}
+                                    {role !== 'user' && (
+                                      <button
+                                        onClick={() =>
+                                          handleDeleteComment(comment.id)
+                                        }
+                                        title="Delete Comment"
+                                        aria-label={`Delete comment by ${comment.user?.firstname} ${comment.user?.lastname}`}
+                                        style={{
+                                          background: 'none',
+                                          border: 'none',
+                                          color: 'red',
+                                          cursor: 'pointer',
+                                          padding: '0',
+                                          marginLeft: '10px',
+                                        }}
+                                      >
+                                        <i
+                                          className="fa fa-trash"
+                                          style={{ fontSize: '16px' }}
+                                        ></i>
+                                      </button>
+                                    )}
+                                  </div>
+                                </li>
+                              ))
+                            ) : (
+                              <li className="comment">No comments yet</li>
+                            )}
                           </ol>
                           <div className="widget-title style-1">
                             <h4 className="title" id="reply-title">
@@ -320,7 +347,7 @@ function SearchThesis() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default SearchThesis;
+export default SearchThesis

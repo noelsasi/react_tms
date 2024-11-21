@@ -18,31 +18,45 @@ function Manage_Thesis() {
 
   const columns = [
     {
-      id: 'id', label: 'ID', width: 80, render: thesis => (
+      id: 'id',
+      label: 'ID',
+      width: 80,
+      render: thesis => (
         <strong>{String(thesis.thesis_id).padStart(2, '0')}</strong>
-      )
+      ),
     },
     { id: 'title', label: 'Title', key: 'title' },
     { id: 'author', label: 'Author', key: 'author_name' },
     {
-      id: 'reviewer', label: 'Reviewer', key: 'reviewer_name',
-      render: thesis =>
+      id: 'reviewer',
+      label: 'Reviewer',
+      key: 'reviewer_name',
+      render: thesis => (
         <span className={thesis.reviewer_id ? '' : 'text-danger'}>
-          {thesis.reviewer_name || 'Not Assigned'
-          }</span>
+          {thesis.reviewer_name || 'Not Assigned'}
+        </span>
+      ),
     },
     { id: 'category', label: 'Category', key: 'category' },
-    { id: 'keywords', label: 'Keywords', render: thesis => thesis.keywords?.join(', ') },
+    {
+      id: 'keywords',
+      label: 'Keywords',
+      render: thesis => thesis?.keywords?.join(', '),
+    },
     { id: 'abstract', label: 'Abstract', key: 'abstract' },
     { id: 'views', label: 'Views', key: 'views_count' },
     { id: 'downloads', label: 'Downloads', key: 'downloads_count' },
     {
-      id: 'status', label: 'Status', render: thesis => (
+      id: 'status',
+      label: 'Status',
+      render: thesis => (
         <span className="text-capitalize">{thesis.status}</span>
-      )
+      ),
     },
     {
-      id: 'actions', label: 'Action', render: thesis => (
+      id: 'actions',
+      label: 'Action',
+      render: thesis => (
         <div className="d-flex flex-column gap-2">
           <button
             type="button"
@@ -54,13 +68,15 @@ function Manage_Thesis() {
           <button
             type="button"
             className="btn btn-sm text-danger"
-            onClick={() => dispatch(deleteThesis(thesis.thesis_id, () => setShow(false)))}
+            onClick={() =>
+              dispatch(deleteThesis(thesis.thesis_id, () => setShow(false)))
+            }
           >
             <TrashIcon />
           </button>
         </div>
-      )
-    }
+      ),
+    },
   ]
 
   useEffect(() => {
@@ -71,13 +87,13 @@ function Manage_Thesis() {
     <div className="content-body">
       <div className="container-fluid">
         <div className="row">
-          <ManageThesisForm thesis={currentThesis} show={show} setShow={setShow} />
+          <ManageThesisForm
+            thesis={currentThesis}
+            show={show}
+            setShow={setShow}
+          />
           <div className="col-lg-12">
-            <Table
-              title="List of Thesis"
-              rows={thesisData}
-              columns={columns}
-            />
+            <Table title="List of Thesis" rows={thesisData} columns={columns} />
           </div>
         </div>
       </div>

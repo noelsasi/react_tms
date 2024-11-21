@@ -13,7 +13,7 @@ const initialState = {
   guidelinesList: [],
   dashboardData: [],
   notifications: [],
-  comments: []
+  comments: [],
 }
 
 const dashboardSlice = createSlice({
@@ -60,7 +60,7 @@ const dashboardSlice = createSlice({
 
     setComments: (state, action) => {
       state.comments = action.payload
-    }
+    },
   },
 })
 
@@ -75,19 +75,20 @@ export const {
   setGuidelinesList,
   setDashboardData,
   setNotifications,
-  setComments
+  setComments,
 } = dashboardSlice.actions
 
 export const dashboardReducer = dashboardSlice.reducer
 
-export const fileUploadHandler = async (file, upload_preset = 'scholarVault') => {
+export const fileUploadHandler = async (
+  file,
+  upload_preset = 'scholarVault'
+) => {
   if (!file) return null
 
   const formData = new FormData()
   formData.append('file', file)
   formData.append('upload_preset', upload_preset)
-
-  dispatch(setFormSubmitting(true))
 
   try {
     const response = await fetch(
@@ -110,8 +111,6 @@ export const fileUploadHandler = async (file, upload_preset = 'scholarVault') =>
     console.error('Error uploading file:', error)
     alert('An error occurred during the file upload.')
     return null
-  } finally{
-    dispatch(setFormSubmitting(false))
   }
 }
 
@@ -123,7 +122,7 @@ export const fetchUsers = () => async dispatch => {
     console.log('Error fetching users:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'Error fetching users'
+      message: error.response?.data?.message || 'Error fetching users',
     })
   }
 }
@@ -149,7 +148,7 @@ export const createUser = (data, cb) => async dispatch => {
     console.log('Error creating user:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'An error occurred'
+      message: error.response?.data?.message || 'An error occurred',
     })
   } finally {
     dispatch(setFormSubmitting(false))
@@ -171,44 +170,43 @@ export const deleteUser = (id, cb) => async dispatch => {
     console.log('Error deleting user:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'An error occurred'
+      message: error.response?.data?.message || 'An error occurred',
     })
   }
 }
 
 export const fetchUserProfile =
   (role = 'admin') =>
-    async dispatch => {
-      try {
-        const response = await axios.get(`/api/${role}/profile`, {
-          withCredentials: true,
-        })
-        dispatch(setUserInfo(response.data))
-      } catch (error) {
-        console.error('Error fetching user profile:', error)
-      }
+  async dispatch => {
+    try {
+      const response = await axios.get(`/api/${role}/profile`, {
+        withCredentials: true,
+      })
+      dispatch(setUserInfo(response.data))
+    } catch (error) {
+      console.error('Error fetching user profile:', error)
     }
+  }
 
 export const updateUserProfile =
   (data, role = 'guest') =>
-    async dispatch => {
+  async dispatch => {
+    try {
+      const response = await axios.post(`/api/${role}/profile`, data, {
+        withCredentials: true,
+      })
 
-      try {
-        const response = await axios.post(`/api/${role}/profile`, data, {
-          withCredentials: true,
+      if (response.data) {
+        dispatch(fetchUserProfile(role))
+        showToast({
+          type: 'success',
+          message: response.data.message,
         })
-
-        if (response.data) {
-          dispatch(fetchUserProfile(role))
-          showToast({
-            type: 'success',
-            message: response.data.message,
-          })
-        }
-      } catch (error) {
-        console.error('Error updating user profile:', error)
       }
+    } catch (error) {
+      console.error('Error updating user profile:', error)
     }
+  }
 
 export const fetchAllThesis = () => async dispatch => {
   try {
@@ -218,7 +216,7 @@ export const fetchAllThesis = () => async dispatch => {
     console.log('Error fetching theses:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'An error occurred'
+      message: error.response?.data?.message || 'An error occurred',
     })
   }
 }
@@ -235,15 +233,19 @@ export const createThesis = (data, cb) => async (dispatch, getState) => {
 
       // Trigger notification for thesis creation/update
       const notificationData = {
-        message: `A thesis "${data.title}" has been ${data.thesis_id ? 'updated' : 'created'}`,
+        message: `A thesis "${data.title}" has been ${
+          data.thesis_id ? 'updated' : 'created'
+        }`,
         type: 'thesis',
-        user_id: userInfo.id
+        user_id: userInfo.id,
       }
       dispatch(triggerNotification(notificationData))
 
       showToast({
         type: 'success',
-        message: `Thesis ${data.thesis_id ? 'updated' : 'created'} successfully`,
+        message: `Thesis ${
+          data.thesis_id ? 'updated' : 'created'
+        } successfully`,
       })
       if (cb) cb()
     }
@@ -251,7 +253,7 @@ export const createThesis = (data, cb) => async (dispatch, getState) => {
     console.log('Error creating thesis:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'An error occurred'
+      message: error.response?.data?.message || 'An error occurred',
     })
   } finally {
     dispatch(setFormSubmitting(false))
@@ -273,7 +275,7 @@ export const deleteThesis = (thesis_id, cb) => async dispatch => {
     console.log('Error deleting thesis:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'An error occurred'
+      message: error.response?.data?.message || 'An error occurred',
     })
   }
 }
@@ -286,7 +288,7 @@ export const fetchPeers = () => async dispatch => {
     console.log('Error fetching peers:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'An error occurred'
+      message: error.response?.data?.message || 'An error occurred',
     })
   }
 }
@@ -313,9 +315,11 @@ export const createPeerReview = (data, cb) => async (dispatch, getState) => {
 
       // Trigger notification for peer review creation/update
       const notificationData = {
-        message: `A new peer review has been ${data.id ? 'updated' : 'added'} for thesis "${data.title}"`,
+        message: `A new peer review has been ${
+          data.id ? 'updated' : 'added'
+        } for thesis "${data.title}"`,
         type: 'review',
-        user_id: userInfo.id
+        user_id: userInfo.id,
       }
       dispatch(triggerNotification(notificationData))
 
@@ -329,7 +333,7 @@ export const createPeerReview = (data, cb) => async (dispatch, getState) => {
     console.log('Error creating peer review:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'An error occurred'
+      message: error.response?.data?.message || 'An error occurred',
     })
   } finally {
     dispatch(setFormSubmitting(false))
@@ -351,7 +355,7 @@ export const deletePeerReview = (id, cb) => async dispatch => {
     console.log('Error deleting peer review:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'An error occurred'
+      message: error.response?.data?.message || 'An error occurred',
     })
   }
 }
@@ -364,7 +368,7 @@ export const fetchGuidelines = () => async dispatch => {
     console.log('Error fetching guidelines:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'An error occurred'
+      message: error.response?.data?.message || 'An error occurred',
     })
   }
 }
@@ -383,10 +387,12 @@ export const createGuideline = (data, cb) => async (dispatch, getState) => {
 
       // Trigger notification for guideline creation/update
       const notificationData = {
-        message: `A new guideline has been ${data.id ? 'updated' : 'added'}: "${data.title}"`,
+        message: `A new guideline has been ${data.id ? 'updated' : 'added'}: "${
+          data.title
+        }"`,
         type: 'guideline',
         user_id: userInfo.id,
-        broadcast: true // This will notify all users
+        broadcast: true, // This will notify all users
       }
       dispatch(triggerNotification(notificationData))
 
@@ -399,7 +405,7 @@ export const createGuideline = (data, cb) => async (dispatch, getState) => {
     console.log('Error creating guideline:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'An error occurred'
+      message: error.response?.data?.message || 'An error occurred',
     })
   } finally {
     dispatch(setFormSubmitting(false))
@@ -421,7 +427,7 @@ export const deleteGuideline = (id, cb) => async dispatch => {
     console.log('Error deleting guideline:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'An error occurred'
+      message: error.response?.data?.message || 'An error occurred',
     })
   }
 }
@@ -431,12 +437,14 @@ export const fetchMyThesis = () => async (dispatch, getState) => {
     dispatch(setLoading(true))
     const { userInfo } = getState().auth
     const { data } = await axios.get(`/api/admin/thesis`)
-    dispatch(setThesisData(data.filter(thesis => thesis.author_id === userInfo.id)))
+    dispatch(
+      setThesisData(data.filter(thesis => thesis.author_id === userInfo.id))
+    )
   } catch (error) {
     console.log('Error fetching my theses:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'An error occurred'
+      message: error.response?.data?.message || 'An error occurred',
     })
   } finally {
     dispatch(setLoading(false))
@@ -452,7 +460,7 @@ export const submitThesis = (data, cb) => async dispatch => {
       dispatch(fetchMyThesis())
       showToast({
         type: 'success',
-        message: 'Thesis submitted successfully'
+        message: 'Thesis submitted successfully',
       })
       if (cb) cb()
     }
@@ -460,14 +468,14 @@ export const submitThesis = (data, cb) => async dispatch => {
     console.log('Error submitting thesis:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'An error occurred'
+      message: error.response?.data?.message || 'An error occurred',
     })
   } finally {
     dispatch(setFormSubmitting(false))
   }
 }
 
-export const searchThesis = (data) => async dispatch => {
+export const searchThesis = data => async dispatch => {
   try {
     const { data: response } = await axios.post('/api/admin/search', data)
     dispatch(setThesisData(response.theses))
@@ -478,7 +486,9 @@ export const searchThesis = (data) => async dispatch => {
 
 export const fetchDashboardData = () => async (dispatch, getState) => {
   const { userInfo } = getState().auth
-  const role = ['admin', 'scholar'].includes(userInfo.role.role_name) ? 'admin' : 'user'
+  const role = ['admin', 'scholar'].includes(userInfo.role.role_name)
+    ? 'admin'
+    : 'user'
   try {
     const { data } = await axios.get('/api/dashboard/' + role, {
       withCredentials: true,
@@ -488,12 +498,12 @@ export const fetchDashboardData = () => async (dispatch, getState) => {
     console.log('Error fetching dashboard data:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'An error occurred'
+      message: error.response?.data?.message || 'An error occurred',
     })
   }
 }
 
-export const fetchNotifications = () => async (dispatch) => {
+export const fetchNotifications = () => async dispatch => {
   try {
     const response = await axios.get('/api/notifications')
     if (response.data) {
@@ -503,12 +513,12 @@ export const fetchNotifications = () => async (dispatch) => {
     console.log('err', err)
     showToast({
       type: 'error',
-      message: err.response?.data?.message || 'An error occurred'
+      message: err.response?.data?.message || 'An error occurred',
     })
   }
 }
 
-export const triggerNotification = (data) => async dispatch => {
+export const triggerNotification = data => async dispatch => {
   try {
     const response = await axios.post('/api/notifications', data)
 
@@ -519,12 +529,12 @@ export const triggerNotification = (data) => async dispatch => {
     console.log('Error triggering notification:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'An error occurred'
+      message: error.response?.data?.message || 'An error occurred',
     })
   }
 }
 
-export const fetchComments = (thesis_id) => async dispatch => {
+export const fetchComments = thesis_id => async dispatch => {
   try {
     const { data } = await axios.get(`/api/comments?thesis_id=${thesis_id}`)
     dispatch(setComments(data))
@@ -532,7 +542,7 @@ export const fetchComments = (thesis_id) => async dispatch => {
     console.log('Error fetching comments:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'An error occurred'
+      message: error.response?.data?.message || 'An error occurred',
     })
   }
 }
@@ -546,7 +556,7 @@ export const addComment = (data, cb) => async (dispatch, getState) => {
       dispatch(fetchComments(data.thesis_id))
       showToast({
         type: 'success',
-        message: 'Comment added successfully'
+        message: 'Comment added successfully',
       })
       if (cb) cb()
     }
@@ -554,7 +564,7 @@ export const addComment = (data, cb) => async (dispatch, getState) => {
     console.log('Error adding comment:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'An error occurred'
+      message: error.response?.data?.message || 'An error occurred',
     })
   } finally {
     dispatch(setFormSubmitting(false))
@@ -570,7 +580,7 @@ export const updateComment = (id, data, cb) => async dispatch => {
       dispatch(fetchComments(data.thesis_id))
       showToast({
         type: 'success',
-        message: 'Comment updated successfully'
+        message: 'Comment updated successfully',
       })
       if (cb) cb()
     }
@@ -578,7 +588,7 @@ export const updateComment = (id, data, cb) => async dispatch => {
     console.log('Error updating comment:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'An error occurred'
+      message: error.response?.data?.message || 'An error occurred',
     })
   } finally {
     dispatch(setFormSubmitting(false))
@@ -592,7 +602,7 @@ export const deleteComment = (id, thesis_id, cb) => async dispatch => {
       dispatch(fetchComments(thesis_id))
       showToast({
         type: 'success',
-        message: 'Comment deleted successfully'
+        message: 'Comment deleted successfully',
       })
       if (cb) cb()
     }
@@ -600,7 +610,50 @@ export const deleteComment = (id, thesis_id, cb) => async dispatch => {
     console.log('Error deleting comment:', error)
     showToast({
       type: 'error',
-      message: error.response?.data?.message || 'An error occurred'
+      message: error.response?.data?.message || 'An error occurred',
+    })
+  }
+}
+
+export const getIPAddress = async () => {
+  const response = await axios.get('https://api.ipify.org?format=json')
+  return response.data.ip
+}
+
+export const viewThesis = id => async dispatch => {
+  try {
+    const ipAddress = await getIPAddress()
+    await axios.post(`/api/misc/view`, {
+      thesisId: id,
+      ipAddress: ipAddress,
+    })
+  } catch (error) {
+    console.log('Error viewing thesis:', error)
+    showToast({
+      type: 'error',
+      message: error.response?.data?.message || 'An error occurred',
+    })
+  }
+}
+
+export const downloadThesis = id => async () => {
+  try {
+    const ipAddress = await getIPAddress()
+    const response = await axios.post(`/api/misc/download`, {
+      thesisId: id,
+      ipAddress: ipAddress,
+    })
+    if (response.data) {
+      showToast({
+        type: 'success',
+        message: 'Thesis downloaded successfully',
+      })
+    }
+  } catch (error) {
+    console.log('Error downloading thesis:', error)
+    showToast({
+      type: 'error',
+      message: error.response?.data?.message || 'An error occurred',
     })
   }
 }

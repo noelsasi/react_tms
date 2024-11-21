@@ -122,7 +122,7 @@ function ValidationsForm() {
                 </div>
 
                 <button type="submit" className="btn btn-primary">
-                  Edit Thesis
+                  Update Thesis
                 </button>
               </div>
             </div>

@@ -1,31 +1,31 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import axios from "axios";
-import showToast from "../../../../lib/showToast";
+import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import axios from 'axios'
+import showToast from '../../../../lib/showToast'
 
 function Contact() {
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: ""
-  });
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  })
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = e => {
+    const { name, value } = e.target
     setFormData(prevState => ({
       ...prevState,
-      [name]: value
-    }));
-  };
+      [name]: value,
+    }))
+  }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const forms = document.querySelectorAll(".needs-validation");
+  const handleSubmit = async e => {
+    e.preventDefault()
+    const forms = document.querySelectorAll('.needs-validation')
     Array.from(forms).forEach(form => {
       if (!form.checkValidity()) {
-        form.classList.add("was-validated")
+        form.classList.add('was-validated')
         return
       }
     })
@@ -33,32 +33,31 @@ function Contact() {
     setLoading(true)
 
     try {
-      const response = await axios.post("/api/enquiry", formData);
+      const response = await axios.post('/api/enquiry', formData)
       if (response.data) {
         showToast({
-          type: "success",
-          message: response.data.message
-        });
+          type: 'success',
+          message: response.data.message,
+        })
         setFormData({
-          name: "",
-          email: "",
-          subject: "",
-          message: ""
+          name: '',
+          email: '',
+          subject: '',
+          message: '',
         })
       }
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error('Error sending message:', error)
     } finally {
       setLoading(false)
     }
-  };
-
+  }
 
   return (
     <div>
       <div
         className="dz-bnr-inr dz-bnr-inr-sm text-center overlay-primary-dark"
-        style={{ backgroundImage: "url(/assets/images/banner/bnr1.jpg)" }}
+        style={{ backgroundImage: 'url(/assets/images/banner/bnr1.jpg)' }}
       >
         <div className="container">
           <div className="dz-bnr-inr-entry">
@@ -110,7 +109,7 @@ function Contact() {
                             />
                             <mask
                               id="mask0_52_48"
-                              style={{ maskType: "luminance" }}
+                              style={{ maskType: 'luminance' }}
                               maskUnits="userSpaceOnUse"
                               x={1}
                               y={2}
@@ -157,7 +156,7 @@ function Contact() {
                             />
                             <mask
                               id="mask0_52_82"
-                              style={{ maskType: "luminance" }}
+                              style={{ maskType: 'luminance' }}
                               maskUnits="userSpaceOnUse"
                               x={5}
                               y={2}
@@ -198,7 +197,7 @@ function Contact() {
                           >
                             <mask
                               id="mask0_52_107"
-                              style={{ maskType: "luminance" }}
+                              style={{ maskType: 'luminance' }}
                               maskUnits="userSpaceOnUse"
                               x={17}
                               y={2}
@@ -228,7 +227,7 @@ function Contact() {
                             />
                             <mask
                               id="mask1_52_107"
-                              style={{ maskType: "luminance" }}
+                              style={{ maskType: 'luminance' }}
                               maskUnits="userSpaceOnUse"
                               x={2}
                               y={2}
@@ -254,7 +253,7 @@ function Contact() {
                           <span className="text-light">Office</span>
                         </div>
                         <p className=" m-a0 p-t20">Mon-Fri from 9am to 7pm.</p>
-                        <h6 className="text-light">+(91) 123 456 7890</h6>
+                        <h6 className="text-light">+1 123 456 7890</h6>
                       </li>
                     </ul>
                   </div>
@@ -317,7 +316,11 @@ function Contact() {
                   We are here for you. How we can help?
                 </p>
                 <div className="contact-area">
-                  <form className="needs-validation" noValidate onSubmit={handleSubmit}>
+                  <form
+                    className="needs-validation"
+                    noValidate
+                    onSubmit={handleSubmit}
+                  >
                     <div className="dzFormMsg" />
                     <input
                       type="hidden"
@@ -413,7 +416,7 @@ function Contact() {
                           data-wow-delay="2.4s"
                           disabled={loading}
                         >
-                          {loading ? "Sending..." : "Submit Now"}
+                          {loading ? 'Sending...' : 'Submit Now'}
                         </button>
                       </div>
                     </div>
@@ -475,7 +478,7 @@ function Contact() {
                 <div className="accordion-body">
                   <strong>
                     It will be depend on the Scholar who reviews the thesis.
-                  </strong>{" "}
+                  </strong>{' '}
                   Generally it wont take more than a week to get the review.
                 </div>
               </div>
@@ -508,7 +511,7 @@ function Contact() {
         </div>
       </section>
     </div>
-  );
+  )
 }
 
-export default Contact;
+export default Contact

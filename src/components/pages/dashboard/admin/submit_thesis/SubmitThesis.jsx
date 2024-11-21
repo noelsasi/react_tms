@@ -1,16 +1,25 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import SubmitThesisForm from "../../../../custom/Forms/SubmitThesisForm";
-import Pagination from "../../../../custom/misc/Pagination";
-import {  fetchMyThesis,  } from "../../slices/dashboardSlice";
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import SubmitThesisForm from '../../../../custom/Forms/SubmitThesisForm'
+import { fetchMyThesis, fetchGuidelines } from '../../slices/dashboardSlice'
 
 function Submit_Thesis() {
-  const dispatch = useDispatch();
-  const { thesisData, loading,  } = useSelector((state) => state.dashboard);
+  const dispatch = useDispatch()
+  const {
+    thesisData,
+    loading,
+    guidelinesList: guidelines,
+  } = useSelector(state => state.dashboard)
+  const [activeAccordion, setActiveAccordion] = useState('1')
 
   useEffect(() => {
-    dispatch(fetchMyThesis());
-  }, [dispatch]);
+    dispatch(fetchMyThesis())
+    dispatch(fetchGuidelines())
+  }, [dispatch])
+
+  const handleAccordionClick = guidelineId => {
+    setActiveAccordion(activeAccordion === guidelineId ? null : guidelineId)
+  }
 
   return (
     <div className="content-body">
@@ -26,193 +35,47 @@ function Submit_Thesis() {
                 </p>
               </div>
               <div className="card-body">
-                <a
-                  className="m-0 subtitle"
-                  href="https://grad.ucsd.edu/academics/preparing-to-graduate/dissertation-thesis-template.html"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Click here to see template
-                </a>
+                <div className="d-flex justify-content-end">
+                  <a
+                    className="m-0 subtitle"
+                    href="https://grad.ucsd.edu/academics/preparing-to-graduate/dissertation-thesis-template.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Download Template
+                  </a>
+                </div>
                 <div
-                  className="accordion accordion-no-gutter accordion-bordered"
+                  className="accordion accordion-no-gutter accordion-bordered mt-3"
                   id="accordion-four"
                 >
-                  <div className="accordion-item">
-                    <div
-                      className="accordion-header  rounded-lg"
-                      id="accord-4One"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapse4One"
-                      aria-controls="collapse4One"
-                      aria-expanded="true"
-                      role="button"
-                    >
-                      <span className="accordion-header-text">
-                        Fonts and Desktop Publishing
-                      </span>
-                      <span className="accordion-header-indicator" />
-                    </div>
-                    <div
-                      id="collapse4One"
-                      className="collapse accordion__body show"
-                      aria-labelledby="accord-4One"
-                      data-bs-parent="#accordion-four"
-                    >
-                      <div className="accordion-body-text">
-                        Features that should stand out in the thesis include the
-                        quality of the scholarship or research, the soundness of
-                        the logic, the originality of ideas, and the lucidity of
-                        the prose, but not the size of the headlines. The use of
-                        headers or chapter titles larger than 3/16" is
-                        discouraged and the use of excessive italics or bold
-                        print is discouraged.
+                  {guidelines.map(guideline => (
+                    <div className="accordion-item" key={guideline.id}>
+                      <div
+                        className={`accordion-header rounded-lg ${
+                          activeAccordion !== guideline.id ? 'collapsed' : ''
+                        }`}
+                        id={`accord-${guideline.id}`}
+                        onClick={() => handleAccordionClick(guideline.id)}
+                        role="button"
+                      >
+                        <span className="accordion-header-text">
+                          {guideline.title}
+                        </span>
+                        <span className="accordion-header-indicator" />
+                      </div>
+                      <div
+                        id={`collapse${guideline.id}`}
+                        className={`collapse accordion__body ${
+                          activeAccordion === guideline.id ? 'show' : ''
+                        }`}
+                      >
+                        <div className="accordion-body-text">
+                          {guideline.description}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="accordion-item">
-                    <div
-                      className="accordion-header collapsed rounded-lg"
-                      id="accord-4Two"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapse4Two"
-                      aria-controls="collapse4Two"
-                      aria-expanded="true"
-                      role="button"
-                    >
-                      <span className="accordion-header-text">Spacing</span>
-                      <span className="accordion-header-indicator" />
-                    </div>
-                    <div
-                      id="collapse4Two"
-                      className="collapse accordion__body"
-                      aria-labelledby="accord-4Two"
-                      data-bs-parent="#accordion-four"
-                    >
-                      <div className="accordion-body-text">
-                        Use 1.5 or double spaced text. Only footnotes, long
-                        quotations, bibliography entries (double space between
-                        entries), table captions, and similar special material
-                        may be single-spaced.
-                      </div>
-                    </div>
-                  </div>
-                  <div className="accordion-item">
-                    <div
-                      className="accordion-header collapsed rounded-lg"
-                      id="accord-4Three"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapse4Three"
-                      aria-controls="collapse4Three"
-                      aria-expanded="true"
-                      role="button"
-                    >
-                      <span className="accordion-header-text">Margins</span>
-                      <span className="accordion-header-indicator" />
-                    </div>
-                    <div
-                      id="collapse4Three"
-                      className="collapse accordion__body"
-                      aria-labelledby="accord-4Three"
-                      data-bs-parent="#accordion-four"
-                    >
-                      <div className="accordion-body-text">
-                        We recommend a left margin of 1.5" and a top, bottom,
-                        and right margin of 1" if the thesis is to be bound.
-                        Page numbers do not need to meet the 1" margin
-                        requirement. If you do not follow the appropriate margin
-                        guidelines that are included here, you might lose
-                        content if your thesis is later bound. Some students may
-                        wish to extend their work beyond the margin requirement
-                        for aesthetic reasons; this is acceptable.
-                      </div>
-                    </div>
-                  </div>
-                  <div className="accordion-item">
-                    <div
-                      className="accordion-header collapsed rounded-lg"
-                      id="accord-4Three"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapse4Four"
-                      aria-controls="collapse4Four"
-                      aria-expanded="true"
-                      role="button"
-                    >
-                      <span className="accordion-header-text">Abstract</span>
-                      <span className="accordion-header-indicator" />
-                    </div>
-                    <div
-                      id="collapse4Four"
-                      className="collapse accordion__body"
-                      aria-labelledby="accord-4Three"
-                      data-bs-parent="#accordion-four"
-                    >
-                      <div className="accordion-body-text">
-                        An abstract is to be included with the thesis.
-                        Particular care should be taken in preparing the
-                        abstract since it will be published in Dissertation
-                        Abstracts or Master's Abstracts and the length is
-                        limited by the publisher. The abstract may not exceed
-                        350 words for a doctorate or 150 words for a master's.
-                        In style, the abstract should be a miniature version of
-                        the thesis. It should be a summary of the results,
-                        conclusions or main arguments presented in the thesis.
-                        The heading of the abstract must contain the word
-                        Abstract, and must show the title of the thesis and the
-                        writer's name as indicated here.
-                      </div>
-                    </div>
-                  </div>
-                  <div className="accordion-item">
-                    <div
-                      className="accordion-header collapsed rounded-lg"
-                      id="accord-4Three"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapse4Five"
-                      aria-controls="collapse4Five"
-                      aria-expanded="true"
-                      role="button"
-                    >
-                      <span className="accordion-header-text">
-                        Page Numbering
-                      </span>
-                      <span className="accordion-header-indicator" />
-                    </div>
-                    <div
-                      id="collapse4Five"
-                      className="collapse accordion__body"
-                      aria-labelledby="accord-4Three"
-                      data-bs-parent="#accordion-four"
-                    >
-                      <div className="accordion-body-text">
-                        Page numbers should be placed in the upper right corner
-                        of the page. Only the number should appear, not "page 9"
-                        or the abbreviation "p. 9." On the first page of each
-                        chapter, the number may be placed at the center bottom,
-                        one double space below the last line of type (the
-                        conventional placement), or at the top right corner.
-                        Page numbers should not be shown on the Title Page, the
-                        Abstract, or on the first page of the Acknowledgments,
-                        Table of Contents, List of Tables or the Preface.
-                        However, the following pages (e.g., the second and
-                        succeeding pages) of each of these sections should be
-                        numbered using Roman numerals. The count for these
-                        preliminary pages should start with the title page. For
-                        example, if the thesis has a two-page abstract, then the
-                        second page of the acknowledgments should be the first
-                        page showing a number, and it should be numbered with
-                        the Roman numeral v. Pages of the text itself and of all
-                        items following the text (i.e. the notes and
-                        bibliography) should be numbered consecutively
-                        throughout in Arabic numbers, beginning with number 1 on
-                        the first page of the first chapter or introduction (but
-                        not preface). Please number every page to be bound,
-                        including pages on which only illustrations, drawings,
-                        tables, or captions appear. The page numbers do not need
-                        to meet the 1" margin requirements.
-                      </div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -268,34 +131,45 @@ function Submit_Thesis() {
                           </td>
                         </tr>
                       ) : (
-                        thesisData.map(({
-                          thesis_id,
-                          title,
-                          author_name,
-                          reviewer_name,
-                          category,
-                          keywords,
-                          abstract,
-                          status
-                        }) => (
-                          <tr key={thesis_id}>
-                            <td>
-                              <strong>{String(thesis_id).padStart(2, '0')}</strong>
-                            </td>
-                            <td>{title}</td>
-                            <td>{author_name}</td>
-                            <td>{reviewer_name || 'Not Assigned'}</td>
-                            <td>{category}</td>
-                            <td>{keywords}</td>
-                            <td>{abstract}</td>
-                            <td>
-                              <span className={`text-capitalize badge badge-${status.toLowerCase() === 'pending' ? 'warning' : 
-                                status.toLowerCase() === 'approved' ? 'success' : 'danger'}`}>
-                                {status}
-                              </span>
-                            </td>
-                          </tr>
-                        ))
+                        thesisData.map(
+                          ({
+                            thesis_id,
+                            title,
+                            author_name,
+                            reviewer_name,
+                            category,
+                            keywords,
+                            abstract,
+                            status,
+                          }) => (
+                            <tr key={thesis_id}>
+                              <td>
+                                <strong>
+                                  {String(thesis_id).padStart(2, '0')}
+                                </strong>
+                              </td>
+                              <td>{title}</td>
+                              <td>{author_name}</td>
+                              <td>{reviewer_name || 'Not Assigned'}</td>
+                              <td>{category}</td>
+                              <td>{keywords}</td>
+                              <td>{abstract}</td>
+                              <td>
+                                <span
+                                  className={`text-capitalize badge badge-${
+                                    status.toLowerCase() === 'pending'
+                                      ? 'warning'
+                                      : status.toLowerCase() === 'approved'
+                                      ? 'success'
+                                      : 'danger'
+                                  }`}
+                                >
+                                  {status}
+                                </span>
+                              </td>
+                            </tr>
+                          )
+                        )
                       )}
                     </tbody>
                   </table>
@@ -307,7 +181,7 @@ function Submit_Thesis() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Submit_Thesis;
+export default Submit_Thesis
