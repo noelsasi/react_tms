@@ -74,7 +74,7 @@ function SubmitThesisForm() {
           document_url: fileUrl,
           status: 'pending', // default status for new submissions
           author_id: user?.id,
-          keywords: formData.keywords.map(keyword => keyword.value),
+          keywords: formData.keywords.map(keyword => keyword.value).join(', '),
         }
 
         // Submit thesis
@@ -216,7 +216,11 @@ function SubmitThesisForm() {
 
               <div className="d-flex justify-content-end">
                 {' '}
-                <button type="submit" className="btn btn-primary">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={formSubmitting}
+                >
                   {formSubmitting ? 'Submitting...' : 'Submit'}
                 </button>
               </div>

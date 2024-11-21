@@ -26,9 +26,9 @@ const getDarkColor = () => {
     '#455a64', // Blue Grey
     '#5d4037', // Brown
     '#616161', // Grey
-  ];
-  return darkColors[Math.floor(Math.random() * darkColors.length)];
-};
+  ]
+  return darkColors[Math.floor(Math.random() * darkColors.length)]
+}
 
 function PrimaryCharts({ dashboardData }) {
   // Add null check for dashboardData
@@ -47,11 +47,13 @@ function PrimaryCharts({ dashboardData }) {
 
   // Transform downloadsByCategory data with null check
   const downloadsData = dashboardData.downloadsByCategory
-    ? Object.entries(dashboardData.downloadsByCategory).map(([name, count]) => ({
-        name,
-        count,
-        fill: getDarkColor(),
-      }))
+    ? Object.entries(dashboardData.downloadsByCategory).map(
+        ([name, count]) => ({
+          name,
+          count,
+          fill: getDarkColor(),
+        })
+      )
     : []
 
   // Transform viewsAndDownloadsByDay data with null check
@@ -74,7 +76,7 @@ function PrimaryCharts({ dashboardData }) {
               <h4 className="card-title">Total Views by Category</h4>
             </div>
             <div className="card-body">
-              <div className="flot-chart">
+              <div className="">
                 <ResponsiveContainer height={300}>
                   <RadialBarChart
                     cx="50%"
@@ -103,10 +105,42 @@ function PrimaryCharts({ dashboardData }) {
         <div className="col-lg-6 col-sm-6">
           <div className="card">
             <div className="card-header">
+              <h4 className="card-title">Downloads by Category</h4>
+            </div>
+            <div className="card-body">
+              <div className="">
+                <ResponsiveContainer height={300}>
+                  <RadialBarChart
+                    cx="50%"
+                    cy="50%"
+                    innerRadius="40%"
+                    outerRadius="100%"
+                    barSize={32}
+                    data={downloadsData}
+                  >
+                    <RadialBar background dataKey="count" />
+                    <Legend
+                      align="left"
+                      verticalAlign="middle"
+                      layout="vertical"
+                      wrapperStyle={{
+                        paddingLeft: '10px',
+                      }}
+                    />
+                  </RadialBarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-lg-12 col-sm-12">
+          <div className="card">
+            <div className="card-header">
               <h4 className="card-title">Views & Downloads Trend</h4>
             </div>
             <div className="card-body">
-              <div className="flot-chart">
+              <div className="">
                 <ResponsiveContainer height={300}>
                   <BarChart data={timeSeriesData} barSize={20}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -147,38 +181,6 @@ function PrimaryCharts({ dashboardData }) {
                       name="Downloads"
                     />
                   </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-lg-6 col-sm-6">
-          <div className="card">
-            <div className="card-header">
-              <h4 className="card-title">Downloads by Category</h4>
-            </div>
-            <div className="card-body">
-              <div className="flot-chart">
-                <ResponsiveContainer height={300}>
-                  <RadialBarChart
-                    cx="50%"
-                    cy="50%"
-                    innerRadius="40%"
-                    outerRadius="100%"
-                    barSize={32}
-                    data={downloadsData}
-                  >
-                    <RadialBar background dataKey="count" />
-                    <Legend
-                      align="left"
-                      verticalAlign="middle"
-                      layout="vertical"
-                      wrapperStyle={{
-                        paddingLeft: '10px',
-                      }}
-                    />
-                  </RadialBarChart>
                 </ResponsiveContainer>
               </div>
             </div>

@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom'
 
 function About() {
   return (
     <div>
       <div
         className="dz-bnr-inr dz-bnr-inr-sm text-center overlay-primary-dark"
-        style={{ backgroundImage: "url(/assets/images/banner/bnr1.jpg)" }}
+        style={{ backgroundImage: 'url(/assets/images/banner/bnr1.jpg)' }}
       >
         <div className="container">
           <div className="dz-bnr-inr-entry">
@@ -108,99 +108,52 @@ function About() {
         <div className="container">
           <div className="section-head text-center">
             <h2 className="title wow fadeInUp" data-wow-delay="0.8s">
-              Our Team
+              Our Mission
             </h2>
           </div>
           <div className="row">
-            <div className="col-lg-4 col-md-6  m-b30">
-              <div
-                className="dz-card style-1 overlay-shine wow fadeInUp"
-                data-wow-delay="1.0s"
-              >
-                <div className="dz-media">
-                  <img src="/assets/images/about/p1.jpeg" alt="img" />
-                </div>
-                <div className="dz-info">
-                  <div className="dz-meta">
-                    <ul>
-                      <li className="post-author text-primary">
-                        <span>
-                          <i className="fa-solid fa-user" />
-                        </span>
-                        Scholar
-                      </li>
-                    </ul>
-                  </div>
-                  <h4 className="dz-title">David</h4>
-                  <p>
-                    {" "}
-                    Thesis Contributed:10 <br></br>Thesis Reviewed:12<br></br>
-                    Since 2010
-                  </p>
-                </div>
-              </div>
+            <div className="col-lg-6">
+              <p>
+                Our mission is to champion academic excellence by ensuring that
+                every thesis is not only accessible but also thoroughly
+                documented and subjected to rigorous peer review. We believe
+                that the foundation of great research lies in its ability to be
+                shared, scrutinized, and refined through collaboration. By
+                creating a robust platform, we aim to empower scholars to
+                present their work to a global audience, fostering an
+                environment where diverse perspectives contribute to the
+                refinement of ideas and the advancement of knowledge.
+                Accessibility is at the heart of our mission, as we strive to
+                eliminate barriers and make academic research available to
+                anyone who seeks to learn or contribute.
+              </p>
+              <p>
+                Beyond accessibility, we are dedicated to cultivating a
+                community of scholars who prioritize integrity, transparency,
+                and collaboration in their research endeavors. Our platform is
+                designed not only to share knowledge but also to connect
+                researchers with peers and mentors who can provide constructive
+                feedback and inspire innovation. By emphasizing the importance
+                of peer review and detailed documentation, we aim to uphold the
+                highest standards of academic rigor, ensuring that the work
+                published through our platform serves as a reliable resource for
+                future research. Together, we are building a vibrant ecosystem
+                where ideas flourish, knowledge grows, and the boundaries of
+                human understanding are continuously expanded.
+              </p>
             </div>
-            <div className="col-lg-4 col-md-6  m-b30">
-              <div
-                className="dz-card style-1 overlay-shine wow fadeInUp"
-                data-wow-delay="1.0s"
-              >
-                <div className="dz-media">
-                  <img src="/assets/images/about/p2.jpeg" alt="img" />
-                </div>
-                <div className="dz-info">
-                  <div className="dz-meta">
-                    <ul>
-                      <li className="post-author text-primary">
-                        <span>
-                          <i className="fa-solid fa-user" />
-                        </span>
-                        Scholar
-                      </li>
-                    </ul>
-                  </div>
-                  <h4 className="dz-title">Mark</h4>
-                  <p>
-                    {" "}
-                    Thesis Contributed:15 <br></br>Thesis Reviewed:16<br></br>
-                    Since 2014
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-4 col-md-6  m-b30">
-              <div
-                className="dz-card style-1 overlay-shine wow fadeInUp"
-                data-wow-delay="1.0s"
-              >
-                <div className="dz-media">
-                  <img src="/assets/images/about/p3.jpeg" alt="img" />
-                </div>
-                <div className="dz-info">
-                  <div className="dz-meta">
-                    <ul>
-                      <li className="post-author text-primary">
-                        <span>
-                          <i className="fa-solid fa-user" />
-                        </span>
-                        Scholar
-                      </li>
-                    </ul>
-                  </div>
-                  <h4 className="dz-title">Harris</h4>
-                  <p>
-                    {" "}
-                    Thesis Contributed:20 <br></br>Thesis Reviewed:17<br></br>
-                    Since 2010
-                  </p>
-                </div>
-              </div>
+            <div className="col-lg-6">
+              <img
+                src="/assets/images/about/mission.png"
+                alt="image"
+                className="rounded"
+              />
             </div>
           </div>
         </div>
       </section>
     </div>
-  );
+  )
 }
 
-export default About;
+export default About

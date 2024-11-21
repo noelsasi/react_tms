@@ -11,13 +11,29 @@ export default function RenderPdf({ fileUrl, thesisId, title }) {
   const dispatch = useDispatch()
   const defaultLayoutPluginInstance = defaultLayoutPlugin()
 
-  const handleDownload = () => {
-    const link = document.createElement('a')
-    link.href = window.URL.createObjectURL(new Blob([fileUrl]))
-    link.setAttribute('download', `${title}.pdf`)
-    link.click()
-    link.remove()
-    dispatch(downloadThesis(thesisId))
+  const handleDownload = async () => {
+    try {
+      // Fetch the file if it's a URL
+      const response = await fetch(fileUrl)
+      const blob = await response.blob()
+
+      // Create download link
+      const link = document.createElement('a')
+      link.href = window.URL.createObjectURL(blob)
+      link.setAttribute('download', `${title}.pdf`)
+
+      // Trigger download
+      document.body.appendChild(link)
+      link.click()
+
+      // Cleanup
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(link.href)
+
+      dispatch(downloadThesis(thesisId))
+    } catch (error) {
+      console.error('Download failed:', error)
+    }
   }
 
   return (
@@ -44,10 +60,7 @@ export default function RenderPdf({ fileUrl, thesisId, title }) {
       <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
         <div style={{ height: '750px' }}>
           <Viewer
-            fileUrl={
-              fileUrl ||
-              'https://cdn.simplepdf.com/simple-pdf/assets/sample.pdf'
-            }
+            fileUrl={fileUrl}
             plugins={[defaultLayoutPluginInstance, getFilePlugin()]}
           />
         </div>

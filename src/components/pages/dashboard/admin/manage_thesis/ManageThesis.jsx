@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react'
 import ManageThesisForm from '../../../../custom/Forms/ManageThesisForm'
 import Table from '../../../../custom/Table/table'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteThesis, fetchAllThesis } from '../../slices/dashboardSlice'
+import {
+  createThesis,
+  deleteThesis,
+  fetchAllThesis,
+} from '../../slices/dashboardSlice'
 import { Pencil1Icon, TrashIcon } from '@radix-ui/react-icons'
 
 function Manage_Thesis() {
@@ -41,7 +45,7 @@ function Manage_Thesis() {
     {
       id: 'keywords',
       label: 'Keywords',
-      render: thesis => thesis?.keywords?.join(', '),
+      render: thesis => thesis.keywords,
     },
     { id: 'abstract', label: 'Abstract', key: 'abstract' },
     { id: 'views', label: 'Views', key: 'views_count' },
@@ -69,7 +73,11 @@ function Manage_Thesis() {
             type="button"
             className="btn btn-sm text-danger"
             onClick={() =>
-              dispatch(deleteThesis(thesis.thesis_id, () => setShow(false)))
+              dispatch(
+                createThesis({ ...thesis, status: 'deleted' }, () =>
+                  setShow(false)
+                )
+              )
             }
           >
             <TrashIcon />

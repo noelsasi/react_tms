@@ -106,20 +106,6 @@ function DashBoardHeader({ onToggle, isMenuToggled }) {
                         {notifications.map(notification => (
                           <li key={notification.id}>
                             <div className="timeline-panel">
-                              <div className="media me-2">
-                                <img
-                                  alt="image"
-                                  width={50}
-                                  src={
-                                    !notification?.user_info?.profilePic ||
-                                    !notification?.user_info?.profilePic.includes(
-                                      'scholarvault.com'
-                                    )
-                                      ? notification?.user_info?.profilePic
-                                      : '/dash/images/avatar/1.jpg'
-                                  }
-                                />
-                              </div>
                               <div className="media-body">
                                 <h6 className="mb-1">{notification.message}</h6>
                                 <small className="d-block">

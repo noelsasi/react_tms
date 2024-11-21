@@ -43,9 +43,7 @@ function UpdateProfile({ user }) {
     const form = e.target
     if (form.checkValidity()) {
       try {
-        dispatch(
-          updateUserProfile({ ...user, ...formData }, 'admin')
-        )
+        dispatch(updateUserProfile({ ...user, ...formData }, 'admin'))
       } catch (error) {
         console.error('Error submitting form:', error)
       }
@@ -123,10 +121,12 @@ function UpdateProfile({ user }) {
         <div className="mb-3">
           <label className="form-label">Phone</label>
           <input
-            type="text"
+            type="tel"
             className="form-control"
             name="phone"
             placeholder="Enter Phone"
+            pattern="[0-9]{10}"
+            maxLength={10}
             value={formData.phone}
             onChange={handleInputChange}
             required

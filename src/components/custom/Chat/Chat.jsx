@@ -124,7 +124,7 @@ const Chat = () => {
                     className="rounded-circle"
                     width="40"
                   />
-                  <h5 className="mb-0 ms-3">{user.username}</h5>
+                  <h5 className="mb-0 ms-3">{user.firstname}</h5>
                 </div>
                 <hr />
                 {/* Search with autocomplete */}
@@ -174,7 +174,7 @@ const Chat = () => {
                               width="40"
                             />
                             <div className="ms-3">
-                              <h6 className="mb-0">{user.username}</h6>
+                              <h6 className="mb-0">{user.firstname}</h6>
                               <p className="mb-0 text-muted">{user.email}</p>
                             </div>
                           </div>

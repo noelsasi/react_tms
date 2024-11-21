@@ -8,8 +8,8 @@ import { authenticateUser, fetchCsrfToken } from '../slices/authSlice'
 function Signin() {
   const dispatch = useDispatch()
   const { csrfToken, loading: isLoading } = useSelector(state => state.auth)
-  const [email, setEmail] = useState('admin@scholarvault.com')
-  const [password, setPassword] = useState('scholarvault')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
   const navigate = useNavigate()
 

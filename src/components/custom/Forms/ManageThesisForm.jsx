@@ -54,6 +54,7 @@ export const STATUSES = [
   { value: 'pending', label: 'Pending' },
   { value: 'approved', label: 'Approved' },
   { value: 'rejected', label: 'Rejected' },
+  { value: 'deleted', label: 'Deleted' },
 ]
 
 const initialFormData = {
@@ -74,12 +75,13 @@ function ManageThesisForm({ thesis: currentThesis, show, setShow }) {
   const [file, setFile] = useState(null)
 
   useEffect(() => {
+    const thisKeywords = currentThesis?.keywords?.split(', ')
     if (currentThesis) {
       const kw = KEYWORDS.filter(keyword =>
-        currentThesis.keywords.includes(keyword.value)
+        thisKeywords.includes(keyword.value)
       )
       kw.push(
-        ...currentThesis.keywords
+        ...thisKeywords
           .filter(keyword => !KEYWORDS.some(k => k.value === keyword))
           .map(keyword => ({ value: keyword, label: keyword }))
       )
@@ -134,13 +136,18 @@ function ManageThesisForm({ thesis: currentThesis, show, setShow }) {
         ...formData,
         document_url: fileUrl,
         status: formData.status?.toLowerCase(),
-        keywords: formData.keywords.map(keyword => keyword.value),
+        keywords: formData.keywords.map(keyword => keyword.value).join(', '),
       }
 
       if (currentThesis?.thesis_id) {
         dataToSubmit.thesis_id = currentThesis.thesis_id
       }
-      dispatch(createThesis(dataToSubmit, () => setFormData(initialFormData)))
+      dispatch(
+        createThesis(dataToSubmit, () => {
+          setFormData(initialFormData)
+          setFile(null)
+        })
+      )
     } else {
       console.log('Form is not valid', e.target)
       e.target.classList.add('was-validated')

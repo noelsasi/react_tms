@@ -35,18 +35,8 @@ function Submit_Thesis() {
                 </p>
               </div>
               <div className="card-body">
-                <div className="d-flex justify-content-end">
-                  <a
-                    className="m-0 subtitle"
-                    href="https://grad.ucsd.edu/academics/preparing-to-graduate/dissertation-thesis-template.html"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Download Template
-                  </a>
-                </div>
                 <div
-                  className="accordion accordion-no-gutter accordion-bordered mt-3"
+                  className="accordion accordion-no-gutter accordion-bordered "
                   id="accordion-four"
                 >
                   {guidelines.map(guideline => (
@@ -72,6 +62,19 @@ function Submit_Thesis() {
                       >
                         <div className="accordion-body-text">
                           {guideline.description}
+                          {guideline.fileUrl && (
+                            <div className="mt-3">
+                              <a
+                                href={guideline.fileUrl}
+                                className="btn btn-primary btn-sm"
+                                download
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <i className="fa fa-download mr-2"></i>
+                              </a>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>

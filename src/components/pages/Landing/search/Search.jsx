@@ -107,6 +107,7 @@ function Search() {
                   theses.map(thesis => (
                     <ThesisHorizontal
                       key={thesis.thesis_id}
+                      thesis_id={thesis.thesis_id}
                       title={thesis.title}
                       abstract={thesis.abstract}
                       author={thesis.author_name}
@@ -121,7 +122,6 @@ function Search() {
                       img_src={
                         thesis.cover_image || '/assets/images/blog/t2.png'
                       }
-                      thesis_id={thesis.thesis_id}
                     />
                   ))
                 )}

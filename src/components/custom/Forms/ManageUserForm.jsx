@@ -227,6 +227,7 @@ function ManageUserForm({ show, setShow, user }) {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
+                      disabled
                     />
                     <div className="invalid-feedback">Please enter Email.</div>
                   </div>

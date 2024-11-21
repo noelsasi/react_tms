@@ -256,11 +256,13 @@ function SearchThesis() {
             <div className="row">
               <div className="col-lg-12">
                 <div className="card">
-                  <RenderPdf
-                    title={selectedThesis?.title}
-                    thesisId={selectedThesis?.thesis_id}
-                    fileUrl={selectedThesis?.document_url}
-                  />
+                  {selectedThesis?.document_url && (
+                    <RenderPdf
+                      title={selectedThesis?.title}
+                      thesisId={selectedThesis?.thesis_id}
+                      fileUrl={selectedThesis?.document_url}
+                    />
+                  )}
                   <div className="card-footer border-0">
                     <div className="clear" id="comment-list">
                       <div className="comments-area" id="comments">
@@ -276,32 +278,32 @@ function SearchThesis() {
                               comments.map(comment => (
                                 <li className="comment" key={comment.id}>
                                   <div className="comment-body d-flex mb-4 align-items-start justify-content-between w-100">
-                                    <div className="d-flex align-items-start">
-                                      <img
-                                        className="avatar photo me-3"
-                                        src={
-                                          !comment.user?.profilePic ||
-                                          comment.user?.profilePic.includes(
-                                            'example.com'
-                                          )
-                                            ? '/dash/images/profile/pic1.jpg'
-                                            : comment.user?.profilePic
-                                        }
-                                        alt={`${comment.user?.firstname} ${comment.user?.lastname}'s avatar`}
-                                        width="40"
-                                      />
-                                      <div>
-                                        <cite className="fn">
-                                          {comment.user?.firstname}{' '}
-                                          {comment.user?.lastname}
-                                        </cite>
+                                    <div className="d-flex align-items-start flex-grow-1">
+                                      <div className="w-100">
+                                        <div className="d-flex justify-content-between align-items-center">
+                                          <cite className="fn">
+                                            {comment.user?.firstname}{' '}
+                                            {comment.user?.lastname}
+                                          </cite>
+                                          <span className="text-muted fs-14">
+                                            {new Date(
+                                              comment.created_at
+                                            ).toLocaleDateString('en-US', {
+                                              year: 'numeric',
+                                              month: 'short',
+                                              day: 'numeric',
+                                              hour: '2-digit',
+                                              minute: '2-digit',
+                                            })}
+                                          </span>
+                                        </div>
                                         <p className="mb-0 fs-16">
                                           {comment.message_content}
                                         </p>
                                       </div>
                                     </div>
 
-                                    {role !== 'user' && (
+                                    {userInfo.id === comment.user_id && (
                                       <button
                                         onClick={() =>
                                           handleDeleteComment(comment.id)
