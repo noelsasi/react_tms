@@ -57,15 +57,36 @@ function PrimaryCharts({ dashboardData }) {
     : []
 
   // Transform viewsAndDownloadsByDay data with null check
-  const timeSeriesData = dashboardData.viewsAndDownloadsByDay
-    ? dashboardData.viewsAndDownloadsByDay.map(item => ({
-        name: new Date(item.date).toLocaleDateString('en-US', {
-          weekday: 'short',
-        }),
-        views: item.views,
-        downloads: item.downloads,
-      }))
-    : []
+  // const timeSeriesData = dashboardData.viewsAndDownloadsByDay
+  //   ? dashboardData.viewsAndDownloadsByDay.map(item => ({
+  //       name: new Date(item.date).toLocaleDateString('en-US', {
+  //         weekday: 'short',
+  //       }),
+  //       views: item.views,
+  //       downloads: item.downloads,
+  //     }))
+  //   : []
+  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
+  // Assuming dashboardData.viewsAndDownloadsByDay contains data for specific dates
+  console.log(dashboardData.viewsAndDownloadsByDay)
+
+  const timeSeriesData = weekDays.map((day, index) => {
+    const dataForDay = dashboardData.viewsAndDownloadsByDay?.find(item => {
+      const itemDate = new Date(item.date)
+
+      const itemDay = itemDate.getDay() + 1
+      return itemDay === index
+    })
+
+    return {
+      name: day, // Use the day name (Sun, Mon, etc.)
+      views: dataForDay ? dataForDay.views : 0, // Set views or 0 if no data
+      downloads: dataForDay ? dataForDay.downloads : 0, // Set downloads or 0 if no data
+    }
+  })
+
+  console.log(timeSeriesData) // Output the processed time series data
 
   return (
     <div className="col-12">
@@ -92,7 +113,7 @@ function PrimaryCharts({ dashboardData }) {
                       verticalAlign="middle"
                       layout="vertical"
                       wrapperStyle={{
-                        paddingLeft: '10px',
+                        paddingLeft: '16px',
                       }}
                     />
                   </RadialBarChart>
@@ -124,7 +145,7 @@ function PrimaryCharts({ dashboardData }) {
                       verticalAlign="middle"
                       layout="vertical"
                       wrapperStyle={{
-                        paddingLeft: '10px',
+                        paddingLeft: '16px',
                       }}
                     />
                   </RadialBarChart>

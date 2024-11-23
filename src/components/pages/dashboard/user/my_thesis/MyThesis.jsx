@@ -6,7 +6,7 @@ import { fetchMyThesis } from '../../slices/dashboardSlice'
 function My_thesis() {
   const dispatch = useDispatch()
   const { thesisData, loading } = useSelector(state => state.dashboard)
-
+  console.log(thesisData)
   useEffect(() => {
     dispatch(fetchMyThesis())
   }, [dispatch])
@@ -86,13 +86,11 @@ function My_thesis() {
                             <td>{category}</td>
                             <td>{keywords}</td>
                             <td>{abstract}</td>
-                            <td>{status === 'Accepted' ? views_count : '-'}</td>
+                            <td>{status === 'approved' ? views_count : '-'}</td>
                             <td>
-                              {status === 'Accepted' ? downloads_count : '-'}
+                              {status === 'approved' ? downloads_count : '-'}
                             </td>
-                            <td>
-                              {reviewer_name || 'Not assigned'}
-                            </td>
+                            <td>{reviewer_name || 'Not assigned'}</td>
                             <td>
                               <span
                                 className={`text-capitalize badge badge-${

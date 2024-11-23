@@ -22,26 +22,39 @@ function Manage_users() {
     setShow(true)
   }
 
-
   const columns = [
     { label: 'First Name', key: 'firstname' },
     { label: 'Last Name', key: 'lastname' },
     { label: 'Gender', key: 'gender' },
-    { label: 'Date of Birth', key: 'dob', render: user => new Date(user.dob).toLocaleDateString() },
+    {
+      label: 'Date of Birth',
+      key: 'dob',
+      render: user => new Date(user.dob).toLocaleDateString(),
+    },
     { label: 'Address', key: 'address' },
     { label: 'Phone', key: 'phone' },
     { label: 'Email', key: 'email' },
     { label: 'Role', key: 'role' },
     { label: 'Status', key: 'status' },
     {
-      label: 'Action', key: 'action', render: user => <div className='d-flex flex-column'>
-        <button className='btn btn-sm text-primary' onClick={() => handleEdit(user)}>
-          <Pencil1Icon />
-        </button>
-        {/* <button className='btn btn-sm text-danger' onClick={() => dispatch(deleteUser(user.id))}>
-          <TrashIcon />
-        </button> */}
-      </div>
+      label: 'Action',
+      key: 'action',
+      render: user => (
+        <div className="d-flex flex-column">
+          <button
+            className="btn btn-sm text-primary"
+            onClick={() => handleEdit(user)}
+          >
+            <Pencil1Icon />
+          </button>
+          <button
+            className="btn btn-sm text-danger"
+            onClick={() => dispatch(deleteUser(user.id))}
+          >
+            <TrashIcon />
+          </button>
+        </div>
+      ),
     },
   ]
 
@@ -53,23 +66,13 @@ function Manage_users() {
     }
   }, [])
 
-
-
   return (
     <div className="content-body">
       <div className="container-fluid">
         <div className="row">
-          <ManageUserForm
-            show={show}
-            setShow={setShow}
-            user={currentUser}
-          />
+          <ManageUserForm show={show} setShow={setShow} user={currentUser} />
           <div className="col-lg-12">
-            <Table
-              title="Users"
-              rows={users}
-              columns={columns}
-            />
+            <Table title="Users" rows={users} columns={columns} />
           </div>
         </div>
       </div>

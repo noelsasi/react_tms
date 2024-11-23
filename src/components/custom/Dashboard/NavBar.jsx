@@ -54,6 +54,11 @@ function NavBar() {
         link: '/dashboard/admin/chat',
         icon: 'flaticon-033-feather',
       },
+      {
+        label: 'Latest Thesis',
+        link: '/dashboard/admin/latest_details',
+        icon: 'flaticon-033-feather',
+      },
     ],
     scholar: [
       {
@@ -96,6 +101,11 @@ function NavBar() {
         link: '/dashboard/scholar/chat',
         icon: 'flaticon-033-feather',
       },
+      {
+        label: 'Latest Thesis',
+        link: '/dashboard/scholar/latest_details',
+        icon: 'flaticon-033-feather',
+      },
     ],
     user: [
       {
@@ -126,6 +136,11 @@ function NavBar() {
       {
         label: 'Chat',
         link: '/dashboard/user/chat',
+        icon: 'flaticon-033-feather',
+      },
+      {
+        label: 'Latest Thesis',
+        link: '/dashboard/user/latest_details',
         icon: 'flaticon-033-feather',
       },
     ],

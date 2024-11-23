@@ -350,11 +350,17 @@ function ManageThesisForm({ thesis: currentThesis, show, setShow }) {
                         <option value="" disabled>
                           Select Reviewer
                         </option>
-                        {usersList.map(user => (
-                          <option key={user.id} value={user.id}>
-                            {user.firstname} {user.lastname}
-                          </option>
-                        ))}
+                        {usersList &&
+                          usersList.map(
+                            user =>
+                              // Check if the role is 'admin' or 'scholar' and display the user
+                              (user.role === 'admin' ||
+                                user.role === 'scholar') && (
+                                <option key={user.id} value={user.id}>
+                                  {user.firstname} {user.lastname}
+                                </option>
+                              )
+                          )}
                       </select>
                     </div>
                   )}

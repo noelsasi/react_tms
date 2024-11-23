@@ -76,7 +76,6 @@ function ManageUserForm({ show, setShow, user }) {
       if (user?.id) {
         dataToSubmit.id = user.id
       }
-
       dispatch(createUser(dataToSubmit, () => handleReset()))
     } else {
       e.target.classList.add('was-validated')
@@ -227,7 +226,6 @@ function ManageUserForm({ show, setShow, user }) {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      disabled
                     />
                     <div className="invalid-feedback">Please enter Email.</div>
                   </div>

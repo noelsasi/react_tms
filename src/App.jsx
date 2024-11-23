@@ -29,6 +29,7 @@ import Verify from './components/pages/auth/verify/Verify'
 import Sendmail from './components/pages/auth/sendmail/Sendmail'
 import { persistor, store } from './redux/store'
 import Chat from './components/custom/Chat'
+import LatestThesis from './components/pages/dashboard/admin/latest_thesis/LatestThesis'
 
 function router() {
   return createBrowserRouter([
@@ -54,7 +55,6 @@ function router() {
         { path: 'signup', element: <SignUp /> },
         { path: 'verify', element: <Verify /> },
         { path: 'sendmail', element: <Sendmail /> },
-
       ],
     },
     {
@@ -69,6 +69,7 @@ function router() {
         { path: 'search_thesis', element: <Search_Thesis /> },
         { path: 'profile', element: <Profile /> },
         { path: 'chat', element: <Chat /> },
+        { path: 'latest_details', element: <LatestThesis /> },
       ],
     },
     {
@@ -83,6 +84,7 @@ function router() {
         { path: 'search_thesis', element: <Search_Thesis /> },
         { path: 'profile', element: <Profile /> },
         { path: 'chat', element: <Chat /> },
+        { path: 'latest_details', element: <LatestThesis /> },
       ],
     },
     {
@@ -95,6 +97,7 @@ function router() {
         { path: 'search_thesis', element: <Search_Thesis /> },
         { path: 'profile', element: <Profile /> },
         { path: 'chat', element: <Chat /> },
+        { path: 'latest_details', element: <LatestThesis /> },
       ],
     },
   ])

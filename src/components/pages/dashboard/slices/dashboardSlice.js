@@ -141,7 +141,7 @@ export const createUser = (data, cb) => async dispatch => {
       dispatch(fetchUsers())
       showToast({
         type: 'success',
-        message: response.data.message,
+        message: response.message,
       })
     }
   } catch (error) {

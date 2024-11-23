@@ -1,5 +1,7 @@
+/* eslint-disable react/jsx-key */
 import { useLocation } from 'react-router-dom'
 import Comment from '../../../../custom/Forms/Comment'
+import Pagination from '../../../../custom/misc/Pagination'
 import RenderPdf from '../../../../custom/pdfRender/RenderPdf'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,13 +14,15 @@ import {
   searchThesis,
   viewThesis,
 } from '../../slices/dashboardSlice'
-import { Table } from '../../../../custom/Table'
+import { KEYWORDS } from '../../../../custom/Forms/ManageThesisForm'
+import Table from '../../../../custom/Table/table'
 
 function SearchThesis() {
   const dispatch = useDispatch()
   const { thesisData, usersList, comments } = useSelector(
     state => state.dashboard
   )
+  console.log(thesisData)
   const { userInfo } = useSelector(state => state.auth)
   const [role, setRole] = useState(null)
   const location = useLocation()
@@ -47,7 +51,7 @@ function SearchThesis() {
     const payload = {}
     if (formData.search) payload.search = formData.search
     if (formData.author) payload.author_name = formData.author
-    if (formData.keyword) payload.keywords = [formData.keyword]
+    if (formData.keyword) payload.keywords = formData.keyword
     if (formData.status) payload.status = formData.status
     if (formData.startdate) payload.startdate = formData.startdate
     if (formData.enddate) payload.enddate = formData.enddate
@@ -73,6 +77,25 @@ function SearchThesis() {
     dispatch(addComment(newComment))
   }
 
+  const columns = [
+    {
+      id: 'thesis_id',
+      key: 'thesis_id',
+      label: 'ID',
+      width: 80,
+    },
+    {
+      id: 'title',
+      key: 'title',
+      label: 'Title',
+    },
+    {
+      id: 'author_name',
+      key: 'author_name',
+      label: 'Author',
+    },
+  ]
+
   useEffect(() => {
     if (location.pathname) {
       const currentRole = location.pathname.split('/')[2]
@@ -94,29 +117,10 @@ function SearchThesis() {
     }
   }, [selectedThesis])
 
-  const columns = [
-    {
-      id: 'thesis_id',
-      key: 'thesis_id',
-      label: 'ID',
-      width: 80,
-    },
-    {
-      id: 'title',
-      key: 'title',
-      label: 'Title',
-    },
-    {
-      id: 'author_name',
-      key: 'author_name',
-      label: 'Author',
-    },
-  ]
-
   return (
     <div className="content-body">
       <div className="container-fluid">
-        <div className="row d-none">
+        <div className="row">
           <div className="col-lg-12">
             <div className="card">
               <div className="card-body">
@@ -147,7 +151,10 @@ function SearchThesis() {
                             Author
                           </option>
                           {usersList?.map(user => (
-                            <option value={user.user_id}>
+                            <option
+                              key={user.user_id}
+                              value={`${user.firstname} ${user.lastname}`}
+                            >
                               {user.firstname} {user.lastname}
                             </option>
                           ))}
@@ -166,10 +173,11 @@ function SearchThesis() {
                           <option value="" disabled>
                             Keywords
                           </option>
-                          <option value="AI">AI</option>
-                          <option value="ML">ML</option>
-                          <option value="NLP">NLP</option>
-                          <option value="Others">Others</option>
+                          {KEYWORDS.map(keyword => (
+                            <option key={keyword.label} value={keyword.value}>
+                              {keyword.label}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     </div>

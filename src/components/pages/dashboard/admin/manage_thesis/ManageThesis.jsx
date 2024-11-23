@@ -73,11 +73,7 @@ function Manage_Thesis() {
             type="button"
             className="btn btn-sm text-danger"
             onClick={() =>
-              dispatch(
-                createThesis({ ...thesis, status: 'deleted' }, () =>
-                  setShow(false)
-                )
-              )
+              dispatch(deleteThesis(thesis.thesis_id, () => setShow(false)))
             }
           >
             <TrashIcon />
