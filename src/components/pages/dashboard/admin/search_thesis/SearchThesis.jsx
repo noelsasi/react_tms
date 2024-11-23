@@ -1,6 +1,5 @@
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import Comment from '../../../../custom/Forms/Comment'
-import Pagination from '../../../../custom/misc/Pagination'
 import RenderPdf from '../../../../custom/pdfRender/RenderPdf'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -13,6 +12,7 @@ import {
   searchThesis,
   viewThesis,
 } from '../../slices/dashboardSlice'
+import { Table } from '../../../../custom/Table'
 
 function SearchThesis() {
   const dispatch = useDispatch()
@@ -93,6 +93,25 @@ function SearchThesis() {
       dispatch(viewThesis(selectedThesis?.thesis_id))
     }
   }, [selectedThesis])
+
+  const columns = [
+    {
+      id: 'thesis_id',
+      key: 'thesis_id',
+      label: 'ID',
+      width: 80,
+    },
+    {
+      id: 'title',
+      key: 'title',
+      label: 'Title',
+    },
+    {
+      id: 'author_name',
+      key: 'author_name',
+      label: 'Author',
+    },
+  ]
 
   return (
     <div className="content-body">
@@ -209,44 +228,17 @@ function SearchThesis() {
             <div className="row">
               <div className="col-lg-12">
                 <div className="card p-3">
-                  <div className="card-header p-3">
-                    <h4 className="fs-20 mb-0">List of Thesis</h4>
-                  </div>
-                  <div className="table-responsive p-2">
-                    <table className="table table-responsive">
-                      <thead>
-                        <tr>
-                          <th>
-                            <strong>ID</strong>
-                          </th>
-                          <th>
-                            <strong>Title</strong>
-                          </th>
-                          <th>
-                            <strong>Author</strong>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {thesisData?.map(thesis => (
-                          <tr
-                            onClick={() => handleThesisClick(thesis)}
-                            key={thesis.thesis_id}
-                            className={`cursor-pointer ${
-                              selectedThesis?.thesis_id === thesis.thesis_id
-                                ? 'active-thesis'
-                                : ''
-                            }`}
-                            style={{ cursor: 'pointer' }}
-                          >
-                            <td>{thesis.thesis_id}</td>
-                            <td>{thesis.title}</td>
-                            <td>{thesis.author_name}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                  <Table
+                    title="List of Thesis"
+                    rows={thesisData || []}
+                    columns={columns}
+                    onRowClick={handleThesisClick}
+                    getRowClassName={row =>
+                      selectedThesis?.thesis_id === row.thesis_id
+                        ? 'active-thesis'
+                        : ''
+                    }
+                  />
                 </div>
               </div>
             </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import ManageGuidelineForm from "../../../../custom/Forms/ManageGuidelineForm"
+import ManageGuidelineForm from '../../../../custom/Forms/ManageGuidelineForm'
 import { useDispatch, useSelector } from 'react-redux'
 import { Pencil1Icon, TrashIcon } from '@radix-ui/react-icons'
 import { deleteGuideline, fetchGuidelines } from '../../slices/dashboardSlice'
@@ -17,13 +17,13 @@ function Manage_Guidelines() {
   }
 
   const columns = [
-    { 
-      id: 'id', 
-      label: 'ID', 
-      width: 80, 
+    {
+      id: 'id',
+      label: 'ID',
+      width: 80,
       render: guideline => (
         <strong>{String(guideline.id).padStart(2, '0')}</strong>
-      )
+      ),
     },
     { id: 'title', label: 'Title', key: 'title' },
     { id: 'description', label: 'Description', key: 'description' },
@@ -43,13 +43,15 @@ function Manage_Guidelines() {
           <button
             type="button"
             className="btn btn-sm text-danger"
-            onClick={() => dispatch(deleteGuideline(guideline.id, () => setShow(false)))}
+            onClick={() =>
+              dispatch(deleteGuideline(guideline.id, () => setShow(false)))
+            }
           >
             <TrashIcon />
           </button>
         </div>
-      )
-    }
+      ),
+    },
   ]
 
   useEffect(() => {
@@ -60,10 +62,10 @@ function Manage_Guidelines() {
     <div className="content-body">
       <div className="container-fluid">
         <div className="row">
-          <ManageGuidelineForm 
-            guideline={currentGuideline} 
-            show={show} 
-            setShow={setShow} 
+          <ManageGuidelineForm
+            guideline={currentGuideline}
+            show={show}
+            setShow={setShow}
           />
           <div className="col-lg-12">
             <Table

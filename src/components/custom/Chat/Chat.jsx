@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useSelector } from '../../../redux/store'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
@@ -14,6 +14,11 @@ const Chat = () => {
   const [newMessage, setNewMessage] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [showAutocomplete, setShowAutocomplete] = useState(false)
+  const messagesEndRef = useRef(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   // Filter users for autocomplete
   const autocompleteResults = searchQuery.trim()
@@ -61,6 +66,8 @@ const Chat = () => {
           `/api/chat/conversation?user_id=${selectedUser.id}`
         )
         setMessages(response.data)
+        // Scroll to bottom after messages are loaded
+        setTimeout(scrollToBottom, 100)
       } catch (error) {
         console.error('Error fetching messages:', error)
       }
@@ -98,12 +105,18 @@ const Chat = () => {
       ])
 
       setNewMessage('')
+      // Scroll to bottom after sending message
+      setTimeout(scrollToBottom, 100)
       fetchMessages()
       fetchChats()
     } catch (error) {
       console.error('Error sending message:', error)
     }
   }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
 
   return (
     <div className="content-body">
@@ -191,11 +204,17 @@ const Chat = () => {
                     <div
                       key={chat.id}
                       className="chat-user d-flex align-items-center py-3 cursor-pointer border-bottom"
+                      style={{
+                        cursor: 'pointer',
+                        '&:hover': {
+                          backgroundColor: '#f1f1f1',
+                        },
+                      }}
                       onClick={() => {
                         setSelectedUser({
-                          id: chat.other_user_id,
-                          username: chat.username,
-                          profilePic: chat.profilePic,
+                          id: chat.receiver_id,
+                          username: chat.receiver.firstname,
+                          profilePic: chat.receiver.profilePic,
                         })
                       }}
                     >
@@ -208,14 +227,24 @@ const Chat = () => {
                             ? chat.profilePic
                             : '/dash/images/profile/pic1.jpg'
                         }
-                        alt={chat.username}
+                        alt={chat.receiver.firstname}
                         className="rounded-circle shadow-sm border border-dark"
                         width="40"
                       />
-                      <div className="ms-3">
-                        <h6 className="mb-0">{chat.username}</h6>
-                        <p className="mb-0 text-muted">{chat.last_message}</p>
+                      <div className="ms-3 w-50">
+                        <h6 className="mb-0">{chat.receiver.firstname}</h6>
+                        <p className="mb-0 text-muted text-truncate">
+                          {chat.content}
+                        </p>
                       </div>
+
+                      {chat.unreadMessages > 0 && (
+                        <div className="ms-auto">
+                          <span className="badge bg-primary">
+                            {chat.unreadMessages}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -296,6 +325,7 @@ const Chat = () => {
                       </small>
                     </div>
                   ))}
+                  <div ref={messagesEndRef} />
                 </div>
 
                 <div className="card-footer">
